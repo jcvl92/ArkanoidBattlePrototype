@@ -6,16 +6,20 @@ import android.graphics.RectF;
 
 public class Paddle extends GameShape
 {
-    public Paddle(float height, float width, float x, float y, Paint paint)
+    private final PaddleController paddleController;
+    public Paddle(float height, float width, float x, float y, Paint paint, PaddleController paddleController)
     {
         super(paint);
+        this.paddleController = paddleController;
         bounds = new RectF(x, y, x+width, y+height);
     }
 
     public void advance()
     {
-        //TODO: implement with a behavior class
-        bounds.offset((float)(Math.random()-0.5)*10, 0);
+        if(paddleController.getMovement() == PaddleController.Controls.LEFT)
+            bounds.offset(-3, 0);
+        else if(paddleController.getMovement() == PaddleController.Controls.RIGHT)
+            bounds.offset(3, 0);
     }
 
     public void draw(Canvas canvas)
