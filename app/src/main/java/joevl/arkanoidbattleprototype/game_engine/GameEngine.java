@@ -12,7 +12,7 @@ import joevl.arkanoidbattleprototype.GameView;
 public abstract class GameEngine
 {
     protected GameView gameView;
-    private static final long refreshTime = (long)(1.0/30);//30 Hz
+    private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
     protected ArrayList<GameShape> balls;
     protected ArrayList<GameShape> paddles;
     protected ArrayList<GameShape> bricks;
@@ -29,6 +29,7 @@ public abstract class GameEngine
         gameShapes.add(bricks = new ArrayList<GameShape>());
 
         //TODO: save the thread to allow pausing and resuming
+        //TODO: use an android construct if that would work better
         new Thread(new Runnable() {
             public void run() {
                 //wait for height and width to be measured
