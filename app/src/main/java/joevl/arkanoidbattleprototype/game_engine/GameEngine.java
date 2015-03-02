@@ -12,7 +12,7 @@ import joevl.arkanoidbattleprototype.GameView;
 public abstract class GameEngine
 {
     protected GameView gameView;
-    private static long refreshTime;//TODO: should this be final?
+    private static final long refreshTime = (long)(1.0/30);//30 Hz
     protected ArrayList<GameShape> balls;
     protected ArrayList<GameShape> paddles;
     protected ArrayList<GameShape> bricks;
@@ -21,14 +21,6 @@ public abstract class GameEngine
     protected GameEngine(final GameView gameView)
     {
         this.gameView = gameView;
-
-        //get the refresh rate of the system
-        float refreshRate = ((WindowManager)gameView.getContext()
-                .getSystemService(Context.WINDOW_SERVICE))
-                .getDefaultDisplay().getRefreshRate();
-
-        //refresh in sync with the refresh rate of the screen
-        refreshTime = (long)(1.0/refreshRate);
 
         //create the shape containers
         gameShapes = new ArrayList<ArrayList<GameShape>>();
