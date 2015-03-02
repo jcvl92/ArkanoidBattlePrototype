@@ -1,6 +1,9 @@
 package joevl.arkanoidbattleprototype.game_engine;
 
+import android.content.Context;
 import android.graphics.RectF;
+import android.view.Display;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 
@@ -9,7 +12,7 @@ import joevl.arkanoidbattleprototype.GameView;
 public abstract class GameEngine
 {
     protected GameView gameView;
-    private static final int refreshTime = 10;//millisecond time between ticks
+    private static long refreshTime;//TODO: should this be final?
     protected ArrayList<GameShape> balls;
     protected ArrayList<GameShape> paddles;
     protected ArrayList<GameShape> bricks;
@@ -19,13 +22,21 @@ public abstract class GameEngine
     {
         this.gameView = gameView;
 
+        //get the refresh rate of the system
+        float refreshRate = ((WindowManager)gameView.getContext()
+                .getSystemService(Context.WINDOW_SERVICE))
+                .getDefaultDisplay().getRefreshRate();
+
+        //refresh in sync with the refresh rate of the screen
+        refreshTime = (long)(1.0/refreshRate);
+
         //create the shape containers
         gameShapes = new ArrayList<ArrayList<GameShape>>();
         gameShapes.add(balls = new ArrayList<GameShape>());
         gameShapes.add(paddles = new ArrayList<GameShape>());
         gameShapes.add(bricks = new ArrayList<GameShape>());
 
-        //TODO: save the thread to allow pausing
+        //TODO: save the thread to allow pausing and resuming
         new Thread(new Runnable() {
             public void run() {
                 //wait for height and width to be measured
@@ -45,7 +56,7 @@ public abstract class GameEngine
                     tick();
                     //wait for remaining amount of time
                     try {
-                        Thread.sleep((System.nanoTime()-time)/1000000 + refreshTime);
+                        Thread.sleep(refreshTime - (System.nanoTime()-time)/1000000);
                     } catch (InterruptedException ie) {}
                 }
             }
@@ -56,19 +67,19 @@ public abstract class GameEngine
 
     private final void tick()
     {
+        //TODO: adjust speed of things according to tick frequency
         doTick();
 
         int right = (int)gameView.bounds.right,
                 bottom = (int)gameView.bounds.bottom;
 
-
         //TODO: do this AFTER advancing, then redo advancing on the bounced ball
-        //check to see if the ball is colliding with anything(except other balls for now)
+        //check to see if the ball is colliding with anything
         for(GameShape ball : balls)
         {
             for(ArrayList<GameShape> gameShapeList : gameShapes)
                 for(GameShape gameShape : gameShapeList)
-                    if(!gameShape.getClass().equals(Ball.class) && ((Ball)ball).collides(gameShape))
+                    if(gameShape != ball && ((Ball)ball).collides(gameShape))
                         ballHit(ball, gameShape);
 
             //TODO: move this to specific implementations, have the engine call specific functions for when the ball COMPLETELY leaves the bounds
@@ -78,7 +89,7 @@ public abstract class GameEngine
             else if(ball.getBounds().intersects(right, 0, right, bottom))//right wall
                 ((Ball)ball).bounceOff(new RectF(right, 0, right, bottom));
 
-            //TODO: this is just for the prototype, this behavior should be implmented in subclasses(goals or bouncing or whatever)
+            //TODO: this is just for the prototype, this behavior should be implemented in subclasses(goals or bouncing or whatever)
             else if(ball.getBounds().intersects(0, 0, right, 0))//top wall
                 ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
             else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
@@ -102,7 +113,6 @@ public abstract class GameEngine
         for(GameShape paddle : paddles)
             ((Paddle)paddle).advance();
 
-        //TODO: force a redraw
         gameView.postInvalidate();
     }
 
