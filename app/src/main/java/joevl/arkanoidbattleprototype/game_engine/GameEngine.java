@@ -15,7 +15,7 @@ public abstract class GameEngine
     protected ArrayList<GameShape> bricks;
     protected ArrayList<ArrayList<GameShape>> gameShapes;
 
-    protected GameEngine(GameView gameView)
+    protected GameEngine(final GameView gameView)
     {
         this.gameView = gameView;
 
@@ -25,12 +25,20 @@ public abstract class GameEngine
         gameShapes.add(paddles = new ArrayList<GameShape>());
         gameShapes.add(bricks = new ArrayList<GameShape>());
 
-        //init();
-
         //TODO: save the thread to allow pausing
         new Thread(new Runnable() {
             public void run() {
-                init();
+                //wait for height and width to be measured
+                synchronized (gameView.bounds) {
+                    try {
+                        while (gameView.bounds.isEmpty())
+                            gameView.bounds.wait();
+                    } catch (InterruptedException ie) {
+                    }
+
+                    //initialize the engine
+                    init();
+                }
                 while(true) {
                     long time = System.nanoTime();
                     //tick
@@ -50,6 +58,11 @@ public abstract class GameEngine
     {
         doTick();
 
+        int right = (int)gameView.bounds.right,
+                bottom = (int)gameView.bounds.bottom;
+
+
+        //TODO: do this AFTER advancing, then redo advancing on the bounced ball
         //check to see if the ball is colliding with anything(except other balls for now)
         for(GameShape ball : balls)
         {
@@ -58,17 +71,18 @@ public abstract class GameEngine
                     if(!gameShape.getClass().equals(Ball.class) && ((Ball)ball).collides(gameShape))
                         ballHit(ball, gameShape);
 
+            //TODO: move this to specific implementations, have the engine call specific functions for when the ball COMPLETELY leaves the bounds
             //bounce off of the walls
-            if(ball.getBounds().intersects(0, 0, 0, gameView.height))//left wall
-                ((Ball)ball).bounceOff(new RectF(0, 0, 0, gameView.height));
-            else if(ball.getBounds().intersects(gameView.width, 0, gameView.width, gameView.height))//right wall
-                ((Ball)ball).bounceOff(new RectF(gameView.width, 0, gameView.width, gameView.height));
+            if(ball.getBounds().intersects(0, 0, 0, bottom))//left wall
+                ((Ball)ball).bounceOff(new RectF(0, 0, 0, bottom));
+            else if(ball.getBounds().intersects(right, 0, right, bottom))//right wall
+                ((Ball)ball).bounceOff(new RectF(right, 0, right, bottom));
 
             //TODO: this is just for the prototype, this behavior should be implmented in subclasses(goals or bouncing or whatever)
-            else if(ball.getBounds().intersects(0, 0, gameView.width, 0))//top wall
-                ((Ball)ball).bounceOff(new RectF(0, 0, gameView.width, 0));
-            else if(ball.getBounds().intersects(0, gameView.height, gameView.width, gameView.height))//bottom wall
-                ((Ball)ball).bounceOff(new RectF(0, gameView.height, gameView.width, gameView.height));
+            else if(ball.getBounds().intersects(0, 0, right, 0))//top wall
+                ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
+            else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
+                ((Ball)ball).bounceOff(new RectF(0, bottom, right, bottom));
 
             ((Ball) ball).advance();
 
@@ -78,10 +92,10 @@ public abstract class GameEngine
                 ballBounds.offsetTo(-1, ballBounds.top);
             if(ballBounds.top+ballBounds.height()<0)
                 ballBounds.offsetTo(ballBounds.left, -1);
-            if(ballBounds.right-ballBounds.width()>gameView.width)
-                ballBounds.offsetTo(gameView.width-ballBounds.width()+1, ballBounds.top);
-            if(ballBounds.bottom-ballBounds.height()>gameView.height)
-                ballBounds.offsetTo(ballBounds.left, gameView.height-ballBounds.height()+1);
+            if(ballBounds.right-ballBounds.width()>right)
+                ballBounds.offsetTo(right-ballBounds.width()+1, ballBounds.top);
+            if(ballBounds.bottom-ballBounds.height()>bottom)
+                ballBounds.offsetTo(ballBounds.left, bottom-ballBounds.height()+1);
         }
 
         //progress the paddles

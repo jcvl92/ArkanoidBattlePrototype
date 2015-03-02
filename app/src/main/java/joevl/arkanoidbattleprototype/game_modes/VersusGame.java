@@ -24,10 +24,13 @@ public class VersusGame extends GameEngine {
 
     protected void init()
     {
+        int width = (int)(gameView.bounds.right-gameView.bounds.left),
+                height = (int)(gameView.bounds.bottom-gameView.bounds.right);
+
         //define the dimension
         ballDiameter = 100;
         brickLength = 100;
-        paddleLength = gameView.width/4;
+        paddleLength = width/4;
 
         //add one ball
         Paint ballPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -47,7 +50,7 @@ public class VersusGame extends GameEngine {
         //add two paddles
         Paint opponentPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         opponentPaddlePaint.setColor(Color.RED);
-        paddles.add(new Paddle(50, paddleLength, gameView.width/4, 10, opponentPaddlePaint,
+        paddles.add(new Paddle(50, paddleLength, width/4, 10, opponentPaddlePaint,
                 new PaddleController(){
                     @Override
                     public Controls getMovement() {
@@ -56,7 +59,7 @@ public class VersusGame extends GameEngine {
                 }));
         Paint userPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         userPaddlePaint.setColor(Color.BLUE);
-        paddles.add(new Paddle(50, paddleLength, gameView.width/4, gameView.height-10, userPaddlePaint,
+        paddles.add(new Paddle(50, paddleLength, width/4, height-10, userPaddlePaint,
                 new TouchPaddleController(
                         new RectF(0, 1500, 200, 1700),
                         new RectF(800, 1500, 1000, 1700)

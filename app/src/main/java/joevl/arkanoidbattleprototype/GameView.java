@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 public class GameView extends View
 {
     GameEngine gameEngine;
-    public int width = 1000, height = 1630;//TODO: compute these instead of guessing
+    public RectF bounds = new RectF();
 
     public GameView(Context context, AttributeSet attrs)
     {
@@ -29,9 +30,11 @@ public class GameView extends View
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        this.width = w;
-        this.height = h;
         super.onSizeChanged(w, h, oldw, oldh);
+        synchronized (bounds) {
+            bounds.set(0, 0, w, h);
+            bounds.notify();
+        }
     }
 
     @Override
