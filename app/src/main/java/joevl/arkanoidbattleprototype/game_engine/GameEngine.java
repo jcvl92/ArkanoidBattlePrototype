@@ -66,6 +66,10 @@ public abstract class GameEngine
         int right = (int)gameView.bounds.right,
                 bottom = (int)gameView.bounds.bottom;
 
+        //progress the paddles
+        for(GameShape paddle : paddles)
+            ((Paddle)paddle).advance();
+
         //TODO: do this AFTER advancing, then redo advancing on the bounced ball
         //check to see if the ball is colliding with anything
         for(GameShape ball : balls)
@@ -101,10 +105,6 @@ public abstract class GameEngine
             if(ballBounds.bottom-ballBounds.height()>bottom)
                 ballBounds.offsetTo(ballBounds.left, bottom-ballBounds.height()+1);
         }
-
-        //progress the paddles
-        for(GameShape paddle : paddles)
-            ((Paddle)paddle).advance();
 
         gameView.postInvalidate();
     }
