@@ -39,16 +39,16 @@ public class VersusGame extends GameEngine {
         balls.add(mainBall);
 
         //add a few bricks
-        for(int i=0; i<3; i++)
+        /*for(int i=0; i<3; i++)
             for(int j=0; j<3; j++)
             {
                 Paint brickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
                 brickPaint.setColor(Color.MAGENTA);
                 bricks.add(new Brick(brickLength / 2, brickLength, 100+(j*400), 380+(i*400), brickPaint));
-            }
+            }*/
 
-        //add a randon behavior paddle
-        Paint opponentPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        //add a random behavior paddle
+        /*Paint opponentPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         opponentPaddlePaint.setColor(Color.RED);
         paddles.add(new Paddle(50, paddleLength, width/4, 10, opponentPaddlePaint,
                 new PaddleController(){
@@ -65,7 +65,7 @@ public class VersusGame extends GameEngine {
                 new TouchPaddleController(
                         new RectF(0, 1500, 200, 1700),
                         new RectF(800, 1500, 1000, 1700)
-                )));
+                )));*/
 
         //add the touch paddle listener to our view
         gameView.setOnTouchListener(TouchPaddleController.listener);
@@ -73,7 +73,7 @@ public class VersusGame extends GameEngine {
 
     protected void doTick()
     {
-        mainBall.multSpeed(1.001);
+        mainBall.multSpeed(1.0001);
     }
 
     @Override
