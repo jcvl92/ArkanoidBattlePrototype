@@ -6,6 +6,7 @@ import android.graphics.RectF;
 
 public class Paddle extends GameShape
 {
+    //TODO: prevent paddles from moving off screen
     private final PaddleController paddleController;
     public Paddle(float height, float width, float x, float y, Paint paint, PaddleController paddleController)
     {

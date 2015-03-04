@@ -47,7 +47,7 @@ public class VersusGame extends GameEngine {
                 bricks.add(new Brick(brickLength / 2, brickLength, 100+(j*400), 380+(i*400), brickPaint));
             }
 
-        //add two paddles
+        //add a randon behavior paddle
         Paint opponentPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         opponentPaddlePaint.setColor(Color.RED);
         paddles.add(new Paddle(50, paddleLength, width/4, 10, opponentPaddlePaint,
@@ -57,6 +57,8 @@ public class VersusGame extends GameEngine {
                         return Math.random()<0.5 ? Controls.LEFT : Controls.RIGHT;
                     }
                 }));
+
+        //add a touch paddle
         Paint userPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         userPaddlePaint.setColor(Color.BLUE);
         paddles.add(new Paddle(50, paddleLength, width/4, height-10, userPaddlePaint,
@@ -64,6 +66,8 @@ public class VersusGame extends GameEngine {
                         new RectF(0, 1500, 200, 1700),
                         new RectF(800, 1500, 1000, 1700)
                 )));
+
+        //add the touch paddle listener to our view
         gameView.setOnTouchListener(TouchPaddleController.listener);
     }
 

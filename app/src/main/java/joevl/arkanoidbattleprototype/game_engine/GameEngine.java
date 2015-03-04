@@ -17,6 +17,7 @@ public abstract class GameEngine
     protected ArrayList<GameShape> paddles;
     protected ArrayList<GameShape> bricks;
     protected ArrayList<ArrayList<GameShape>> gameShapes;
+    private Thread ticker;
 
     protected GameEngine(final GameView gameView)
     {
@@ -28,17 +29,15 @@ public abstract class GameEngine
         gameShapes.add(paddles = new ArrayList<GameShape>());
         gameShapes.add(bricks = new ArrayList<GameShape>());
 
-        //TODO: save the thread to allow pausing and resuming
         //TODO: use an android construct if that would work better
-        new Thread(new Runnable() {
+        ticker = new Thread(new Runnable() {
             public void run() {
                 //wait for height and width to be measured
                 synchronized (gameView.bounds) {
                     try {
                         while (gameView.bounds.isEmpty())
                             gameView.bounds.wait();
-                    } catch (InterruptedException ie) {
-                    }
+                    } catch (InterruptedException ie) {}
 
                     //initialize the engine
                     init();
@@ -53,10 +52,31 @@ public abstract class GameEngine
                     } catch (InterruptedException ie) {}
                 }
             }
-        }).start();
+        });
+        ticker.start();
     }
 
-    //TODO: add serialization and deserialization
+    public void pause()
+    {
+        ticker.suspend();
+    }
+
+    public void resume()
+    {
+        ticker.resume();
+    }
+
+    public byte[] getSerializedState()
+    {
+        //TODO: implement this
+        return null;
+    }
+
+    public void setSerializedState(byte[] bytes)
+    {
+        //TODO: implement this
+    }
+
     protected abstract void init();
 
     private final void tick()
