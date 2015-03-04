@@ -3,6 +3,7 @@ package joevl.arkanoidbattleprototype.game_engine;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
 public class Ball extends GameShape
 {
@@ -26,14 +27,10 @@ public class Ball extends GameShape
 
     public void bounceOff(GameShape gameShape)
     {
-        //calculate new trajectory and direction and adjust
-        //find the side it hit the object on
-
-        //TODO: implement circle bouncing
-
-        //the bound angle off of a paddle is equal to the angel between the center of the paddle and
-        //the center of the ball
+        //the bounce angle off of a paddle is equal to the angel between the center of the paddle and the center of the ball
         if(gameShape.getClass() == Paddle.class)//bouncing off of paddles
+            angle = Math.atan2(bounds.centerX()-gameShape.getBounds().centerX(), bounds.centerY()-gameShape.getBounds().centerY());
+        else if(gameShape.getClass() == Ball.class)//bouncing off of balls
             angle = Math.atan2(bounds.centerX()-gameShape.getBounds().centerX(), bounds.centerY()-gameShape.getBounds().centerY());
         else//bouncing off of other rectangles
             bounceOff(gameShape.getBounds());
@@ -41,9 +38,10 @@ public class Ball extends GameShape
 
     public void bounceOff(RectF rect)
     {
-        //the smallest difference between corresponding x and corresponding y values(of the ball and the rect) determines which side was hit
-        //TODO: how does this handle hitting the "corner" of the ball?
         //TODO: corner hits should probably not "hard" bounce by reflecting, they should be reflected based on where on the circle they hit(angle within circle will give some sort of transformation)
+        //eh, only do this^ if game testing shows we need it
+
+        //the smallest difference between corresponding x and corresponding y values(of the ball and the rect) determines which side was hit
         float yDist = Math.abs(rect.top - bounds.centerY());
         if(Math.abs(rect.bottom - bounds.centerY()) < yDist)
             yDist = Math.abs(rect.bottom - bounds.centerY());
@@ -54,9 +52,15 @@ public class Ball extends GameShape
         //TODO: any problems here are likely due to the vertical flipping not being constrained to [-pi, pi]
 
         if(xDist < yDist)//if hit one of the vertical sides
-            angle = (-Math.PI - angle)%(2*Math.PI);//flip the angle across the x axis
+        {
+            angle = (Math.PI - angle) % (2 * Math.PI);//flip the angle across the y axis
+            Log.v("bouncer", "bouncing across |");
+        }
         else//if hit one of the horizontal sides
-            angle = (Math.PI - angle)%(2*Math.PI);//flip the angle across the y axis
+        {
+            angle = (-Math.PI - angle) % (2 * Math.PI);//flip the angle across the x axis
+            Log.v("bouncer", "bouncing across -");
+        }
     }
 
     public void advance()

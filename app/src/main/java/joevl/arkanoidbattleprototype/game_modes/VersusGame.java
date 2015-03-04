@@ -65,10 +65,10 @@ public class VersusGame extends GameEngine {
                 new TouchPaddleController(
                         new RectF(0, 1500, 200, 1700),
                         new RectF(800, 1500, 1000, 1700)
-                )));*/
+                )));
 
         //add the touch paddle listener to our view
-        gameView.setOnTouchListener(TouchPaddleController.listener);
+        gameView.setOnTouchListener(TouchPaddleController.listener);*/
     }
 
     protected void doTick()
