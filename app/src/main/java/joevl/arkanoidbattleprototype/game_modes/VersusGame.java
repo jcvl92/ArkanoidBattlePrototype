@@ -2,7 +2,9 @@ package joevl.arkanoidbattleprototype.game_modes;
 
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RadialGradient;
 import android.graphics.RectF;
+import android.graphics.Shader;
 
 import joevl.arkanoidbattleprototype.GameView;
 import joevl.arkanoidbattleprototype.game_engine.Ball;
@@ -32,11 +34,17 @@ public class VersusGame extends GameEngine {
         brickLength = 100;
         paddleLength = width/4;
 
+        //TODO: the engine should handle the adding of objects(balls, bricks, and paddles)
+
         //add one ball
         Paint ballPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        ballPaint.setColor(Color.CYAN);
+        //ballPaint.setColor(Color.CYAN);
+        ballPaint.setShadowLayer(1, 10, 10, Color.LTGRAY);
         mainBall = new Ball(ballDiameter, ballDiameter, 500, 500, ballPaint);
-        balls.add(mainBall);
+        //TODO: could this be the center of the board to give a sunlight effect?
+        ballPaint.setShader(new RadialGradient(mainBall.getBounds().centerX(), mainBall.getBounds().centerY(),
+                            ballDiameter/2, Color.CYAN, Color.GREEN, Shader.TileMode.CLAMP));
+        gameShapes.get("balls").add(mainBall);
 
         //add a few bricks
         /*for(int i=0; i<3; i++)
@@ -44,13 +52,13 @@ public class VersusGame extends GameEngine {
             {
                 Paint brickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
                 brickPaint.setColor(Color.MAGENTA);
-                bricks.add(new Brick(brickLength / 2, brickLength, 100+(j*400), 380+(i*400), brickPaint));
+                gameShapes.get("bricks").add(new Brick(brickLength / 2, brickLength, 100+(j*400), 380+(i*400), brickPaint));
             }*/
 
         //add a random behavior paddle
         /*Paint opponentPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         opponentPaddlePaint.setColor(Color.RED);
-        paddles.add(new Paddle(50, paddleLength, width/4, 10, opponentPaddlePaint,
+        gameShapes.get("paddles").add(new Paddle(50, paddleLength, width/4, 10, opponentPaddlePaint,
                 new PaddleController(){
                     @Override
                     public Controls getMovement() {
@@ -59,12 +67,13 @@ public class VersusGame extends GameEngine {
                 }));
 
         //add a touch paddle
+        int touchAreaSize = 300;
         Paint userPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         userPaddlePaint.setColor(Color.BLUE);
-        paddles.add(new Paddle(50, paddleLength, width/4, height-10, userPaddlePaint,
+        gameShapes.get("paddles").add(new Paddle(50, paddleLength, width/4, height-10, userPaddlePaint,
                 new TouchPaddleController(
-                        new RectF(0, 1500, 200, 1700),
-                        new RectF(800, 1500, 1000, 1700)
+                        new RectF(0, height-touchAreaSize, touchAreaSize, height),
+                        new RectF(width-touchAreaSize, height-touchAreaSize, width, height)
                 )));
 
         //add the touch paddle listener to our view

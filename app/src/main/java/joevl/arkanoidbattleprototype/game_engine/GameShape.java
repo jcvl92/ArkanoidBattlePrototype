@@ -2,6 +2,7 @@ package joevl.arkanoidbattleprototype.game_engine;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
 import android.util.Log;
 
@@ -15,8 +16,8 @@ public abstract class GameShape
         this.paint = paint;
     }
     public abstract void draw(Canvas canvas);
-    protected RectF getBounds()
+    public RectF getBounds()
     {
-        return bounds;
+        return new RectF(bounds);
     }
 }

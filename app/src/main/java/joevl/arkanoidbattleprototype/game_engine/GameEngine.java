@@ -5,7 +5,15 @@ import android.graphics.RectF;
 import android.view.Display;
 import android.view.WindowManager;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import joevl.arkanoidbattleprototype.GameView;
 
@@ -13,10 +21,7 @@ public abstract class GameEngine
 {
     protected GameView gameView;
     private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
-    protected ArrayList<GameShape> balls;
-    protected ArrayList<GameShape> paddles;
-    protected ArrayList<GameShape> bricks;
-    protected ArrayList<ArrayList<GameShape>> gameShapes;
+    protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
 
     protected GameEngine(final GameView gameView)
@@ -24,10 +29,10 @@ public abstract class GameEngine
         this.gameView = gameView;
 
         //create the shape containers
-        gameShapes = new ArrayList<ArrayList<GameShape>>();
-        gameShapes.add(balls = new ArrayList<GameShape>());
-        gameShapes.add(paddles = new ArrayList<GameShape>());
-        gameShapes.add(bricks = new ArrayList<GameShape>());
+        gameShapes = new HashMap<String, ArrayList<GameShape>>();
+        gameShapes.put("balls", new ArrayList<GameShape>());
+        gameShapes.put("paddles", new ArrayList<GameShape>());
+        gameShapes.put("bricks", new ArrayList<GameShape>());
 
         //TODO: use an android construct if that would work better
         ticker = new Thread(new Runnable() {
@@ -68,13 +73,32 @@ public abstract class GameEngine
 
     public byte[] getSerializedState()
     {
-        //TODO: implement this
-        return null;
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(gameShapes);
+            byte[] bytes = bos.toByteArray();
+            out.close();
+            bos.close();
+            return bytes;
+        } catch(IOException ioe) {
+            return null;
+        }
     }
 
     public void setSerializedState(byte[] bytes)
     {
-        //TODO: implement this
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+            ObjectInputStream in = new ObjectInputStream(bis);
+            Object obj = in.readObject();
+            gameShapes = (HashMap<String, ArrayList<GameShape>>) obj;
+            in.close();
+            bis.close();
+        } catch(IOException|ClassNotFoundException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     protected abstract void init();
@@ -89,14 +113,14 @@ public abstract class GameEngine
                 bottom = (int)gameView.bounds.bottom;
 
         //progress the paddles
-        for(GameShape paddle : paddles)
+        for(GameShape paddle : gameShapes.get("paddles"))
             ((Paddle)paddle).advance();
 
         //TODO: do this AFTER advancing, then redo advancing on the bounced ball
         //check to see if the ball is colliding with anything
-        for(GameShape ball : balls)
+        for(GameShape ball : gameShapes.get("balls"))
         {
-            for(ArrayList<GameShape> gameShapeList : gameShapes)
+            for(ArrayList<GameShape> gameShapeList : gameShapes.values())
                 for(GameShape gameShape : gameShapeList)
                     if(gameShape != ball && ((Ball)ball).collides(gameShape))
                         ballHit(ball, gameShape);
@@ -135,7 +159,7 @@ public abstract class GameEngine
 
     protected abstract void ballHit(GameShape ball, GameShape object);
 
-    public final ArrayList<ArrayList<GameShape>> getGameShapes()
+    public final HashMap<String, ArrayList<GameShape>> getGameShapes()
     {
         return gameShapes;
     }

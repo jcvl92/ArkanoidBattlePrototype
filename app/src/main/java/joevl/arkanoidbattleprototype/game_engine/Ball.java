@@ -53,13 +53,13 @@ public class Ball extends GameShape
 
         if(xDist < yDist)//if hit one of the vertical sides
         {
+            Log.v("bouncer", "bouncing across |, previous angle:"+Math.toDegrees(angle)+", new angle:"+(Math.PI - angle) % (2 * Math.PI));
             angle = (Math.PI - angle) % (2 * Math.PI);//flip the angle across the y axis
-            Log.v("bouncer", "bouncing across |");
         }
         else//if hit one of the horizontal sides
         {
+            Log.v("bouncer", "bouncing across -, previous angle:"+Math.toDegrees(angle)+", new angle:"+(Math.PI - angle) % (2 * Math.PI));
             angle = (-Math.PI - angle) % (2 * Math.PI);//flip the angle across the x axis
-            Log.v("bouncer", "bouncing across -");
         }
     }
 

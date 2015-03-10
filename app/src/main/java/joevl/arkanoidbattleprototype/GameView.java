@@ -43,7 +43,7 @@ public class GameView extends View
         super.onDraw(canvas);
 
         //draw the objects on the screen
-        for(ArrayList<GameShape> gameShapes : gameEngine.getGameShapes())
+        for(ArrayList<GameShape> gameShapes : gameEngine.getGameShapes().values())
             for (GameShape gameShape : gameShapes)
                 gameShape.draw(canvas);
     }
