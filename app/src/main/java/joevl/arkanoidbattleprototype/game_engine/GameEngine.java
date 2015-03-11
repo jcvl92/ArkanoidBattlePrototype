@@ -1,19 +1,15 @@
 package joevl.arkanoidbattleprototype.game_engine;
 
-import android.content.Context;
 import android.graphics.RectF;
-import android.view.Display;
-import android.view.WindowManager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
 
 import joevl.arkanoidbattleprototype.GameView;
 
@@ -34,7 +30,7 @@ public abstract class GameEngine
         gameShapes.put("paddles", new ArrayList<GameShape>());
         gameShapes.put("bricks", new ArrayList<GameShape>());
 
-        //TODO: use an android construct if that would work better
+        //TODO: use an android mechanism if that would work better
         ticker = new Thread(new Runnable() {
             public void run() {
                 //wait for height and width to be measured
@@ -114,16 +110,20 @@ public abstract class GameEngine
 
         //progress the paddles
         for(GameShape paddle : gameShapes.get("paddles"))
-            ((Paddle)paddle).advance();
+            ((Paddle)paddle).advance(0, right);
 
-        //TODO: do this AFTER advancing, then redo advancing on the bounced ball
         //check to see if the ball is colliding with anything
         for(GameShape ball : gameShapes.get("balls"))
         {
+            ((Ball) ball).advance();
+
             for(ArrayList<GameShape> gameShapeList : gameShapes.values())
-                for(GameShape gameShape : gameShapeList)
-                    if(gameShape != ball && ((Ball)ball).collides(gameShape))
-                        ballHit(ball, gameShape);
+                for(Iterator<GameShape> iter = gameShapeList.iterator(); iter.hasNext();)
+                {
+                    GameShape gameShape = iter.next();
+                    if (gameShape != ball && ((Ball) ball).collides(gameShape))
+                        ballHit(ball, gameShape, iter);//TODO: this is so gross and I hate it, change it to do something cleaner
+                }
 
             //TODO: move this to specific implementations, have the engine call specific functions for when the ball COMPLETELY leaves the bounds
             //bounce off of the walls
@@ -132,14 +132,13 @@ public abstract class GameEngine
             else if(ball.getBounds().intersects(right, 0, right, bottom))//right wall
                 ((Ball)ball).bounceOff(new RectF(right, 0, right, bottom));
 
-            //TODO: this is just for the prototype, this behavior should be implemented in subclasses(goals or bouncing or whatever)
+            //TODO: this is just for the prototype, this behavior should be implemented in subclasses(goals or bouncing or whatever)(SEE ABOVE!)
             else if(ball.getBounds().intersects(0, 0, right, 0))//top wall
                 ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
             else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
                 ((Ball)ball).bounceOff(new RectF(0, bottom, right, bottom));
 
-            ((Ball) ball).advance();
-
+            //TODO: this doesnt work, fix it
             //if the ball went over an edge, push it back to the edge
             RectF ballBounds = ball.getBounds();
             if(ballBounds.left+ballBounds.width()<0)
@@ -157,7 +156,7 @@ public abstract class GameEngine
 
     protected abstract void doTick();
 
-    protected abstract void ballHit(GameShape ball, GameShape object);
+    protected abstract void ballHit(GameShape ball, GameShape object, Iterator iter);
 
     public final HashMap<String, ArrayList<GameShape>> getGameShapes()
     {

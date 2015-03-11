@@ -6,7 +6,6 @@ import android.graphics.RectF;
 
 public class Paddle extends GameShape
 {
-    //TODO: prevent paddles from moving off screen
     private final PaddleController paddleController;
     public Paddle(float height, float width, float x, float y, Paint paint, PaddleController paddleController)
     {
@@ -15,12 +14,17 @@ public class Paddle extends GameShape
         bounds = new RectF(x, y, x+width, y+height);
     }
 
-    public void advance()
+    public void advance(float min, float max)
     {
         if(paddleController.getMovement() == PaddleController.Controls.LEFT)
-            bounds.offset(-3, 0);
+            bounds.offset(-20, 0);
         else if(paddleController.getMovement() == PaddleController.Controls.RIGHT)
-            bounds.offset(3, 0);
+            bounds.offset(20, 0);
+
+        if(bounds.left < min)
+            bounds.offset(min-bounds.left, 0);
+        else if(bounds.right > max)
+            bounds.offset(max-bounds.right, 0);
     }
 
     public void draw(Canvas canvas)
