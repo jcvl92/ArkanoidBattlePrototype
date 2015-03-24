@@ -14,7 +14,7 @@ import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 
 public class GameView extends View
 {
-    GameEngine gameEngine;
+    public GameEngine gameEngine;
     public RectF bounds = new RectF();
 
     public GameView(Context context, AttributeSet attrs)

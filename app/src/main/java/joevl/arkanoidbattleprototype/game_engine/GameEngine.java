@@ -1,6 +1,7 @@
 package joevl.arkanoidbattleprototype.game_engine;
 
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,6 +20,8 @@ public abstract class GameEngine
     private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
+
+    final static String TAG = "AKBGameEngine";
 
     protected GameEngine(final GameView gameView)
     {
@@ -49,7 +52,7 @@ public abstract class GameEngine
                     tick();
                     //wait for remaining amount of time
                     try {
-                        Thread.sleep(refreshTime - (System.nanoTime()-time)/1000000);
+                        Thread.sleep(100);
                     } catch (InterruptedException ie) {}
                 }
             }
@@ -78,6 +81,8 @@ public abstract class GameEngine
             bos.close();
             return bytes;
         } catch(IOException ioe) {
+            Log.d(TAG, "Error Serializing State");
+            Log.d(TAG, ioe.toString());
             return null;
         }
     }
