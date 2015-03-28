@@ -12,6 +12,7 @@ import joevl.arkanoidbattleprototype.game_engine.Brick;
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 import joevl.arkanoidbattleprototype.game_engine.GameShape;
 import joevl.arkanoidbattleprototype.game_engine.Paddle;
+import joevl.arkanoidbattleprototype.game_engine.SerialPaint;
 import joevl.arkanoidbattleprototype.game_engine.TouchPaddleController;
 
 public class VersusGame extends GameEngine {
@@ -36,7 +37,7 @@ public class VersusGame extends GameEngine {
         //TODO: the engine should handle the adding of objects(balls, bricks, and paddles)
 
         //add one ball
-        Paint ballPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint ballPaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
         ballPaint.setShadowLayer(20, 50, 50, Color.LTGRAY);//TODO: fix this
         mainBall = new Ball(ballDiameter, ballDiameter, 500, height-200, ballPaint);
         gameShapes.get("balls").add(mainBall);
@@ -45,7 +46,7 @@ public class VersusGame extends GameEngine {
         for(int i=0; i<3; i++)
             for(int j=0; j<7; j++)
             {
-                Paint brickPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+                Paint brickPaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
                 brickPaint.setColor(Color.MAGENTA);
                 gameShapes.get("bricks").add(new Brick(brickLength / 2, brickLength, 40+(j*150), (height/3)+(i*100), brickPaint));
             }
@@ -56,11 +57,11 @@ public class VersusGame extends GameEngine {
                 new RectF(0, height-touchAreaSize, touchAreaSize, height),
                 new RectF(width-touchAreaSize, height-touchAreaSize, width, height));
 
-        Paint opponentPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint opponentPaddlePaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
         opponentPaddlePaint.setColor(Color.RED);
         gameShapes.get("paddles").add(new Paddle(50, paddleLength, width/4, 10, opponentPaddlePaint, tpc));
 
-        Paint userPaddlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        Paint userPaddlePaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
         userPaddlePaint.setColor(Color.BLUE);
         gameShapes.get("paddles").add(new Paddle(50, paddleLength, width/4, height-50, userPaddlePaint, tpc));
 

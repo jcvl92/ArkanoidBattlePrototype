@@ -1,15 +1,18 @@
 package joevl.arkanoidbattleprototype.game_engine;
 
 import android.graphics.RectF;
+import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import joevl.arkanoidbattleprototype.GameView;
 
@@ -49,7 +52,7 @@ public abstract class GameEngine
                     tick();
                     //wait for remaining amount of time
                     try {
-                        Thread.sleep(refreshTime - (System.nanoTime()-time)/1000000);
+                        Thread.sleep(100);//refreshTime - (System.nanoTime()-time)/1000000);
                     } catch (InterruptedException ie) {}
                 }
             }
@@ -72,12 +75,19 @@ public abstract class GameEngine
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(bos);
-            out.writeObject(gameShapes);
+            for(Map.Entry<String, ArrayList<GameShape>> e : gameShapes.entrySet()) {
+                if(!e.getKey().equals("paddles")) {
+                    out.writeObject(e.getKey());
+                    out.writeObject(e.getValue());
+                }
+            }
+            //out.writeObject(gameShapes);
             byte[] bytes = bos.toByteArray();
             out.close();
             bos.close();
             return bytes;
         } catch(IOException ioe) {
+            Log.println(Log.ASSERT, "error", Log.getStackTraceString(ioe));
             return null;
         }
     }
@@ -87,12 +97,18 @@ public abstract class GameEngine
         try {
             ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
             ObjectInputStream in = new ObjectInputStream(bis);
-            Object obj = in.readObject();
-            gameShapes = (HashMap<String, ArrayList<GameShape>>) obj;
-            in.close();
-            bis.close();
-        } catch(IOException|ClassNotFoundException e)
-        {
+            try {
+                while (true) {
+                    Object str = in.readObject();
+                    Object lst = in.readObject();
+                    gameShapes.put((String)str, (ArrayList<GameShape>)lst);
+                }
+                //gameShapes = (HashMap<String, ArrayList<GameShape>>) obj;
+            } catch(EOFException eofe) {
+                in.close();
+                bis.close();
+            }
+        } catch (IOException|ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
