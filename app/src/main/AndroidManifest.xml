@@ -18,6 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:label="GameActivity" android:name=".GameActivity"></activity>
+        <activity android:label="GameOverActivity" android:name=".GameOverActivity"></activity>
         <activity android:label="ScoreActivity" android:name=".ScoreActivity"></activity>
         <activity android:label="OptionsActivity" android:name=".OptionsActivity"></activity>
     </application>

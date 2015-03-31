@@ -26,8 +26,9 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 0 && resultCode == RESULT_OK) {
-            String res = data.getStringExtra("mode")+", "+data.getStringExtra("status")+", "+data.getStringExtra("score");
+            String res = data.getStringExtra("mode")+" - "+data.getStringExtra("score");
             scores.add(res);
+            gameOver(data.getStringExtra("status"));
         }
     }
 
@@ -44,5 +45,11 @@ public class MainMenuActivity extends Activity {
     public void options(View view)
     {
         startActivity(new Intent(this, OptionsActivity.class));
+    }
+
+    public void gameOver(String result) {
+        Intent intent = new Intent(this, GameOverActivity.class);
+        intent.putExtra("result", result);
+        startActivity(intent);
     }
 }

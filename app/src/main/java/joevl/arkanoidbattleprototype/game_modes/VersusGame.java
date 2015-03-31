@@ -25,9 +25,6 @@ public class VersusGame extends GameEngine {
     {
         super(gameView);
         this.gameView = gameView;
-
-        //add the touch paddle listener to our view
-        gameView.setOnTouchListener(TouchPaddleController.listener);
     }
 
     private int ballDiameter, brickLength, paddleLength;
@@ -66,6 +63,9 @@ public class VersusGame extends GameEngine {
                 tpc = new TouchPaddleController(
                         new RectF(0, height - touchAreaSize, touchAreaSize, height),
                         new RectF(width - touchAreaSize, height - touchAreaSize, width, height));
+
+                //add the touch paddle listener to our view
+                gameView.setOnTouchListener(tpc);
             }
 
             Paint opponentPaddlePaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
@@ -127,7 +127,7 @@ public class VersusGame extends GameEngine {
     }
 
     public String getStatus() {
-        return "Won";
+        return humanScore>computerScore ? "YOU WIN!" : "YOU LOSE!";
     }
 
     public String getScore() {

@@ -14,7 +14,8 @@ public class ScoreActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scores);
 
-        ScrollView sv = new ScrollView(this);
+        ScrollView sv = (ScrollView)findViewById(R.id.scoresScrollView);
+
         LinearLayout ll = new LinearLayout(this);
         ll.setOrientation(LinearLayout.VERTICAL);
         sv.addView(ll);
@@ -25,7 +26,5 @@ public class ScoreActivity extends Activity {
             tv.setTextColor(Color.RED);
             ll.addView(tv);
         }
-
-        addContentView(sv, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
     }
 }
