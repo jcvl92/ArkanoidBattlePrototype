@@ -17,9 +17,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp" />
 
-    <ScrollView
+    <ListView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/textView"
-        android:id="@+id/scoresScrollView" />
+        android:layout_alignTop="@id/textView"
+        android:layout_marginTop="56dp"
+        android:id="@+id/scoresListView" />
 </RelativeLayout>

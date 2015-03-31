@@ -1,11 +1,9 @@
 package joevl.arkanoidbattleprototype;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.LinearLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class ScoreActivity extends Activity {
 
@@ -14,17 +12,9 @@ public class ScoreActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scores);
 
-        ScrollView sv = (ScrollView)findViewById(R.id.scoresScrollView);
-
-        LinearLayout ll = new LinearLayout(this);
-        ll.setOrientation(LinearLayout.VERTICAL);
-        sv.addView(ll);
-
-        for(String score : MainMenuActivity.scores) {
-            TextView tv = new TextView(this);
-            tv.setText(score);
-            tv.setTextColor(Color.RED);
-            ll.addView(tv);
-        }
+        ListView lv = (ListView)findViewById(R.id.scoresListView);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                R.layout.score_list_item, MainMenuActivity.scores);
+        lv.setAdapter(adapter);
     }
 }

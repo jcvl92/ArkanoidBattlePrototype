@@ -14,19 +14,12 @@ public class MainMenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-
-        scores.add("test1 - test2");
-        scores.add("test3 - test4");
-        scores.add("test5 - test6");
-        scores.add("test7 - test8");
-        scores.add("test9 - test10");
-        scores.add("test11 - test12");
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == 0 && resultCode == RESULT_OK) {
-            String res = data.getStringExtra("mode")+" - "+data.getStringExtra("score");
+            String res = data.getStringExtra("mode")+"\t-\t"+data.getStringExtra("score");
             scores.add(res);
             gameOver(data.getStringExtra("status"));
         }
