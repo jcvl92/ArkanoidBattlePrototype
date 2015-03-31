@@ -7,7 +7,7 @@ import android.graphics.RectF;
 public class Paddle extends GameShape
 {
     private PaddleController paddleController;
-    public static final int speed = 20;
+    public static final int speed = 30;
 
     public Paddle(float height, float width, float x, float y, Paint paint)
     {

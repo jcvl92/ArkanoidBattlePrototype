@@ -50,15 +50,18 @@ public class VersusGame extends GameEngine {
             mainBall = new Ball(ballDiameter, ballDiameter, 500, height - 200, ballPaint);
             gameShapes.get("balls").add(mainBall);
 
+            Paint brickPaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
+            brickPaint.setColor(Color.MAGENTA);
+
             //add a few bricks
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 7; j++) {
-                    Paint brickPaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
-                    brickPaint.setColor(Color.MAGENTA);
-                    gameShapes.get("bricks").add(new Brick(brickLength / 2, brickLength, 40 + (j * 150), (height / 3) + (i * 100), brickPaint));
+            for (int i = 0; i < 5; i++)
+                for (int j = 0; j < 8; j++) {
+                    if(j == 3 || j == 4)
+                        continue;
+                    gameShapes.get("bricks").add(new Brick(brickLength / 2, brickLength, 40 + (j * 130), (height / 3) + (i * 100), brickPaint));
                 }
 
-            //add two touch paddles
+            //add the touch paddle listener
             int touchAreaSize = 300;
             if(tpc == null) {
                 tpc = new TouchPaddleController(

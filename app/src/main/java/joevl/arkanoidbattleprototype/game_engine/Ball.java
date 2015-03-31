@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class Ball extends GameShape
 {
-    private double speed=20, angle=-45;
+    private double speed=30, angle=-45;
     private float lastX, lastY;
     public Ball(float height, float width, float x, float y, Paint paint)
     {
