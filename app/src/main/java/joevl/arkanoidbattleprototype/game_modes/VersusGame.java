@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import joevl.arkanoidbattleprototype.GameView;
+import joevl.arkanoidbattleprototype.game_engine.AIPaddleController;
 import joevl.arkanoidbattleprototype.game_engine.Ball;
 import joevl.arkanoidbattleprototype.game_engine.Brick;
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
@@ -68,13 +69,19 @@ public class VersusGame extends GameEngine {
                 gameView.setOnTouchListener(tpc);
             }
 
+            //opponent
             Paint opponentPaddlePaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
             opponentPaddlePaint.setColor(Color.RED);
-            gameShapes.get("paddles").add(new Paddle(50, paddleLength, width / 4, 10, opponentPaddlePaint, tpc));
+            Paddle opponentPaddle = new Paddle(50, paddleLength, width / 4, 10, opponentPaddlePaint);
+            opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
+            gameShapes.get("paddles").add(opponentPaddle);
 
+            //player
             Paint userPaddlePaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
             userPaddlePaint.setColor(Color.BLUE);
-            gameShapes.get("paddles").add(new Paddle(50, paddleLength, width / 4, height - 50, userPaddlePaint, tpc));
+            Paddle playerPaddle = new Paddle(50, paddleLength, width / 4, height - 50, userPaddlePaint);
+            playerPaddle.setPaddleController(tpc);
+            gameShapes.get("paddles").add(playerPaddle);
         }
     }
 

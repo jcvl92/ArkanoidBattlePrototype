@@ -16,9 +16,15 @@ public class TouchPaddleController implements OnTouchListener, PaddleController
         rightArea = right;
     }
 
+    @Override
     public Controls getMovement()
     {
         return current;
+    }
+
+    @Override
+    public float getSpeed() {
+        return Paddle.speed;
     }
 
     public boolean onTouch(View v, MotionEvent event)
