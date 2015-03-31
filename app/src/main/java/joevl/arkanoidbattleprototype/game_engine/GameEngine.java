@@ -43,7 +43,7 @@ public abstract class GameEngine
                     try {
                         while (gameView.bounds.isEmpty())
                             gameView.bounds.wait();
-                    } catch (InterruptedException ie) {}
+                    } catch(InterruptedException ie) {}
 
                     //initialize the engine
                     init();
@@ -52,6 +52,7 @@ public abstract class GameEngine
                     long time = System.nanoTime();
                     //tick
                     tick();
+                    gameView.postInvalidate();
                     //wait for remaining amount of time
                     try {
                         long sleepTime = refreshTime - (System.nanoTime()-time)/1000000;
@@ -172,8 +173,6 @@ public abstract class GameEngine
             if(ballBounds.bottom-ballBounds.height()>bottom)
                 ballBounds.offsetTo(ballBounds.left, bottom-ballBounds.height()+1);
         }
-
-        gameView.postInvalidate();
     }
 
     protected abstract void doTick();

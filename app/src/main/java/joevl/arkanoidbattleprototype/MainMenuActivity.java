@@ -2,23 +2,25 @@ package joevl.arkanoidbattleprototype;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 
 import java.util.ArrayList;
 
 public class MainMenuActivity extends Activity {
-    AnimationDrawable spaceAnimation;
-    ArrayList<String> scores = new ArrayList<String>();//TODO: make this a global thing
+    static ArrayList<String> scores = new ArrayList<String>();//TODO: make this a global thing
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        //TODO: set up background animating
+        scores.add("test1 - test2");
+        scores.add("test3 - test4");
+        scores.add("test5 - test6");
+        scores.add("test7 - test8");
+        scores.add("test9 - test10");
+        scores.add("test11 - test12");
     }
 
     @Override
@@ -36,7 +38,6 @@ public class MainMenuActivity extends Activity {
 
     public void play(View view)
     {
-        //startActivityForResult(new Intent(this, GameActivity.class), 0);
         startActivityForResult(new Intent(this, GameActivity.class), 0);
     }
 
