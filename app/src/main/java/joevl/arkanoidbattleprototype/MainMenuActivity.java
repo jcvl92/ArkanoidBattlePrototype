@@ -18,10 +18,7 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        ImageView space = (ImageView) findViewById(R.id.imageAnimation);
-        space.setBackgroundResource(R.drawable.animatedspace);
-        spaceAnimation = (AnimationDrawable) space.getBackground();
-        spaceAnimation.start();
+        //TODO: set up background animating
     }
 
     @Override

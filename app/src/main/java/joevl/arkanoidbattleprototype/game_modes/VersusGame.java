@@ -95,14 +95,14 @@ public class VersusGame extends GameEngine {
 
         for(GameShape ball : gameShapes.get("balls")) {
             if (ball.getBounds().intersects(0, 0, right, 0)) {//top wall
-                if(++humanScore >= 7)
+                if(++humanScore >= 3)
                     close();
                 else
                     reset();
                 return;
             }
             else if (ball.getBounds().intersects(0, bottom, right, bottom)) {//bottom wall
-                if(++computerScore >= 7)
+                if(++computerScore >= 3)
                     close();
                 else
                     reset();
