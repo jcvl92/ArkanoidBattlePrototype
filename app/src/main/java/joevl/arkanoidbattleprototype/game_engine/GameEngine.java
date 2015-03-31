@@ -15,13 +15,15 @@ import java.util.Iterator;
 import java.util.Map;
 
 import joevl.arkanoidbattleprototype.GameView;
-
+//TODO: destruct touch listeners!(backing up and starting again doesn't allow touch)
+//TODO: implement closeable
 public abstract class GameEngine
 {
     protected GameView gameView;
     private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
+    private boolean closing = false;
 
     protected GameEngine(final GameView gameView)
     {
@@ -46,18 +48,28 @@ public abstract class GameEngine
                     //initialize the engine
                     init();
                 }
-                while(true) {
+                while(!closing) {
                     long time = System.nanoTime();
                     //tick
                     tick();
                     //wait for remaining amount of time
                     try {
-                        Thread.sleep(100);//refreshTime - (System.nanoTime()-time)/1000000);
+                        long sleepTime = refreshTime - (System.nanoTime()-time)/1000000;
+                        if(sleepTime > 0) {
+                            Thread.sleep(sleepTime);
+                        }
                     } catch (InterruptedException ie) {}
                 }
             }
         });
         ticker.start();
+    }
+
+    public void close() {
+        closing = true;
+        /*try {
+            ticker.join();
+        } catch(InterruptedException ie) {}*/
     }
 
     public void pause()
@@ -133,28 +145,22 @@ public abstract class GameEngine
         {
             ((Ball) ball).advance();
 
-            for(ArrayList<GameShape> gameShapeList : gameShapes.values())
-                for(Iterator<GameShape> iter = gameShapeList.iterator(); iter.hasNext();)
-                {
-                    GameShape gameShape = iter.next();
-                    if (gameShape != ball && ((Ball) ball).collides(gameShape))
-                        ballHit(ball, gameShape, iter);//TODO: this is so gross and I hate it, change it to do something cleaner
-                }
+            synchronized(gameShapes) {
+                for (ArrayList<GameShape> gameShapeList : gameShapes.values())
+                    for (Iterator<GameShape> iter = gameShapeList.iterator(); iter.hasNext(); ) {
+                        GameShape gameShape = iter.next();
+                        if (gameShape != ball && ((Ball) ball).collides(gameShape))
+                            ballHit(ball, gameShape, iter);//TODO: this is so gross and I hate it, change it to do something cleaner
+                    }
+            }
 
-            //TODO: move this to specific implementations, have the engine call specific functions for when the ball COMPLETELY leaves the bounds
             //bounce off of the walls
             if(ball.getBounds().intersects(0, 0, 0, bottom))//left wall
                 ((Ball)ball).bounceOff(new RectF(0, 0, 0, bottom));
             else if(ball.getBounds().intersects(right, 0, right, bottom))//right wall
                 ((Ball)ball).bounceOff(new RectF(right, 0, right, bottom));
 
-            //TODO: this is just for the prototype, this behavior should be implemented in subclasses(goals or bouncing or whatever)(SEE ABOVE!)
-            else if(ball.getBounds().intersects(0, 0, right, 0))//top wall
-                ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
-            else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
-                ((Ball)ball).bounceOff(new RectF(0, bottom, right, bottom));
-
-            //TODO: this doesnt work, fix it
+            //TODO: this doesnt work, fix it?
             //if the ball went over an edge, push it back to the edge
             RectF ballBounds = ball.getBounds();
             if(ballBounds.left+ballBounds.width()<0)
@@ -178,4 +184,10 @@ public abstract class GameEngine
     {
         return gameShapes;
     }
+
+    public abstract String getDescription();
+
+    public abstract String getStatus();
+
+    public abstract String getScore();
 }

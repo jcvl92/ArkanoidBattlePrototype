@@ -10,19 +10,14 @@ import java.util.ArrayList;
 
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 import joevl.arkanoidbattleprototype.game_engine.GameShape;
-import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 
 public class GameView extends View
 {
     GameEngine gameEngine;
     public RectF bounds = new RectF();
 
-    public GameView(Context context, AttributeSet attrs)
-    {
+    public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        //spawn the game engine
-        gameEngine = new VersusGame(this);
     }
 
     @Override
@@ -42,9 +37,18 @@ public class GameView extends View
            and new locations of objects, all union-ed */
         super.onDraw(canvas);
 
+        if(gameEngine == null)
+            gameEngine = ((GameActivity)getContext()).gameEngine;
+
         //draw the objects on the screen
-        for(ArrayList<GameShape> gameShapes : gameEngine.getGameShapes().values())
-            for (GameShape gameShape : gameShapes)
-                gameShape.draw(canvas);
+        synchronized(gameEngine.getGameShapes()) {
+            for (ArrayList<GameShape> gameShapes : gameEngine.getGameShapes().values())
+                for (GameShape gameShape : gameShapes)
+                    gameShape.draw(canvas);
+        }
+    }
+
+    public void onGameOver() {
+        ((GameActivity)getContext()).onGameOver(gameEngine.getDescription(), gameEngine.getStatus(), gameEngine.getScore());
     }
 }
