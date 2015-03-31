@@ -5,6 +5,7 @@
     android:background="@color/background_material_dark"
     tools:context=".MainActivity" >
     <joevl.arkanoidbattleprototype.GameView
+        android:id="@+id/gameView"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 </RelativeLayout>

@@ -2,6 +2,8 @@ package joevl.arkanoidbattleprototype;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
@@ -10,19 +12,18 @@ import java.util.ArrayList;
 
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 import joevl.arkanoidbattleprototype.game_engine.GameShape;
-import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 
 public class GameView extends View
 {
     GameEngine gameEngine;
     public RectF bounds = new RectF();
+    Paint textPaint;
 
-    public GameView(Context context, AttributeSet attrs)
-    {
+    public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        //spawn the game engine
-        gameEngine = new VersusGame(this);
+        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setColor(Color.YELLOW);
+        textPaint.setTextSize(200);
     }
 
     @Override
@@ -42,9 +43,21 @@ public class GameView extends View
            and new locations of objects, all union-ed */
         super.onDraw(canvas);
 
+        if(gameEngine == null)
+            gameEngine = ((GameActivity)getContext()).gameEngine;
+
         //draw the objects on the screen
-        for(ArrayList<GameShape> gameShapes : gameEngine.getGameShapes().values())
-            for (GameShape gameShape : gameShapes)
-                gameShape.draw(canvas);
+        synchronized(gameEngine.getGameShapes()) {
+            for (ArrayList<GameShape> gameShapes : gameEngine.getGameShapes().values())
+                for (GameShape gameShape : gameShapes)
+                    gameShape.draw(canvas);
+        }
+
+        //TODO: move this into the game object
+        canvas.drawText(gameEngine.getScore(), 0, 150, textPaint);
+    }
+
+    public void onGameOver() {
+        ((GameActivity)getContext()).onGameOver(gameEngine.getDescription(), gameEngine.getStatus(), gameEngine.getScore());
     }
 }

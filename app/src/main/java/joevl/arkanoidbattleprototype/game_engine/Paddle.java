@@ -6,20 +6,26 @@ import android.graphics.RectF;
 
 public class Paddle extends GameShape
 {
-    private final PaddleController paddleController;
-    public Paddle(float height, float width, float x, float y, Paint paint, PaddleController paddleController)
+    private PaddleController paddleController;
+    public static final int speed = 30;
+
+    public Paddle(float height, float width, float x, float y, Paint paint)
     {
         super(paint);
-        this.paddleController = paddleController;
         bounds = new RectF(x, y, x+width, y+height);
+    }
+
+    public void setPaddleController(PaddleController paddleController) {
+        this.paddleController = paddleController;
     }
 
     public void advance(float min, float max)
     {
+        float aSpeed = paddleController.getSpeed() < speed ? paddleController.getSpeed() : speed;
         if(paddleController.getMovement() == PaddleController.Controls.LEFT)
-            bounds.offset(-20, 0);
+            bounds.offset(-aSpeed, 0);
         else if(paddleController.getMovement() == PaddleController.Controls.RIGHT)
-            bounds.offset(20, 0);
+            bounds.offset(aSpeed, 0);
 
         if(bounds.left < min)
             bounds.offset(min-bounds.left, 0);

@@ -7,14 +7,43 @@ import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
 
+import java.io.IOException;
+
 public class Ball extends GameShape
 {
-    private double speed=10, angle=-45;
+    private double speed=30, angle=-45;
     private float lastX, lastY;
     public Ball(float height, float width, float x, float y, Paint paint)
     {
         super(paint);
         bounds = new RectF(x, y, x+width, y+height);
+    }
+
+    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.writeFloat(bounds.left);
+        out.writeFloat(bounds.top);
+        out.writeFloat(bounds.right);
+        out.writeFloat(bounds.bottom);
+        out.writeObject(paint);
+
+        out.writeDouble(speed);
+        out.writeDouble(angle);
+        out.writeFloat(lastX);
+        out.writeFloat(lastY);
+    }
+    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        bounds = new RectF(
+                in.readFloat(),
+                in.readFloat(),
+                in.readFloat(),
+                in.readFloat()
+        );
+        paint = (Paint)in.readObject();
+
+        speed = in.readDouble();
+        angle = in.readDouble();
+        lastX = in.readFloat();
+        lastY = in.readFloat();
     }
 
     public void move(float dx, float dy)

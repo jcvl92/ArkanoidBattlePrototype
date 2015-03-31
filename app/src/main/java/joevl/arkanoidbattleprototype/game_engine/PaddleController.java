@@ -8,4 +8,5 @@ public interface PaddleController
         NONE
     }
     public Controls getMovement();
+    public float getSpeed();
 }
