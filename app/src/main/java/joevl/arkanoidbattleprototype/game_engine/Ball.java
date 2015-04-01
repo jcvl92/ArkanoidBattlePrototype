@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -123,6 +124,7 @@ public class Ball extends GameShape
 
     public void bounceOff(RectF rect)
     {
+        //TODO: this doesn't work. fix it
         //the smallest difference between corresponding x and corresponding y values(of the ball and the rect) determines which side was hit
         float yDist = Math.abs(rect.top - bounds.centerY());
         if(Math.abs(rect.bottom - bounds.centerY()) < yDist)
@@ -132,10 +134,16 @@ public class Ball extends GameShape
         if(Math.abs(rect.right - bounds.centerY()) < xDist)
             xDist = Math.abs(rect.right - bounds.centerX());
 
-        if(xDist < yDist)//if hit one of the vertical sides
+        if(xDist < yDist) {//if hit one of the vertical sides
+            double lastAngle = angle;
             angle = (0 - angle) % (360);//flip the angle across the y axis
-        else//if hit one of the horizontal sides
+            Log.v("angles", "bouncing off of top or bottom, angles: "+lastAngle+"->"+angle);
+        }
+        else {//if hit one of the horizontal sides
+            double lastAngle = angle;
             angle = (180 - angle) % (360);//flip the angle across the x axis
+            Log.v("angles", "bouncing off of left or right, angles: "+lastAngle+"->"+angle);
+        }
 
         reAdvance();
     }

@@ -158,6 +158,10 @@ public abstract class GameEngine
                 ((Ball)ball).bounceOff(new RectF(0, 0, 0, bottom));
             else if(ball.getBounds().intersects(right, 0, right, bottom))//right wall
                 ((Ball)ball).bounceOff(new RectF(right, 0, right, bottom));
+            /*else if(ball.getBounds().intersects(0, 0, right, 0))//top wall
+                ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
+            else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
+                ((Ball)ball).bounceOff(new RectF(0, bottom, right, bottom));*/
 
             //TODO: this doesnt work, fix it?
             //if the ball went over an edge, push it back to the edge
