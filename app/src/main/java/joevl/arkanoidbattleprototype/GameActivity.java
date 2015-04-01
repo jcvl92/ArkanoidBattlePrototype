@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
-import joevl.arkanoidbattleprototype.game_modes.BounceTester;
 import joevl.arkanoidbattleprototype.game_modes.VersusGame;
+import joevl.arkanoidbattleprototype.physics_test_environments.BounceTester;
 
 public class GameActivity extends Activity {
     public GameEngine gameEngine;
@@ -22,7 +22,6 @@ public class GameActivity extends Activity {
 
         //spawn the game engine
         gameEngine = new VersusGame(gameView);
-        //gameEngine = new BounceTester(gameView);
     }
 
     public void onGameOver(String mode, String status, String score) {

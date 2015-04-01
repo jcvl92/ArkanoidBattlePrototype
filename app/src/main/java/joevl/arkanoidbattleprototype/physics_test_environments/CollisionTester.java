@@ -1,4 +1,4 @@
-package joevl.arkanoidbattleprototype.game_modes;
+package joevl.arkanoidbattleprototype.physics_test_environments;
 
 import android.content.Context;
 import android.graphics.Canvas;

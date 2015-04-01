@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class Ball extends GameShape
 {
-    private double speed=30, angle=-45;
+    private double speed=30, angle=315;
     private float lastX, lastY;
     public Ball(float height, float width, float x, float y, Paint paint)
     {
@@ -107,15 +107,16 @@ public class Ball extends GameShape
 
     public void bounceOff(GameShape gameShape)
     {
+        backUp();
         //the bounce angle off of a paddle is equal to the angel between the center of the paddle and the center of the ball
         if(gameShape.getClass() == Paddle.class)//bouncing off of paddles
         {
-            angle = Math.toDegrees(Math.atan2(bounds.centerX() - gameShape.getBounds().centerX(), gameShape.getBounds().centerY() - bounds.centerY()));
+            setAngle(Math.toDegrees(Math.atan2(bounds.centerX() - gameShape.getBounds().centerX(), gameShape.getBounds().centerY() - bounds.centerY())));
             reAdvance();
         }
         else if(gameShape.getClass() == Ball.class)//bouncing off of balls
         {
-            angle = Math.toDegrees(Math.atan2(bounds.centerX() - gameShape.getBounds().centerX(), gameShape.getBounds().centerY() - bounds.centerY()));
+            setAngle(Math.toDegrees(Math.atan2(bounds.centerX() - gameShape.getBounds().centerX(), gameShape.getBounds().centerY() - bounds.centerY())));
             reAdvance();
         }
         else//bouncing off of other rectangles
@@ -124,35 +125,55 @@ public class Ball extends GameShape
 
     public void bounceOff(RectF rect)
     {
-        //TODO: this doesn't work. fix it
-        //the smallest difference between corresponding x and corresponding y values(of the ball and the rect) determines which side was hit
-        float yDist = Math.abs(rect.top - bounds.centerY());
-        if(Math.abs(rect.bottom - bounds.centerY()) < yDist)
-            yDist = Math.abs(rect.bottom - bounds.centerY());
+        //get the angles
+        double topLeftAngle, topRightAngle, bottomRightAngle, bottomLeftAngle, ballAngle;
+        ballAngle = Math.toDegrees(Math.atan2(bounds.centerX() - rect.centerX(), rect.centerY() - bounds.centerY()));
+        topLeftAngle = Math.toDegrees(Math.atan2(rect.left - rect.centerX(), rect.centerY() - rect.top));
+        topRightAngle = Math.toDegrees(Math.atan2(rect.right - rect.centerX(), rect.centerY() - rect.top));
+        bottomRightAngle = Math.toDegrees(Math.atan2(rect.right - rect.centerX(), rect.centerY() - rect.bottom));
+        bottomLeftAngle = Math.toDegrees(Math.atan2(rect.left - rect.centerX(), rect.centerY() - rect.bottom));
 
-        float xDist = Math.abs(rect.left - bounds.centerX());
-        if(Math.abs(rect.right - bounds.centerY()) < xDist)
-            xDist = Math.abs(rect.right - bounds.centerX());
-
-        if(xDist < yDist) {//if hit one of the vertical sides
+        if((topLeftAngle > ballAngle && ballAngle < topRightAngle) ||
+                (bottomRightAngle > ballAngle && ballAngle < bottomLeftAngle)) {//if hit one of the vertical sides
             double lastAngle = angle;
-            angle = (0 - angle) % (360);//flip the angle across the y axis
+            flipVertical();//flip the angle across the y axis
             Log.v("angles", "bouncing off of top or bottom, angles: "+lastAngle+"->"+angle);
         }
         else {//if hit one of the horizontal sides
             double lastAngle = angle;
-            angle = (180 - angle) % (360);//flip the angle across the x axis
+            flipHorizontal();//flip the angle across the x axis
             Log.v("angles", "bouncing off of left or right, angles: "+lastAngle+"->"+angle);
         }
+    }
 
+    public void flipHorizontal() {
+        setAngle(180 - angle);
         reAdvance();
+    }
+
+    public void flipVertical() {
+        setAngle(0 - angle);
+        reAdvance();
+    }
+
+    private void setAngle(double angle) {
+        angle %= 360;
+
+        if(angle < 0)
+            angle += 360;
+
+        this.angle = angle;
     }
 
     private void reAdvance()
     {
+        advance();
+    }
+
+    private void backUp()
+    {
         //undo the last advancement
         bounds.offset(-lastX, -lastY);
-        advance();
     }
 
     public void advance()

@@ -149,15 +149,15 @@ public abstract class GameEngine
                     for (Iterator<GameShape> iter = gameShapeList.iterator(); iter.hasNext(); ) {
                         GameShape gameShape = iter.next();
                         if (gameShape != ball && ((Ball) ball).collides(gameShape))
-                            ballHit(ball, gameShape, iter);//TODO: this is so gross and I hate it, change it to do something cleaner
+                            ballHit(ball, gameShape, iter);//TODO: this is so gross and I hate it, change it to do something cleaner?
                     }
             }
 
             //bounce off of the walls
             if(ball.getBounds().intersects(0, 0, 0, bottom))//left wall
-                ((Ball)ball).bounceOff(new RectF(0, 0, 0, bottom));
+                ((Ball)ball).flipVertical();
             else if(ball.getBounds().intersects(right, 0, right, bottom))//right wall
-                ((Ball)ball).bounceOff(new RectF(right, 0, right, bottom));
+                ((Ball)ball).flipVertical();
             /*else if(ball.getBounds().intersects(0, 0, right, 0))//top wall
                 ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
             else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
