@@ -130,8 +130,6 @@ public abstract class GameEngine
 
     private final void tick()
     {
-        //TODO: adjust speed of things according to tick frequency
-        //TODO: instantiate with the size of the screen to stretch to fit
         doTick();
 
         int right = (int)gameView.bounds.right,

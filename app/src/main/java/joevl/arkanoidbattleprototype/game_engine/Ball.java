@@ -53,8 +53,55 @@ public class Ball extends GameShape
 
     public boolean collides(GameShape gameShape)
     {
-        //TODO: implement proper oval collision
-        return RectF.intersects(bounds, gameShape.getBounds());
+        //TODO: implement circle on circle collision
+        if(RectF.intersects(bounds, gameShape.getBounds()))
+        {
+            //if the bounding box of the circle does not hang over the edge of the gameShape's
+            //rectangle by more than half the width of the circle
+            float circleX = bounds.centerX(), circleY = bounds.centerY();
+            if(circleX > gameShape.getBounds().left && circleX < gameShape.getBounds().right)
+                return true;
+
+            if(circleY > gameShape.getBounds().top && circleY < gameShape.getBounds().bottom)
+                return true;
+
+            //otherwise, we are intersecting with a corner of the rectangle and it is possible that
+            //the circle does not touch any of the gameShape's rectangle edges
+
+            //so, go through all corners of the box and see if they are close enough to the center
+            //of the circle to constitute intersection
+
+            //top left
+            if(contains(gameShape.getBounds().left, gameShape.getBounds().top))
+                return true;
+
+            //top right
+            if(contains(gameShape.getBounds().right, gameShape.getBounds().top))
+                return true;
+
+            //bottom left
+            if(contains(gameShape.getBounds().left, gameShape.getBounds().bottom))
+                return true;
+
+            //bottom right
+            if(contains(gameShape.getBounds().right, gameShape.getBounds().bottom))
+                return true;
+        }
+
+        return false;
+    }
+
+    public boolean contains(float x, float y) {
+        float circleX = bounds.centerX(), circleY = bounds.centerY(), circleRadius = bounds.width()/2;
+
+        float dist = (float)Math.sqrt(
+                Math.pow((circleX-x), 2) +
+                        Math.pow((circleY-y), 2));
+
+        if(dist <= circleRadius)
+            return true;
+        else
+            return false;
     }
 
     public void bounceOff(GameShape gameShape)

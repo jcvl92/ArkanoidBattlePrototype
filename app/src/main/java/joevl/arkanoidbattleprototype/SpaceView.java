@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class SpaceView extends View {
     ArrayList<Star> stars = new ArrayList<Star>();
     private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
-    boolean closing = false;
+    boolean closing = false, ready = false;
     Thread ticker = null;
     RectF viewBounds = new RectF();
     Paint starPaint;
@@ -43,6 +43,9 @@ public class SpaceView extends View {
                     float x = (float)((Math.random()-.5)*varianceDiameter), y = (float)((Math.random()-.5)*varianceDiameter);
                     stars.add(new Star(x + viewBounds.centerX(), y + viewBounds.centerY()));
                 }
+
+                //stars are ready to be drawn now
+                ready = true;
 
                 //this is just to avoid the initial "explosions"
                 for(int i=0; i<initialSkip; ++i)
@@ -85,8 +88,10 @@ public class SpaceView extends View {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        for(Star star : stars)
-            star.draw(canvas);
+        if(ready) {
+            for (Star star : stars)
+                star.draw(canvas);
+        }
     }
 
     private void tick() {
