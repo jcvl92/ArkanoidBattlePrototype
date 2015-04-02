@@ -45,12 +45,12 @@ public class VersusGame extends GameEngine {
             //TODO: the engine should handle the adding of objects(balls, bricks, and paddles)
 
             //add one ball
-            Paint ballPaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
+            Paint ballPaint = new SerialPaint();
             ballPaint.setShadowLayer(20, 50, 50, Color.LTGRAY);//TODO: fix this
             mainBall = new Ball(ballDiameter, ballDiameter, 500, height - 200, ballPaint);
             gameShapes.get("balls").add(mainBall);
 
-            Paint brickPaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
+            Paint brickPaint = new SerialPaint();
             brickPaint.setColor(Color.MAGENTA);
 
             //add a few bricks
@@ -62,25 +62,27 @@ public class VersusGame extends GameEngine {
                 }
 
             //add the touch paddle listener
-            int touchAreaSize = 300;
+            //int touchAreaSize = 300;
             if(tpc == null) {
                 tpc = new TouchPaddleController(
-                        new RectF(0, height - touchAreaSize, touchAreaSize, height),
-                        new RectF(width - touchAreaSize, height - touchAreaSize, width, height));
+                        new RectF(gameView.bounds.left, gameView.bounds.top,
+                                gameView.bounds.right/2, gameView.bounds.bottom),//(0, height - touchAreaSize, touchAreaSize, height),
+                        new RectF(gameView.bounds.left+gameView.bounds.right/2, gameView.bounds.top,
+                                gameView.bounds.right, gameView.bounds.bottom));//(width - touchAreaSize, height - touchAreaSize, width, height));
 
                 //add the touch paddle listener to our view
                 gameView.setOnTouchListener(tpc);
             }
 
             //opponent
-            Paint opponentPaddlePaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
+            Paint opponentPaddlePaint = new SerialPaint();
             opponentPaddlePaint.setColor(Color.RED);
             Paddle opponentPaddle = new Paddle(50, paddleLength, width / 4, 10, opponentPaddlePaint);
             opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
             gameShapes.get("paddles").add(opponentPaddle);
 
             //player
-            Paint userPaddlePaint = new SerialPaint(Paint.ANTI_ALIAS_FLAG);
+            Paint userPaddlePaint = new SerialPaint();
             userPaddlePaint.setColor(Color.BLUE);
             Paddle playerPaddle = new Paddle(50, paddleLength, width / 4, height - 50, userPaddlePaint);
             playerPaddle.setPaddleController(tpc);
@@ -88,7 +90,8 @@ public class VersusGame extends GameEngine {
         }
     }
 
-    private void reset()
+    @Override
+    protected void reset()
     {
         synchronized(gameShapes) {
             for(ArrayList<GameShape> gs : gameShapes.values()) {
@@ -96,6 +99,7 @@ public class VersusGame extends GameEngine {
             }
             init();
         }
+        super.reset();
     }
 
     protected void doTick()
@@ -126,6 +130,8 @@ public class VersusGame extends GameEngine {
     @Override
     protected void ballHit(GameShape ball, GameShape object, Iterator iter)
     {
+        super.ballHit(ball, object, iter);
+
         if(object.getClass()==Brick.class)
             iter.remove();
 

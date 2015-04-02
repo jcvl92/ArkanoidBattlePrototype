@@ -18,6 +18,8 @@ public class Ball extends GameShape
     {
         super(paint);
         bounds = new RectF(x, y, x+width, y+height);
+        paint.setShader(new RadialGradient(bounds.centerX(), bounds.centerY(),
+                bounds.height() / 2, Color.RED, Color.GREEN, Shader.TileMode.CLAMP));
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {

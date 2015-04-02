@@ -6,13 +6,10 @@ import java.io.IOException;
 import java.io.Serializable;
 
 public class SerialPaint extends Paint implements Serializable {
-    private int flags, shaderShadowColor;
+    private int shaderShadowColor;
     float shaderRadius, shaderDx, shaderDy;
 
-    public SerialPaint(int flags)
-    {
-        this.flags = flags;
-    }
+    public SerialPaint(){}
 
     @Override
     public void setShadowLayer(float radius, float dx, float dy, int shadowColor) {
@@ -24,7 +21,6 @@ public class SerialPaint extends Paint implements Serializable {
     }
 
     private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.writeInt(flags);
         out.writeFloat(shaderRadius);
         out.writeFloat(shaderDx);
         out.writeFloat(shaderDy);
@@ -32,7 +28,6 @@ public class SerialPaint extends Paint implements Serializable {
         out.writeInt(getColor());
     }
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
-        setFlags(in.readInt());
         setShadowLayer(
                 in.readFloat(),
                 in.readFloat(),

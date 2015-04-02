@@ -21,9 +21,6 @@ public class GameView extends View
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setColor(Color.YELLOW);
-        textPaint.setTextSize(200);
     }
 
     @Override
@@ -46,15 +43,7 @@ public class GameView extends View
         if(gameEngine == null)
             gameEngine = ((GameActivity)getContext()).gameEngine;
 
-        //draw the objects on the screen
-        synchronized(gameEngine.getGameShapes()) {
-            for (ArrayList<GameShape> gameShapes : gameEngine.getGameShapes().values())
-                for (GameShape gameShape : gameShapes)
-                    gameShape.draw(canvas);
-        }
-
-        //TODO: move this into the game object
-        canvas.drawText(gameEngine.getScore(), 0, 150, textPaint);
+        gameEngine.draw(canvas);
     }
 
     public void onGameOver() {

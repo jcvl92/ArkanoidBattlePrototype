@@ -23,6 +23,8 @@
         <activity android:label="OptionsActivity" android:name=".OptionsActivity"></activity>
     </application>
 
+    <uses-permission android:name="android.permission.VIBRATE" />
+
 </manifest>
 
 

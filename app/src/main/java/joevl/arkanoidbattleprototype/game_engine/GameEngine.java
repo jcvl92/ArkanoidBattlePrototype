@@ -1,6 +1,12 @@
 package joevl.arkanoidbattleprototype.game_engine;
 
+import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.Vibrator;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
@@ -23,7 +29,10 @@ public abstract class GameEngine
     private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
-    private boolean closing = false;
+    private boolean closing = false, resetting = true;
+    private Paint textPaint, resetTextPaint, overlayPaint;
+    private Vibrator vibrator;
+    private int resetCounter = 0, resetValue = 3;
 
     protected GameEngine(final GameView gameView)
     {
@@ -34,6 +43,22 @@ public abstract class GameEngine
         gameShapes.put("balls", new ArrayList<GameShape>());
         gameShapes.put("paddles", new ArrayList<GameShape>());
         gameShapes.put("bricks", new ArrayList<GameShape>());
+
+        //initialize the paints
+        textPaint = new Paint();
+        textPaint.setColor(Color.YELLOW);
+        textPaint.setTextSize(200);
+
+        resetTextPaint = new Paint();
+        resetTextPaint.setColor(Color.WHITE);
+        resetTextPaint.setTextSize(500);
+
+        overlayPaint = new Paint();
+        overlayPaint.setColor(Color.BLACK);
+        overlayPaint.setAlpha(128);
+
+        //get the vibrator
+        vibrator = (Vibrator)gameView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
         //TODO: use an android mechanism if that would work better
         ticker = new Thread(new Runnable() {
@@ -51,7 +76,10 @@ public abstract class GameEngine
                 while(!closing) {
                     long time = System.nanoTime();
                     //tick
-                    tick();
+                    if(!resetting)
+                        tick();
+                    else
+                        resetTick();
                     gameView.postInvalidate();
                     //wait for remaining amount of time
                     try {
@@ -107,26 +135,44 @@ public abstract class GameEngine
 
     public void setSerializedState(byte[] bytes)
     {
-        try {
-            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-            ObjectInputStream in = new ObjectInputStream(bis);
+        synchronized(gameShapes) {
             try {
-                while (true) {
-                    Object str = in.readObject();
-                    Object lst = in.readObject();
-                    gameShapes.put((String)str, (ArrayList<GameShape>)lst);
+                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                ObjectInputStream in = new ObjectInputStream(bis);
+                try {
+                    while (true) {
+                        Object str = in.readObject();
+                        Object lst = in.readObject();
+                        gameShapes.put((String) str, (ArrayList<GameShape>) lst);
+                    }
+                    //gameShapes = (HashMap<String, ArrayList<GameShape>>) obj;
+                } catch (EOFException eofe) {
+                    in.close();
+                    bis.close();
                 }
-                //gameShapes = (HashMap<String, ArrayList<GameShape>>) obj;
-            } catch(EOFException eofe) {
-                in.close();
-                bis.close();
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
             }
-        } catch (IOException|ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 
     protected abstract void init();
+
+    protected void reset()
+    {
+        resetting = true;
+    }
+
+    private void resetTick()
+    {
+        resetValue = 3-resetCounter++/30;
+
+        if(resetValue == 0) {
+            resetValue = 3;
+            resetCounter = 0;
+            resetting = false;
+        }
+    }
 
     private final void tick()
     {
@@ -177,9 +223,40 @@ public abstract class GameEngine
         }
     }
 
+    public void draw(Canvas canvas)
+    {
+        //draw the score
+        canvas.drawText(getScore(), 0, 150, textPaint);
+
+        //draw the objects on the screen
+        synchronized(gameShapes) {
+            for (ArrayList<GameShape> gameShapeList : gameShapes.values())
+                for (GameShape gameShape : gameShapeList)
+                    gameShape.draw(canvas);
+        }
+
+        //draw the reset overlay
+        if(resetting) {
+            //draw transparent rectangle overlay
+            canvas.drawRect(gameView.bounds, overlayPaint);
+
+            //draw text
+            String val = String.valueOf(resetValue);
+            Rect bounds = new Rect();
+            resetTextPaint.getTextBounds(val, 0, val.length(), bounds);
+            canvas.drawText(val,
+                    gameView.bounds.centerX() - bounds.width()/2,
+                    gameView.bounds.centerY() + bounds.height()/2,
+                    resetTextPaint);
+        }
+    }
+
     protected abstract void doTick();
 
-    protected abstract void ballHit(GameShape ball, GameShape object, Iterator iter);
+    protected void ballHit(GameShape ball, GameShape object, Iterator iter)
+    {
+        vibrator.vibrate(50);
+    }
 
     public final HashMap<String, ArrayList<GameShape>> getGameShapes()
     {
