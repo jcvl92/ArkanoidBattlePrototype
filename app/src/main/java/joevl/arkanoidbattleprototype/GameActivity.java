@@ -24,6 +24,12 @@ public class GameActivity extends Activity {
         gameEngine = new VersusGame(gameView);
     }
 
+    @Override
+    public void onDestroy() {
+        gameEngine.close();
+        super.onDestroy();
+    }
+
     public void onGameOver(String mode, String status, String score) {
         Intent result = new Intent();
         result.putExtra("mode", mode);
