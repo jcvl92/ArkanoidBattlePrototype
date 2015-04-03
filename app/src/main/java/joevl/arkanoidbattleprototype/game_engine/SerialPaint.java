@@ -9,7 +9,9 @@ public class SerialPaint extends Paint implements Serializable {
     private int shaderShadowColor;
     float shaderRadius, shaderDx, shaderDy;
 
-    public SerialPaint(){}
+    public SerialPaint(){
+        super(Paint.ANTI_ALIAS_FLAG);
+    }
 
     @Override
     public void setShadowLayer(float radius, float dx, float dy, int shadowColor) {
