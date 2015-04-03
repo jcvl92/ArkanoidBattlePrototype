@@ -96,9 +96,9 @@ public abstract class GameEngine
 
     public void close() {
         closing = true;
-        try {
+        /*try {
             ticker.join();
-        } catch(InterruptedException ie) {}
+        } catch(InterruptedException ie) {}*/
     }
 
     public void pause()
