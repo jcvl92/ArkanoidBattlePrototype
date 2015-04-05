@@ -3,19 +3,34 @@ package joevl.arkanoidbattleprototype;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class MainMenuActivity extends Activity {
     static ArrayList<String> scores = new ArrayList<String>();//TODO: make this a global thing
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        textView = (TextView) findViewById(R.id.playGameButton);
+        Typeface playDigitFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
+        textView.setTypeface(playDigitFont);
+
+        textView = (TextView) findViewById(R.id.scoreButton);
+        Typeface scoreDigitFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
+        textView.setTypeface(scoreDigitFont);
+
+        textView = (TextView) findViewById(R.id.optionButton);
+        Typeface optionDigitFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
+        textView.setTypeface(optionDigitFont);
     }
 
     @Override
