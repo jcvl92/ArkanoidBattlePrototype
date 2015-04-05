@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.view.View;
@@ -20,6 +21,10 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        MediaPlayer mediaPlayer = MediaPlayer.create(MainMenuActivity.this, R.raw.spacesound);
+        mediaPlayer.start();
+
+
         textView = (TextView) findViewById(R.id.playGameButton);
         Typeface playDigitFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
         textView.setTypeface(playDigitFont);
@@ -35,6 +40,7 @@ public class MainMenuActivity extends Activity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         if(requestCode == 0 && resultCode == RESULT_OK) {
             String res = data.getStringExtra("mode")+"\t-\t"+data.getStringExtra("score");
             scores.add(res);
