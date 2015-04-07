@@ -15,15 +15,17 @@ import java.util.ArrayList;
 public class MainMenuActivity extends Activity {
     static ArrayList<String> scores = new ArrayList<String>();//TODO: make this a global thing
     TextView textView;
+    MediaPlayer mediaPlayer;
+    static boolean playMusic = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        MediaPlayer mediaPlayer = MediaPlayer.create(MainMenuActivity.this, R.raw.spacesound);
+        mediaPlayer = MediaPlayer.create(MainMenuActivity.this, R.raw.spacesound2);
+        mediaPlayer.setLooping(true);
         mediaPlayer.start();
-
 
         textView = (TextView) findViewById(R.id.playGameButton);
         Typeface playDigitFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
@@ -36,6 +38,22 @@ public class MainMenuActivity extends Activity {
         textView = (TextView) findViewById(R.id.optionButton);
         Typeface optionDigitFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
         textView.setTypeface(optionDigitFont);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer.stop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
