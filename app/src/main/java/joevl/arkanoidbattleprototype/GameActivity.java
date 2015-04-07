@@ -16,6 +16,8 @@ public class GameActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        MainMenuActivity.mediaPlayer.start();
+
         setContentView(R.layout.activity_game);
 
         gameView = (GameView)findViewById(R.id.gameView);
@@ -29,6 +31,18 @@ public class GameActivity extends Activity {
         gameEngine.close();
         super.onDestroy();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainMenuActivity.mediaPlayer.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainMenuActivity.mediaPlayer.start();
+    } 
 
     public void onGameOver(String mode, String status, String score) {
         Intent result = new Intent();

@@ -15,8 +15,7 @@ import java.util.ArrayList;
 public class MainMenuActivity extends Activity {
     static ArrayList<String> scores = new ArrayList<String>();//TODO: make this a global thing
     TextView textView;
-    MediaPlayer mediaPlayer;
-    static boolean playMusic = true;
+    static MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,11 +48,13 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
+        mediaPlayer.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        mediaPlayer.start();
     }
 
     @Override

@@ -10,11 +10,26 @@ public class ScoreActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MainMenuActivity.mediaPlayer.start();
+
         setContentView(R.layout.activity_scores);
 
         ListView lv = (ListView)findViewById(R.id.scoresListView);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.score_list_item, MainMenuActivity.scores);
         lv.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainMenuActivity.mediaPlayer.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainMenuActivity.mediaPlayer.start();
     }
 }

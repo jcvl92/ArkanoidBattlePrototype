@@ -15,9 +15,10 @@ public class OptionsActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        MainMenuActivity.mediaPlayer.start();
+
         setContentView(R.layout.activity_options);
-
-
 
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -47,5 +48,17 @@ public class OptionsActivity extends Activity {
         textView = (TextView) findViewById(R.id.SoundEffectBox);
         Typeface soundEffectFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
         textView.setTypeface(soundEffectFont);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        MainMenuActivity.mediaPlayer.pause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        MainMenuActivity.mediaPlayer.start();
     }
 }
