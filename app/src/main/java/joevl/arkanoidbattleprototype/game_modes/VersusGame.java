@@ -117,7 +117,8 @@ public class VersusGame extends GameEngine {
         super.reset();
     }
 
-    protected void doTick()
+    @Override
+    protected void tick()
     {
         int right = (int)gameView.bounds.right,
                 bottom = (int)gameView.bounds.bottom;
@@ -139,7 +140,7 @@ public class VersusGame extends GameEngine {
             }
         }
 
-        mainBall.multSpeed(1.001);
+        super.tick();
     }
 
     @Override

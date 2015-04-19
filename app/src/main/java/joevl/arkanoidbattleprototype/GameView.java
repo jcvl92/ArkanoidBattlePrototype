@@ -44,6 +44,8 @@ public class GameView extends View
             gameEngine = ((GameActivity)getContext()).gameEngine;
 
         gameEngine.draw(canvas);
+
+        invalidate();
     }
 
     public void onGameOver() {

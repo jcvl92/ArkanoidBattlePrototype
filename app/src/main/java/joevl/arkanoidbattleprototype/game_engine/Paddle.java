@@ -6,7 +6,8 @@ import android.graphics.RectF;
 
 public class Paddle extends GameShape {
     private transient PaddleController paddleController;
-    public static final int speed = 30;
+    public static final int speed = 900;
+    private long lastTick = -1;
 
     public Paddle(float height, float width, float x, float y, Paint paint) {
         super(paint);
@@ -19,15 +20,21 @@ public class Paddle extends GameShape {
 
     public void advance(float min, float max) {
         float aSpeed = paddleController.getSpeed() < speed ? paddleController.getSpeed() : speed;
-        if (paddleController.getMovement() == PaddleController.Controls.LEFT)
-            bounds.offset(-aSpeed, 0);
-        else if (paddleController.getMovement() == PaddleController.Controls.RIGHT)
-            bounds.offset(aSpeed, 0);
+
+        if(lastTick>0) {
+            long difference = System.currentTimeMillis()-lastTick;
+
+            if (paddleController.getMovement() == PaddleController.Controls.LEFT)
+                bounds.offset((-aSpeed*difference)/1000, 0);
+            else if (paddleController.getMovement() == PaddleController.Controls.RIGHT)
+                bounds.offset((aSpeed*difference)/1000, 0);
+        }
+        lastTick = System.currentTimeMillis();
 
         if (bounds.left < min)
-            bounds.offset(min - bounds.left, 0);
+            bounds.offsetTo(min, bounds.top);
         else if (bounds.right > max)
-            bounds.offset(max - bounds.right, 0);
+            bounds.offsetTo(max-bounds.width(), bounds.top);
     }
 
     public void draw(Canvas canvas) {

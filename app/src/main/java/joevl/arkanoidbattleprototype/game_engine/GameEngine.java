@@ -25,13 +25,14 @@ import joevl.arkanoidbattleprototype.GameView;
 //TODO: implement closeable
 public abstract class GameEngine {
     protected GameView gameView;
-    private static final long refreshTime = (long) ((1.0 / 30) * 1000);//30 Hz - milliseconds
+    //private static final long refreshTime = (long) ((1.0 / 30) * 1000);//30 Hz - milliseconds
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
-    private boolean closing = false, resetting = true;
+    private boolean closing = false, resetting;
     private Paint textPaint, resetTextPaint, overlayPaint;
     private Vibrator vibrator;
-    private int resetCounter = 0, resetValue = 3;
+    private long resetTime;
+    private int resetValue;
 
     protected GameEngine(final GameView gameView) {
         this.gameView = gameView;
@@ -69,25 +70,14 @@ public abstract class GameEngine {
                     } catch (InterruptedException ie) {
                     }
 
-                    //initialize the engine
-                    init();
+                    //set the engine for the first time
+                    reset();
                 }
                 while (!closing) {
-                    long time = System.nanoTime();
-                    //tick
                     if (!resetting)
                         tick();
                     else
                         resetTick();
-                    gameView.postInvalidate();
-                    //wait for remaining amount of time
-                    try {
-                        long sleepTime = refreshTime - (System.nanoTime() - time) / 1000000;
-                        if (sleepTime > 0) {
-                            Thread.sleep(sleepTime);
-                        }
-                    } catch (InterruptedException ie) {
-                    }
                 }
             }
         });
@@ -156,21 +146,16 @@ public abstract class GameEngine {
 
     protected void reset() {
         resetting = true;
+        resetTime = System.currentTimeMillis();
     }
 
     private void resetTick() {
-        resetValue = 3 - resetCounter++ / 30;
-
-        if (resetValue == 0) {
-            resetValue = 3;
-            resetCounter = 0;
-            resetting = false;
-        }
+        long difference = System.currentTimeMillis()-resetTime;
+        resetValue = (int) (3-(difference/1000));
+        resetting = difference < 3000;
     }
 
-    private final void tick() {
-        doTick();
-
+    protected void tick() {
         int right = (int) gameView.bounds.right,
                 bottom = (int) gameView.bounds.bottom;
 
@@ -258,8 +243,6 @@ public abstract class GameEngine {
                     resetTextPaint);
         }
     }
-
-    protected abstract void doTick();
 
     protected void ballHit(GameShape ball, GameShape object, Iterator iter) {
         vibrator.vibrate(50);

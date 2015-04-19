@@ -19,9 +19,10 @@ public class SerializationTester extends VersusGame {
         state = null;
     }
 
-    protected void doTick()
+    @Override
+    protected void tick()
     {
-        super.doTick();
+        super.tick();
 
         if(++counter == 100) {
             counter = 0;

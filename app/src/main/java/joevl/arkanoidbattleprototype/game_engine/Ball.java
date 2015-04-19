@@ -11,8 +11,9 @@ import android.util.Log;
 import java.io.IOException;
 
 public class Ball extends GameShape {
-    private double speed = 30, angle = 135;
-    private float lastX, lastY;
+    private double speed = 900, angle = 135, acceleration = 1.01;
+    private float lastX = 0, lastY = 0;
+    private long lastTick = -1;
 
     public Ball(float height, float width, float x, float y, Paint paint) {
         super(paint);
@@ -152,25 +153,36 @@ public class Ball extends GameShape {
 
     public void backUp() {
         //undo the last advancement
-        bounds.offset(-lastX, -lastY);
+        //TODO: first decelerate
+        move(-lastX, -lastY);
     }
 
     public void advance() {
         //move the ball along the trajectory
-        float x = -(float) (speed * Math.sin(Math.toRadians(angle))),
-                y = (float) (speed * Math.cos(Math.toRadians(angle)));
+        float x = -(float) (Math.sin(Math.toRadians(angle))),
+                y = (float) (Math.cos(Math.toRadians(angle)));
         lastX = x;
         lastY = y;
-        bounds.offset(x, y);
+        move(x, y);
 
         paint.setShader(new RadialGradient(bounds.centerX(), bounds.centerY(),
                 bounds.height() / 2, Color.RED, Color.GREEN, Shader.TileMode.CLAMP));
     }
 
-    public void multSpeed(double ds) {
-        //cap the speed
-        if (speed * ds < bounds.width())
-            speed *= ds;
+    private void move(float x, float y) {
+        if(lastTick>0) {
+            long difference = System.currentTimeMillis()-lastTick;
+            bounds.offset(
+                    (float) ((speed*difference)/1000) * x,
+                    (float) ((speed*difference)/1000) * y
+            );
+
+            //cap the speed
+            /*double aDiff = (acceleration * difference) / 1000;
+            if (speed * aDiff < bounds.width()*100)
+                speed *= aDiff;*/
+        }
+        lastTick = System.currentTimeMillis();
     }
 
     public void draw(Canvas canvas) {
