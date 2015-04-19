@@ -9,7 +9,7 @@ public class SerialPaint extends Paint implements Serializable {
     private int shaderShadowColor;
     float shaderRadius, shaderDx, shaderDy;
 
-    public SerialPaint(){
+    public SerialPaint() {
         super(Paint.ANTI_ALIAS_FLAG);
     }
 
@@ -29,6 +29,7 @@ public class SerialPaint extends Paint implements Serializable {
         out.writeInt(shaderShadowColor);
         out.writeInt(getColor());
     }
+
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         setShadowLayer(
                 in.readFloat(),

@@ -10,14 +10,13 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class Ball extends GameShape
-{
-    private double speed=30, angle=315;
+public class Ball extends GameShape {
+    private double speed = 30, angle = 135;
     private float lastX, lastY;
-    public Ball(float height, float width, float x, float y, Paint paint)
-    {
+
+    public Ball(float height, float width, float x, float y, Paint paint) {
         super(paint);
-        bounds = new RectF(x, y, x+width, y+height);
+        bounds = new RectF(x, y, x + width, y + height);
         paint.setShader(new RadialGradient(bounds.centerX(), bounds.centerY(),
                 bounds.height() / 2, Color.RED, Color.GREEN, Shader.TileMode.CLAMP));
     }
@@ -34,6 +33,7 @@ public class Ball extends GameShape
         out.writeFloat(lastX);
         out.writeFloat(lastY);
     }
+
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         bounds = new RectF(
                 in.readFloat(),
@@ -41,7 +41,7 @@ public class Ball extends GameShape
                 in.readFloat(),
                 in.readFloat()
         );
-        paint = (Paint)in.readObject();
+        paint = (Paint) in.readObject();
 
         speed = in.readDouble();
         angle = in.readDouble();
@@ -49,23 +49,16 @@ public class Ball extends GameShape
         lastY = in.readFloat();
     }
 
-    public void move(float dx, float dy)
-    {
-        bounds.offset(dx, dy);
-    }
-
-    public boolean collides(GameShape gameShape)
-    {
+    public boolean collides(GameShape gameShape) {
         //TODO: implement circle on circle collision
-        if(RectF.intersects(bounds, gameShape.getBounds()))
-        {
+        if (RectF.intersects(bounds, gameShape.getBounds())) {
             //if the bounding box of the circle does not hang over the edge of the gameShape's
             //rectangle by more than half the width of the circle
             float circleX = bounds.centerX(), circleY = bounds.centerY();
-            if(circleX > gameShape.getBounds().left && circleX < gameShape.getBounds().right)
+            if (circleX > gameShape.getBounds().left && circleX < gameShape.getBounds().right)
                 return true;
 
-            if(circleY > gameShape.getBounds().top && circleY < gameShape.getBounds().bottom)
+            if (circleY > gameShape.getBounds().top && circleY < gameShape.getBounds().bottom)
                 return true;
 
             //otherwise, we are intersecting with a corner of the rectangle and it is possible that
@@ -75,19 +68,19 @@ public class Ball extends GameShape
             //of the circle to constitute intersection
 
             //top left
-            if(contains(gameShape.getBounds().left, gameShape.getBounds().top))
+            if (contains(gameShape.getBounds().left, gameShape.getBounds().top))
                 return true;
 
             //top right
-            if(contains(gameShape.getBounds().right, gameShape.getBounds().top))
+            if (contains(gameShape.getBounds().right, gameShape.getBounds().top))
                 return true;
 
             //bottom left
-            if(contains(gameShape.getBounds().left, gameShape.getBounds().bottom))
+            if (contains(gameShape.getBounds().left, gameShape.getBounds().bottom))
                 return true;
 
             //bottom right
-            if(contains(gameShape.getBounds().right, gameShape.getBounds().bottom))
+            if (contains(gameShape.getBounds().right, gameShape.getBounds().bottom))
                 return true;
         }
 
@@ -95,94 +88,77 @@ public class Ball extends GameShape
     }
 
     public boolean contains(float x, float y) {
-        float circleX = bounds.centerX(), circleY = bounds.centerY(), circleRadius = bounds.width()/2;
+        float circleX = bounds.centerX(), circleY = bounds.centerY(), circleRadius = bounds.width() / 2;
 
-        float dist = (float)Math.sqrt(
-                Math.pow((circleX-x), 2) +
-                        Math.pow((circleY-y), 2));
+        float dist = (float) Math.sqrt(
+                Math.pow((circleX - x), 2) +
+                        Math.pow((circleY - y), 2));
 
-        if(dist <= circleRadius)
-            return true;
-        else
-            return false;
+        return dist <= circleRadius;
     }
 
-    public void bounceOff(GameShape gameShape)
-    {
+    public void bounceOff(GameShape gameShape) {
         backUp();
+
         //the bounce angle off of a paddle is equal to the angel between the center of the paddle and the center of the ball
-        if(gameShape.getClass() == Paddle.class)//bouncing off of paddles
+        if (gameShape.getClass() == Paddle.class)//bouncing off of paddles
         {
-            setAngle(Math.toDegrees(Math.atan2(bounds.centerX() - gameShape.getBounds().centerX(), gameShape.getBounds().centerY() - bounds.centerY())));
-            reAdvance();
-        }
-        else if(gameShape.getClass() == Ball.class)//bouncing off of balls
+            setAngle(Math.toDegrees(Math.atan2(gameShape.getBounds().centerX() - bounds.centerX(), bounds.centerY() - gameShape.getBounds().centerY())));
+            advance();
+        } else if (gameShape.getClass() == Ball.class)//bouncing off of balls
         {
-            setAngle(Math.toDegrees(Math.atan2(bounds.centerX() - gameShape.getBounds().centerX(), gameShape.getBounds().centerY() - bounds.centerY())));
-            reAdvance();
-        }
-        else//bouncing off of other rectangles
+            setAngle(Math.toDegrees(Math.atan2(gameShape.getBounds().centerX() - bounds.centerX(), bounds.centerY() - gameShape.getBounds().centerY())));
+            advance();
+        } else//bouncing off of other rectangles
             bounceOff(gameShape.getBounds());
     }
 
-    public void bounceOff(RectF rect)
-    {
+    public void bounceOff(RectF rect) {
         //get the angles
-        double topLeftAngle, topRightAngle, bottomRightAngle, bottomLeftAngle, ballAngle;
-        ballAngle = Math.toDegrees(Math.atan2(bounds.centerX() - rect.centerX(), rect.centerY() - bounds.centerY()));
-        topLeftAngle = Math.toDegrees(Math.atan2(rect.left - rect.centerX(), rect.centerY() - rect.top));
-        topRightAngle = Math.toDegrees(Math.atan2(rect.right - rect.centerX(), rect.centerY() - rect.top));
-        bottomRightAngle = Math.toDegrees(Math.atan2(rect.right - rect.centerX(), rect.centerY() - rect.bottom));
-        bottomLeftAngle = Math.toDegrees(Math.atan2(rect.left - rect.centerX(), rect.centerY() - rect.bottom));
+        double ballAngle, topRightAngle, topLeftAngle, bottomRightAngle, bottomLeftAngle;
+        ballAngle = Math.toDegrees(Math.atan2(rect.centerY() - bounds.centerY(), bounds.centerX() - rect.centerX()));
 
-        if((topLeftAngle > ballAngle && ballAngle < topRightAngle) ||
-                (bottomRightAngle > ballAngle && ballAngle < bottomLeftAngle)) {//if hit one of the vertical sides
-            double lastAngle = angle;
-            flipVertical();//flip the angle across the y axis
-            Log.v("angles", "bouncing off of top or bottom, angles: "+lastAngle+"->"+angle);
-        }
-        else {//if hit one of the horizontal sides
-            double lastAngle = angle;
+        topRightAngle = Math.toDegrees(Math.atan2(rect.centerY() - rect.top, rect.centerX() - rect.left));
+        topLeftAngle = Math.toDegrees(Math.atan2(rect.centerY() - rect.top, rect.centerX() - rect.right));
+        bottomRightAngle = Math.toDegrees(Math.atan2(rect.centerY() - rect.bottom, rect.right - rect.centerX()));
+        bottomLeftAngle = Math.toDegrees(Math.atan2(rect.centerY() - rect.bottom, rect.left - rect.centerX()));
+
+        if ((ballAngle > topRightAngle && ballAngle < topLeftAngle) ||
+                (ballAngle < bottomRightAngle && ballAngle > bottomLeftAngle)) {//if hit one of the horizontal sides
             flipHorizontal();//flip the angle across the x axis
-            Log.v("angles", "bouncing off of left or right, angles: "+lastAngle+"->"+angle);
+            advance();
+        } else {//if hit one of the vertical sides
+            flipVertical();//flip the angle across the y axis
+            advance();
         }
     }
 
     public void flipHorizontal() {
         setAngle(180 - angle);
-        reAdvance();
     }
 
     public void flipVertical() {
         setAngle(0 - angle);
-        reAdvance();
     }
 
     private void setAngle(double angle) {
         angle %= 360;
 
-        if(angle < 0)
+        if (angle < 0)
             angle += 360;
 
         this.angle = angle;
     }
 
-    private void reAdvance()
-    {
-        advance();
-    }
-
-    private void backUp()
-    {
+    public void backUp() {
         //undo the last advancement
         bounds.offset(-lastX, -lastY);
     }
 
-    public void advance()
-    {
+    public void advance() {
         //move the ball along the trajectory
-        float x = (float)(speed*Math.sin(Math.toRadians(angle))),
-                y = -(float)(speed*Math.cos(Math.toRadians(angle)));
+        float x = -(float) (speed * Math.sin(Math.toRadians(angle))),
+                y = (float) (speed * Math.cos(Math.toRadians(angle)));
         lastX = x;
         lastY = y;
         bounds.offset(x, y);
@@ -191,15 +167,13 @@ public class Ball extends GameShape
                 bounds.height() / 2, Color.RED, Color.GREEN, Shader.TileMode.CLAMP));
     }
 
-    public void multSpeed(double ds)
-    {
+    public void multSpeed(double ds) {
         //cap the speed
-        if(speed*ds < bounds.width())
+        if (speed * ds < bounds.width())
             speed *= ds;
     }
 
-    public void draw(Canvas canvas)
-    {
+    public void draw(Canvas canvas) {
         canvas.drawOval(bounds, paint);
     }
 }

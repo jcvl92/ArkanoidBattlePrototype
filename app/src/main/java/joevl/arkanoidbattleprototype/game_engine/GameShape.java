@@ -7,8 +7,7 @@ import android.graphics.RectF;
 import java.io.IOException;
 import java.io.Serializable;
 
-public abstract class GameShape implements Serializable
-{
+public abstract class GameShape implements Serializable {
     protected RectF bounds;
     public Paint paint;
 
@@ -19,6 +18,7 @@ public abstract class GameShape implements Serializable
         out.writeFloat(bounds.bottom);
         out.writeObject(paint);
     }
+
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         bounds = new RectF(
                 in.readFloat(),
@@ -26,16 +26,16 @@ public abstract class GameShape implements Serializable
                 in.readFloat(),
                 in.readFloat()
         );
-        paint = (Paint)in.readObject();
+        paint = (Paint) in.readObject();
     }
 
-    protected GameShape(Paint paint)
-    {
+    protected GameShape(Paint paint) {
         this.paint = paint;
     }
+
     public abstract void draw(Canvas canvas);
-    public RectF getBounds()
-    {
+
+    public RectF getBounds() {
         return new RectF(bounds);
     }
 }

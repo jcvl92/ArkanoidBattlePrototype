@@ -21,12 +21,11 @@ import java.util.Iterator;
 import java.util.Map;
 
 import joevl.arkanoidbattleprototype.GameView;
-//TODO: destruct touch listeners!(backing up and starting again doesn't allow touch)
+
 //TODO: implement closeable
-public abstract class GameEngine
-{
+public abstract class GameEngine {
     protected GameView gameView;
-    private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
+    private static final long refreshTime = (long) ((1.0 / 30) * 1000);//30 Hz - milliseconds
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
     private boolean closing = false, resetting = true;
@@ -34,8 +33,7 @@ public abstract class GameEngine
     private Vibrator vibrator;
     private int resetCounter = 0, resetValue = 3;
 
-    protected GameEngine(final GameView gameView)
-    {
+    protected GameEngine(final GameView gameView) {
         this.gameView = gameView;
 
         //create the shape containers
@@ -58,7 +56,7 @@ public abstract class GameEngine
         overlayPaint.setAlpha(128);
 
         //get the vibrator
-        vibrator = (Vibrator)gameView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        vibrator = (Vibrator) gameView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
 
         //TODO: use an android mechanism if that would work better
         ticker = new Thread(new Runnable() {
@@ -68,26 +66,28 @@ public abstract class GameEngine
                     try {
                         while (gameView.bounds.isEmpty())
                             gameView.bounds.wait();
-                    } catch(InterruptedException ie) {}
+                    } catch (InterruptedException ie) {
+                    }
 
                     //initialize the engine
                     init();
                 }
-                while(!closing) {
+                while (!closing) {
                     long time = System.nanoTime();
                     //tick
-                    if(!resetting)
+                    if (!resetting)
                         tick();
                     else
                         resetTick();
                     gameView.postInvalidate();
                     //wait for remaining amount of time
                     try {
-                        long sleepTime = refreshTime - (System.nanoTime()-time)/1000000;
-                        if(sleepTime > 0) {
+                        long sleepTime = refreshTime - (System.nanoTime() - time) / 1000000;
+                        if (sleepTime > 0) {
                             Thread.sleep(sleepTime);
                         }
-                    } catch (InterruptedException ie) {}
+                    } catch (InterruptedException ie) {
+                    }
                 }
             }
         });
@@ -101,23 +101,20 @@ public abstract class GameEngine
         } catch(InterruptedException ie) {}*/
     }
 
-    public void pause()
-    {
+    public void pause() {
         ticker.suspend();
     }
 
-    public void resume()
-    {
+    public void resume() {
         ticker.resume();
     }
 
-    public byte[] getSerializedState()
-    {
+    public byte[] getSerializedState() {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(bos);
-            for(Map.Entry<String, ArrayList<GameShape>> e : gameShapes.entrySet()) {
-                if(!e.getKey().equals("paddles")) {
+            for (Map.Entry<String, ArrayList<GameShape>> e : gameShapes.entrySet()) {
+                if (!e.getKey().equals("paddles")) {
                     out.writeObject(e.getKey());
                     out.writeObject(e.getValue());
                 }
@@ -127,15 +124,14 @@ public abstract class GameEngine
             out.close();
             bos.close();
             return bytes;
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             Log.println(Log.ASSERT, "error", Log.getStackTraceString(ioe));
             return null;
         }
     }
 
-    public void setSerializedState(byte[] bytes)
-    {
-        synchronized(gameShapes) {
+    public void setSerializedState(byte[] bytes) {
+        synchronized (gameShapes) {
             try {
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 ObjectInputStream in = new ObjectInputStream(bis);
@@ -158,85 +154,97 @@ public abstract class GameEngine
 
     protected abstract void init();
 
-    protected void reset()
-    {
+    protected void reset() {
         resetting = true;
     }
 
-    private void resetTick()
-    {
-        resetValue = 3-resetCounter++/30;
+    private void resetTick() {
+        resetValue = 3 - resetCounter++ / 30;
 
-        if(resetValue == 0) {
+        if (resetValue == 0) {
             resetValue = 3;
             resetCounter = 0;
             resetting = false;
         }
     }
 
-    private final void tick()
-    {
+    private final void tick() {
         doTick();
 
-        int right = (int)gameView.bounds.right,
-                bottom = (int)gameView.bounds.bottom;
+        int right = (int) gameView.bounds.right,
+                bottom = (int) gameView.bounds.bottom;
 
         //progress the paddles
-        for(GameShape paddle : gameShapes.get("paddles"))
-            ((Paddle)paddle).advance(0, right);
+        for (GameShape paddle : gameShapes.get("paddles"))
+            ((Paddle) paddle).advance(0, right);
 
         //check to see if the ball is colliding with anything
-        for(GameShape ball : gameShapes.get("balls"))
-        {
+        for (GameShape ball : gameShapes.get("balls")) {
             ((Ball) ball).advance();
 
-            synchronized(gameShapes) {
+            synchronized (gameShapes) {
                 for (ArrayList<GameShape> gameShapeList : gameShapes.values())
                     for (Iterator<GameShape> iter = gameShapeList.iterator(); iter.hasNext(); ) {
                         GameShape gameShape = iter.next();
-                        if (gameShape != ball && ((Ball) ball).collides(gameShape))
-                            ballHit(ball, gameShape, iter);//TODO: this is so gross and I hate it, change it to do something cleaner?
+                        if (gameShape != ball && ((Ball) ball).collides(gameShape)) {
+                            ballHit(ball, gameShape, iter);
+                            break;
+                        }
                     }
             }
 
             //bounce off of the walls
-            if(ball.getBounds().intersects(0, 0, 0, bottom))//left wall
-                ((Ball)ball).flipVertical();
-            else if(ball.getBounds().intersects(right, 0, right, bottom))//right wall
-                ((Ball)ball).flipVertical();
-            /*else if(ball.getBounds().intersects(0, 0, right, 0))//top wall
-                ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
-            else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
-                ((Ball)ball).bounceOff(new RectF(0, bottom, right, bottom));*/
+            if (ball.getBounds().intersects(0, 0, 0, bottom)) {//left wall
+                Ball b = (Ball) ball;
+                b.backUp();
+                b.flipVertical();
+                b.advance();
+            }
+            else if (ball.getBounds().intersects(right, 0, right, bottom)) {//right wall
+                Ball b = (Ball) ball;
+                b.backUp();
+                b.flipVertical();
+                b.advance();
+            }
+            /*else if(ball.getBounds().intersects(0, 0, right, 0)) {//top wall
+                Ball b = (Ball) ball;
+                b.backUp();
+                b.flipHorizontal();
+                b.advance();
+            }
+            else if(ball.getBounds().intersects(0, bottom, right, bottom)) {//bottom wall
+                Ball b = (Ball) ball;
+                b.backUp();
+                b.flipHorizontal();
+                b.advance();
+            }*/
 
-            //TODO: this doesnt work, fix it?
             //if the ball went over an edge, push it back to the edge
             RectF ballBounds = ball.getBounds();
-            if(ballBounds.left+ballBounds.width()<0)
+            if (ballBounds.left + ballBounds.width() < 0)
                 ballBounds.offsetTo(-1, ballBounds.top);
-            if(ballBounds.top+ballBounds.height()<0)
+            if (ballBounds.top + ballBounds.height() < 0)
                 ballBounds.offsetTo(ballBounds.left, -1);
-            if(ballBounds.right-ballBounds.width()>right)
-                ballBounds.offsetTo(right-ballBounds.width()+1, ballBounds.top);
-            if(ballBounds.bottom-ballBounds.height()>bottom)
-                ballBounds.offsetTo(ballBounds.left, bottom-ballBounds.height()+1);
+            if (ballBounds.right - ballBounds.width() > right)
+                ballBounds.offsetTo(right - ballBounds.width() + 1, ballBounds.top);
+            if (ballBounds.bottom - ballBounds.height() > bottom)
+                ballBounds.offsetTo(ballBounds.left, bottom - ballBounds.height() + 1);
         }
     }
 
-    public void draw(Canvas canvas)
-    {
+    public void draw(Canvas canvas) {
         //draw the score
         canvas.drawText(getScore(), 0, 150, textPaint);
 
         //draw the objects on the screen
-        synchronized(gameShapes) {
+        synchronized (gameShapes) {
             for (ArrayList<GameShape> gameShapeList : gameShapes.values())
                 for (GameShape gameShape : gameShapeList)
                     gameShape.draw(canvas);
         }
 
         //draw the reset overlay
-        if(resetting) {
+        if (resetting) {
             //draw transparent rectangle overlay
             canvas.drawRect(gameView.bounds, overlayPaint);
 
@@ -245,21 +253,19 @@ public abstract class GameEngine
             Rect bounds = new Rect();
             resetTextPaint.getTextBounds(val, 0, val.length(), bounds);
             canvas.drawText(val,
-                    gameView.bounds.centerX() - bounds.width()/2,
-                    gameView.bounds.centerY() + bounds.height()/2,
+                    gameView.bounds.centerX() - bounds.width() / 2,
+                    gameView.bounds.centerY() + bounds.height() / 2,
                     resetTextPaint);
         }
     }
 
     protected abstract void doTick();
 
-    protected void ballHit(GameShape ball, GameShape object, Iterator iter)
-    {
+    protected void ballHit(GameShape ball, GameShape object, Iterator iter) {
         vibrator.vibrate(50);
     }
 
-    public final HashMap<String, ArrayList<GameShape>> getGameShapes()
-    {
+    public final HashMap<String, ArrayList<GameShape>> getGameShapes() {
         return gameShapes;
     }
 

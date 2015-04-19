@@ -3,6 +3,7 @@ package joevl.arkanoidbattleprototype.game_engine;
 public class AIPaddleController implements PaddleController {
     Ball ball;
     Paddle paddle;
+
     public AIPaddleController(Ball ball, Paddle paddle) {
         this.ball = ball;
         this.paddle = paddle;
@@ -10,9 +11,9 @@ public class AIPaddleController implements PaddleController {
 
     @Override
     public Controls getMovement() {
-        if(paddle.getBounds().centerX() - ball.getBounds().centerX() > 0)
+        if (paddle.getBounds().centerX() - ball.getBounds().centerX() > 0)
             return Controls.LEFT;
-        else if(paddle.getBounds().centerX() - ball.getBounds().centerX() < 0)
+        else if (paddle.getBounds().centerX() - ball.getBounds().centerX() < 0)
             return Controls.RIGHT;
         else
             return Controls.NONE;
