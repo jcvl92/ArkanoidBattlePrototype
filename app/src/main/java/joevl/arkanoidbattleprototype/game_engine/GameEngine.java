@@ -113,13 +113,13 @@ public abstract class GameEngine {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream out = new ObjectOutputStream(bos);
-            for (Map.Entry<String, ArrayList<GameShape>> e : gameShapes.entrySet()) {
+            /*for (Map.Entry<String, ArrayList<GameShape>> e : gameShapes.entrySet()) {
                 if (!e.getKey().equals("paddles")) {
                     out.writeObject(e.getKey());
                     out.writeObject(e.getValue());
                 }
-            }
-            //out.writeObject(gameShapes);
+            }*/
+            out.writeObject(gameShapes);
             byte[] bytes = bos.toByteArray();
             out.close();
             bos.close();
@@ -136,12 +136,12 @@ public abstract class GameEngine {
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 ObjectInputStream in = new ObjectInputStream(bis);
                 try {
-                    while (true) {
+                    /*while (true) {
                         Object str = in.readObject();
                         Object lst = in.readObject();
                         gameShapes.put((String) str, (ArrayList<GameShape>) lst);
-                    }
-                    //gameShapes = (HashMap<String, ArrayList<GameShape>>) obj;
+                    }*/
+                    gameShapes = (HashMap<String, ArrayList<GameShape>>) in.readObject();
                 } catch (EOFException eofe) {
                     in.close();
                     bis.close();

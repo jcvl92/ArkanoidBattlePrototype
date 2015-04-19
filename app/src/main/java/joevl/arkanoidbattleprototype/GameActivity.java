@@ -7,6 +7,7 @@ import android.os.Bundle;
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 import joevl.arkanoidbattleprototype.physics_test_environments.BounceTester;
+import joevl.arkanoidbattleprototype.physics_test_environments.SerializationTester;
 
 public class GameActivity extends Activity {
     public GameEngine gameEngine;

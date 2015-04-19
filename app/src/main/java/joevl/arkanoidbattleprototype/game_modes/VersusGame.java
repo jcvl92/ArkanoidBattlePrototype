@@ -6,6 +6,7 @@ import android.graphics.RectF;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Map;
 
 import joevl.arkanoidbattleprototype.GameView;
 import joevl.arkanoidbattleprototype.game_engine.AIPaddleController;
@@ -14,13 +15,14 @@ import joevl.arkanoidbattleprototype.game_engine.Brick;
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 import joevl.arkanoidbattleprototype.game_engine.GameShape;
 import joevl.arkanoidbattleprototype.game_engine.Paddle;
+import joevl.arkanoidbattleprototype.game_engine.PaddleController;
 import joevl.arkanoidbattleprototype.game_engine.SerialPaint;
 import joevl.arkanoidbattleprototype.game_engine.TouchPaddleController;
 
 public class VersusGame extends GameEngine {
     GameView gameView;
     int computerScore = 0, humanScore = 0;
-    TouchPaddleController tpc = null;
+    PaddleController tpc = null, apc = null;
 
     public VersusGame(GameView gameView)
     {
@@ -71,13 +73,14 @@ public class VersusGame extends GameEngine {
                                 gameView.bounds.right, gameView.bounds.bottom));//(width - touchAreaSize, height - touchAreaSize, width, height));
 
                 //add the touch paddle listener to our view
-                gameView.setOnTouchListener(tpc);
+                gameView.setOnTouchListener((TouchPaddleController) tpc);
             }
 
             //opponent
             Paint opponentPaddlePaint = new SerialPaint();
             opponentPaddlePaint.setColor(Color.RED);
             Paddle opponentPaddle = new Paddle(50, paddleLength, width / 4, 10, opponentPaddlePaint);
+            apc = new AIPaddleController(mainBall, opponentPaddle);
             opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
             gameShapes.get("paddles").add(opponentPaddle);
 
@@ -88,6 +91,18 @@ public class VersusGame extends GameEngine {
             playerPaddle.setPaddleController(tpc);
             gameShapes.get("paddles").add(playerPaddle);
         }
+    }
+
+    @Override
+    public void setSerializedState(byte[] bytes) {
+        super.setSerializedState(bytes);
+
+        ArrayList<GameShape> paddles = gameShapes.get("paddles");
+        Paddle opponentPaddle = (Paddle) paddles.get(0);
+        Ball mainBall = (Ball) gameShapes.get("balls").get(0);
+        opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
+
+        ((Paddle) paddles.get(1)).setPaddleController(tpc);
     }
 
     @Override
@@ -108,14 +123,14 @@ public class VersusGame extends GameEngine {
                 bottom = (int)gameView.bounds.bottom;
 
         for(GameShape ball : gameShapes.get("balls")) {
-            if (ball.getBounds().intersects(0, 0, right, 0)) {//top wall
+            if (ball.getBounds().centerY() < 0) {//top wall
                 if(++humanScore >= 3)
                     close();
                 else
                     reset();
                 return;
             }
-            else if (ball.getBounds().intersects(0, bottom, right, bottom)) {//bottom wall
+            else if (ball.getBounds().centerY() > bottom) {//bottom wall
                 if(++computerScore >= 3)
                     close();
                 else
