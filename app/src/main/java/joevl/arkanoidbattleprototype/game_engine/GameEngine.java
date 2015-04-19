@@ -25,7 +25,6 @@ import joevl.arkanoidbattleprototype.GameView;
 //TODO: implement closeable
 public abstract class GameEngine {
     protected GameView gameView;
-    //private static final long refreshTime = (long) ((1.0 / 30) * 1000);//30 Hz - milliseconds
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
     private boolean closing = false, resetting;
@@ -181,15 +180,17 @@ public abstract class GameEngine {
             //bounce off of the walls
             if (ball.getBounds().intersects(0, 0, 0, bottom)) {//left wall
                 Ball b = (Ball) ball;
-                b.backUp();
+                //redirect the ball
                 b.flipVertical();
-                b.advance();
+                //push it off of the wall
+                b.bounds.offsetTo(1, b.bounds.top);
             }
             else if (ball.getBounds().intersects(right, 0, right, bottom)) {//right wall
                 Ball b = (Ball) ball;
-                b.backUp();
+                //redirect the ball
                 b.flipVertical();
-                b.advance();
+                //push it off of the wall
+                b.bounds.offsetTo(right-b.bounds.width(), b.bounds.top);
             }
             /*else if(ball.getBounds().intersects(0, 0, right, 0)) {//top wall
                 Ball b = (Ball) ball;
@@ -205,7 +206,7 @@ public abstract class GameEngine {
             }*/
 
             //if the ball went over an edge, push it back to the edge
-            RectF ballBounds = ball.getBounds();
+            /*RectF ballBounds = ball.getBounds();
             if (ballBounds.left + ballBounds.width() < 0)
                 ballBounds.offsetTo(-1, ballBounds.top);
             if (ballBounds.top + ballBounds.height() < 0)
@@ -213,7 +214,7 @@ public abstract class GameEngine {
             if (ballBounds.right - ballBounds.width() > right)
                 ballBounds.offsetTo(right - ballBounds.width() + 1, ballBounds.top);
             if (ballBounds.bottom - ballBounds.height() > bottom)
-                ballBounds.offsetTo(ballBounds.left, bottom - ballBounds.height() + 1);
+                ballBounds.offsetTo(ballBounds.left, bottom - ballBounds.height() + 1);*/
         }
     }
 

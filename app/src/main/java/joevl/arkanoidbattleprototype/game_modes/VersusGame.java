@@ -24,8 +24,7 @@ public class VersusGame extends GameEngine {
     int computerScore = 0, humanScore = 0;
     PaddleController tpc = null, apc = null;
 
-    public VersusGame(GameView gameView)
-    {
+    public VersusGame(GameView gameView) {
         super(gameView);
         this.gameView = gameView;
     }
@@ -33,8 +32,7 @@ public class VersusGame extends GameEngine {
     private int ballDiameter, brickLength, paddleLength;
     private Ball mainBall;
 
-    protected void init()
-    {
+    protected void init() {
         synchronized(gameShapes) {
             int width = (int) (gameView.bounds.right - gameView.bounds.left),
                     height = (int) (gameView.bounds.bottom - gameView.bounds.top);
@@ -106,8 +104,7 @@ public class VersusGame extends GameEngine {
     }
 
     @Override
-    protected void reset()
-    {
+    protected void reset() {
         synchronized(gameShapes) {
             for(ArrayList<GameShape> gs : gameShapes.values()) {
                 gs.clear();
@@ -118,8 +115,7 @@ public class VersusGame extends GameEngine {
     }
 
     @Override
-    protected void tick()
-    {
+    protected void tick() {
         int right = (int)gameView.bounds.right,
                 bottom = (int)gameView.bounds.bottom;
 
@@ -144,8 +140,7 @@ public class VersusGame extends GameEngine {
     }
 
     @Override
-    protected void ballHit(GameShape ball, GameShape object, Iterator iter)
-    {
+    protected void ballHit(GameShape ball, GameShape object, Iterator iter) {
         super.ballHit(ball, object, iter);
 
         if(object.getClass()==Brick.class)

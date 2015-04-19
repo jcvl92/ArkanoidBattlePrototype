@@ -151,6 +151,7 @@ public class Ball extends GameShape {
         this.angle = angle;
     }
 
+    //TODO: remove this
     public void backUp() {
         //undo the last advancement
         //TODO: first decelerate
