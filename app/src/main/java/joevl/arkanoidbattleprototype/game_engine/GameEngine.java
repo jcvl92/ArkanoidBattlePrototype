@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.os.Vibrator;
 import android.util.Log;
 
@@ -18,7 +17,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 
 import joevl.arkanoidbattleprototype.GameView;
 
@@ -140,8 +138,6 @@ public abstract class GameEngine {
             }
         }
     }
-
-    protected abstract void init();
 
     protected void reset() {
         resetting = true;

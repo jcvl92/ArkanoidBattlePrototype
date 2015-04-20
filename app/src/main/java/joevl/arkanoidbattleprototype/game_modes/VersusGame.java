@@ -6,7 +6,6 @@ import android.graphics.RectF;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 
 import joevl.arkanoidbattleprototype.GameView;
@@ -47,7 +46,6 @@ public class VersusGame extends GameEngine {
 
             //add one ball
             Paint ballPaint = new SerialPaint();
-            ballPaint.setShadowLayer(20, 50, 50, Color.LTGRAY);//TODO: fix this
             mainBall = new Ball(ballDiameter, ballDiameter, 500, height - 200, ballPaint);
             gameShapes.get("balls").add(mainBall);
 

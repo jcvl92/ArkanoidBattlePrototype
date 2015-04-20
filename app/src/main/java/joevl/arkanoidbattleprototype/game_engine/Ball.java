@@ -12,7 +12,6 @@ import java.io.IOException;
 
 public class Ball extends GameShape {
     private double speed = 900, angle = 135, acceleration = 1.01;
-    private float lastX = 0, lastY = 0;
     private long lastTick = -1;
 
     public Ball(float height, float width, float x, float y, Paint paint) {
@@ -31,8 +30,6 @@ public class Ball extends GameShape {
 
         out.writeDouble(speed);
         out.writeDouble(angle);
-        out.writeFloat(lastX);
-        out.writeFloat(lastY);
     }
 
     private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
@@ -46,8 +43,6 @@ public class Ball extends GameShape {
 
         speed = in.readDouble();
         angle = in.readDouble();
-        lastX = in.readFloat();
-        lastY = in.readFloat();
     }
 
     public boolean collides(GameShape gameShape) {
@@ -98,20 +93,16 @@ public class Ball extends GameShape {
         return dist <= circleRadius;
     }
 
-    public void bounceOff(GameShape gameShape) {
-        backUp();
-
-        //the bounce angle off of a paddle is equal to the angel between the center of the paddle and the center of the ball
-        if (gameShape.getClass() == Paddle.class)//bouncing off of paddles
-        {
+    public void bounceOff(GameShape gameShape) {//the bounce angle off of a paddle is equal to the angel between the center of the paddle and the center of the ball
+        if (gameShape.getClass() == Paddle.class) {//bouncing off of paddles
             setAngle(Math.toDegrees(Math.atan2(gameShape.getBounds().centerX() - bounds.centerX(), bounds.centerY() - gameShape.getBounds().centerY())));
-            advance();
-        } else if (gameShape.getClass() == Ball.class)//bouncing off of balls
-        {
+        } else if (gameShape.getClass() == Ball.class) {//bouncing off of balls
             setAngle(Math.toDegrees(Math.atan2(gameShape.getBounds().centerX() - bounds.centerX(), bounds.centerY() - gameShape.getBounds().centerY())));
-            advance();
-        } else//bouncing off of other rectangles
+        } else {//bouncing off of other rectangles
             bounceOff(gameShape.getBounds());
+        }
+        //
+        bounds.offsetTo(bounds.left, bounds.top);
     }
 
     public void bounceOff(RectF rect) {
@@ -127,10 +118,8 @@ public class Ball extends GameShape {
         if ((ballAngle > topRightAngle && ballAngle < topLeftAngle) ||
                 (ballAngle < bottomRightAngle && ballAngle > bottomLeftAngle)) {//if hit one of the horizontal sides
             flipHorizontal();//flip the angle across the x axis
-            advance();
         } else {//if hit one of the vertical sides
             flipVertical();//flip the angle across the y axis
-            advance();
         }
     }
 
@@ -151,19 +140,10 @@ public class Ball extends GameShape {
         this.angle = angle;
     }
 
-    //TODO: remove this
-    public void backUp() {
-        //undo the last advancement
-        //TODO: first decelerate
-        move(-lastX, -lastY);
-    }
-
     public void advance() {
         //move the ball along the trajectory
         float x = -(float) (Math.sin(Math.toRadians(angle))),
                 y = (float) (Math.cos(Math.toRadians(angle)));
-        lastX = x;
-        lastY = y;
         move(x, y);
 
         paint.setShader(new RadialGradient(bounds.centerX(), bounds.centerY(),
@@ -178,6 +158,7 @@ public class Ball extends GameShape {
                     (float) ((speed*difference)/1000) * y
             );
 
+            //TODO: re-implement this
             //cap the speed
             /*double aDiff = (acceleration * difference) / 1000;
             if (speed * aDiff < bounds.width()*100)
