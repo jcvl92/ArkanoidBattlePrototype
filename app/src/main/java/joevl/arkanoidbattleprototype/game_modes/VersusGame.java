@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 
 import joevl.arkanoidbattleprototype.GameView;
 import joevl.arkanoidbattleprototype.game_engine.AIPaddleController;
@@ -50,14 +51,14 @@ public class VersusGame extends GameEngine {
             mainBall = new Ball(ballDiameter, ballDiameter, 500, height - 200, ballPaint);
             gameShapes.get("balls").add(mainBall);
 
-            Paint brickPaint = new SerialPaint();
-            brickPaint.setColor(Color.MAGENTA);
-
             //add a few bricks
             for (int i = 0; i < 5; i++)
                 for (int j = 0; j < 8; j++) {
                     if(j == 3 || j == 4)
                         continue;
+                    Paint brickPaint = new SerialPaint();
+                    Random rnd = new Random();
+                    brickPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
                     gameShapes.get("bricks").add(new Brick(brickLength / 2, brickLength, 40 + (j * 130), (height / 3) + (i * 100), brickPaint));
                 }
 
