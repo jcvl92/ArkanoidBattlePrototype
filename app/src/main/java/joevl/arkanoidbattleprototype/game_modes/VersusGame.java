@@ -103,17 +103,6 @@ public class VersusGame extends GameEngine {
     }
 
     @Override
-    protected void reset() {
-        synchronized(gameShapes) {
-            for(ArrayList<GameShape> gs : gameShapes.values()) {
-                gs.clear();
-            }
-            init();
-        }
-        super.reset();
-    }
-
-    @Override
     protected void tick() {
         int right = (int)gameView.bounds.right,
                 bottom = (int)gameView.bounds.bottom;

@@ -101,7 +101,6 @@ public class Ball extends GameShape {
         } else {//bouncing off of other rectangles
             bounceOff(gameShape.getBounds());
         }
-        //
         bounds.offsetTo(bounds.left, bounds.top);
     }
 
@@ -152,10 +151,11 @@ public class Ball extends GameShape {
 
     private void move(float x, float y) {
         if(lastTick>0) {
-            long difference = System.currentTimeMillis()-lastTick;
+            float mult = (System.currentTimeMillis()-lastTick)/1000f;
+            lastTick = System.currentTimeMillis();
             bounds.offset(
-                    (float) ((speed*difference)/1000) * x,
-                    (float) ((speed*difference)/1000) * y
+                    (float) (speed*mult) * x,
+                    (float) (speed*mult) * y
             );
 
             //TODO: re-implement this
@@ -164,7 +164,6 @@ public class Ball extends GameShape {
             if (speed * aDiff < bounds.width()*100)
                 speed *= aDiff;*/
         }
-        lastTick = System.currentTimeMillis();
     }
 
     public void draw(Canvas canvas) {

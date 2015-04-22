@@ -12,13 +12,12 @@ import java.util.ArrayList;
 
 public class SpaceView extends View {
     ArrayList<Star> stars = new ArrayList<Star>();
-    private static final long refreshTime = (long)((1.0/30) * 1000);//30 Hz - milliseconds
     boolean closing = false, ready = false;
     Thread ticker = null;
     RectF viewBounds = new RectF();
     Paint starPaint;
-    final int numberOfStars=100, varianceDiameter=300, starStartSize=-2, initialSkip=500;
-    final float initialStarSpeed=0, initialStarAcceleration=0, initialStarGrowth=0.07f, starGrowthRate=0.004f, starAcceleration=0.025f;
+    final int numberOfStars=100, varianceDiameter=300, starStartSize=-2;
+    final float initialStarSpeed=0, initialStarAcceleration=0, initialStarGrowth=0.0075f, starGrowthRate=0.0001f, starAcceleration=0.004f;
 
     public SpaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -47,24 +46,8 @@ public class SpaceView extends View {
                 //stars are ready to be drawn now
                 ready = true;
 
-                //this is just to avoid the initial "explosions"
-                for(int i=0; i<initialSkip; ++i)
-                {
-                    tick();
-                }
-
                 while(!closing) {
-                    long time = System.nanoTime();
-                    //tick
                     tick();
-                    postInvalidate();
-                    //wait for remaining amount of time
-                    try {
-                        long sleepTime = refreshTime - (System.nanoTime()-time)/1000000;
-                        if(sleepTime > 0) {
-                            Thread.sleep(sleepTime);
-                        }
-                    } catch (InterruptedException ie) {}
                 }
             }
         });
@@ -92,6 +75,8 @@ public class SpaceView extends View {
             for (Star star : stars)
                 star.draw(canvas);
         }
+
+        invalidate();
     }
 
     private void tick() {
@@ -106,6 +91,8 @@ public class SpaceView extends View {
 
     class Star {
         RectF starBounds;
+        //TODO: use this to "skip" the beginning part
+        long lastTime = System.currentTimeMillis();
         float speed = initialStarSpeed, acceleration = initialStarAcceleration, growthRate = initialStarGrowth;
 
         Star(float x, float y) {
@@ -120,15 +107,17 @@ public class SpaceView extends View {
         }
 
         public void advance() {
+            float mult = ((System.currentTimeMillis()-lastTime)*30)/1000f;
+            lastTime = System.currentTimeMillis();
             double angle = Math.atan2(starBounds.centerX() - viewBounds.centerX(), viewBounds.centerY() - starBounds.centerY());
             float x = (float)(speed*Math.sin(angle)),
                     y = -(float)(speed*Math.cos(angle));
 
-            starBounds.offset(x, y);
+            starBounds.offset(x*mult, y*mult);
 
-            speed += (acceleration += starAcceleration);
+            speed += (acceleration += starAcceleration*mult);
 
-            growthRate += starGrowthRate;
+            growthRate += starGrowthRate*mult;
 
             starBounds.set(starBounds.left - growthRate,
                     starBounds.top - growthRate,

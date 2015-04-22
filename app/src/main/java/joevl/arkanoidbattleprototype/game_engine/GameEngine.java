@@ -139,7 +139,15 @@ public abstract class GameEngine {
         }
     }
 
+    protected abstract void init();
+
     protected void reset() {
+        synchronized(gameShapes) {
+            for(ArrayList<GameShape> gs : gameShapes.values()) {
+                gs.clear();
+            }
+            init();
+        }
         resetting = true;
         resetTime = System.currentTimeMillis();
     }
