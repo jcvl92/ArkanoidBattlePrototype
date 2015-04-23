@@ -21,6 +21,7 @@ public class BounceTester extends GameEngine {
         super(gameView);
     }
 
+    @Override
     protected void init() {
         //add brick
         Paint brickPaint = new Paint();

@@ -22,14 +22,14 @@ public class Paddle extends GameShape {
         float aSpeed = paddleController.getSpeed() < speed ? paddleController.getSpeed() : speed;
 
         if(lastTick>0) {
-            float mult = (System.currentTimeMillis()-lastTick)/1000f;
-            lastTick = System.currentTimeMillis();
+            long difference = System.currentTimeMillis()-lastTick;
 
             if (paddleController.getMovement() == PaddleController.Controls.LEFT)
-                bounds.offset(-aSpeed*mult, 0);
+                bounds.offset((-aSpeed*difference)/1000, 0);
             else if (paddleController.getMovement() == PaddleController.Controls.RIGHT)
-                bounds.offset(aSpeed*mult, 0);
+                bounds.offset((aSpeed*difference)/1000, 0);
         }
+        lastTick = System.currentTimeMillis();
 
         if (bounds.left < min)
             bounds.offsetTo(min, bounds.top);
