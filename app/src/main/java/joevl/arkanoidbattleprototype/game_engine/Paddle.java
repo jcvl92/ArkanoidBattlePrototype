@@ -25,9 +25,9 @@ public class Paddle extends GameShape {
             long difference = System.currentTimeMillis()-lastTick;
 
             if (paddleController.getMovement() == PaddleController.Controls.LEFT)
-                bounds.offset((-aSpeed*difference)/1000, 0);
+                bounds.offset((-aSpeed*difference)/1000f, 0);
             else if (paddleController.getMovement() == PaddleController.Controls.RIGHT)
-                bounds.offset((aSpeed*difference)/1000, 0);
+                bounds.offset((aSpeed*difference)/1000f, 0);
         }
         lastTick = System.currentTimeMillis();
 

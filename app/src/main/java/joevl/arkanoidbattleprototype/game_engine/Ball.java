@@ -154,8 +154,8 @@ public class Ball extends GameShape {
         if(lastTick>0) {
             long difference = System.currentTimeMillis()-lastTick;
             bounds.offset(
-                    (float) ((speed*difference)/1000) * x,
-                    (float) ((speed*difference)/1000) * y
+                    (float) ((speed*difference)/1000f) * x,
+                    (float) ((speed*difference)/1000f) * y
             );
 
             //TODO: re-implement this
