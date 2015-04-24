@@ -197,18 +197,6 @@ public abstract class GameEngine {
                 //push it off of the wall
                 b.bounds.offsetTo(right-b.bounds.width(), b.bounds.top);
             }
-            /*else if(ball.getBounds().intersects(0, 0, right, 0)) {//top wall
-                Ball b = (Ball) ball;
-                b.backUp();
-                b.flipHorizontal();
-                b.advance();
-            }
-            else if(ball.getBounds().intersects(0, bottom, right, bottom)) {//bottom wall
-                Ball b = (Ball) ball;
-                b.backUp();
-                b.flipHorizontal();
-                b.advance();
-            }*/
 
             //if the ball went over an edge, push it back to the edge
             /*RectF ballBounds = ball.getBounds();
