@@ -23,13 +23,16 @@ public class Paddle extends GameShape {
 
         if(lastTick>0) {
             long difference = System.currentTimeMillis()-lastTick;
+            lastTick = System.currentTimeMillis();
 
             if (paddleController.getMovement() == PaddleController.Controls.LEFT)
                 bounds.offset((-aSpeed*difference)/1000f, 0);
             else if (paddleController.getMovement() == PaddleController.Controls.RIGHT)
                 bounds.offset((aSpeed*difference)/1000f, 0);
         }
-        lastTick = System.currentTimeMillis();
+        else {
+            lastTick = System.currentTimeMillis();
+        }
 
         if (bounds.left < min)
             bounds.offsetTo(min, bounds.top);

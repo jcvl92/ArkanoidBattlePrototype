@@ -11,7 +11,7 @@ import android.util.Log;
 import java.io.IOException;
 
 public class Ball extends GameShape {
-    private double speed = 900, angle = 135, acceleration = 1.01;
+    private double speed = 900, angle = 135, acceleration = 0.03;
     private long lastTick = -1;
 
     public Ball(float height, float width, float x, float y, Paint paint) {
@@ -153,6 +153,7 @@ public class Ball extends GameShape {
     private void move(float x, float y) {
         if(lastTick>0) {
             long difference = System.currentTimeMillis()-lastTick;
+            lastTick = System.currentTimeMillis();
             bounds.offset(
                     (float) ((speed*difference)/1000f) * x,
                     (float) ((speed*difference)/1000f) * y
@@ -160,11 +161,13 @@ public class Ball extends GameShape {
 
             //TODO: re-implement this
             //cap the speed
-            /*double aDiff = (acceleration * difference) / 1000;
-            if (speed * aDiff < bounds.width()*100)
-                speed *= aDiff;*/
+            double aDiff = (acceleration * difference)/1000f;
+            if (speed * aDiff < (bounds.width()*30)/1000f)
+                speed *= 1+aDiff;
         }
-        lastTick = System.currentTimeMillis();
+        else {
+            lastTick = System.currentTimeMillis();
+        }
     }
 
     public void draw(Canvas canvas) {
