@@ -10,17 +10,31 @@
         android:hardwareAccelerated="true" >
         <activity
             android:name=".MainMenuActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:label="GameActivity" android:name=".GameActivity"></activity>
-        <activity android:label="GameOverActivity" android:name=".GameOverActivity"></activity>
-        <activity android:label="ScoreActivity" android:name=".ScoreActivity"></activity>
-        <activity android:label="OptionsActivity" android:name=".OptionsActivity"></activity>
+        <activity
+            android:label="GameActivity"
+            android:name=".GameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:label="GameOverActivity"
+            android:name=".GameOverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:label="ScoreActivity"
+            android:name=".ScoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:label="OptionsActivity"
+            android:name=".OptionsActivity"
+            android:screenOrientation="portrait" />
     </application>
 
     <uses-permission android:name="android.permission.VIBRATE" />
