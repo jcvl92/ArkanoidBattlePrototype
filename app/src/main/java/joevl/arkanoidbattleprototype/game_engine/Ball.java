@@ -101,8 +101,9 @@ public class Ball extends GameShape {
         } else {//bouncing off of other rectangles
             bounceOff(gameShape.getBounds());
         }
-        //
-        bounds.offsetTo(bounds.left, bounds.top);
+
+        //TODO: set this to "push" off of the object
+        //bounds.offsetTo(bounds.left, bounds.top);
     }
 
     public void bounceOff(RectF rect) {
