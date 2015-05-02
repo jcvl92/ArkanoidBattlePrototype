@@ -13,41 +13,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Play Game"
+        android:textSize="15sp"
         android:id="@+id/playGameButton"
+        android:onClick="play"
+
+        android:textColor="#FFFFFF"
+        android:clickable="true"
+        android:background="@drawable/button"
+        android:layout_above="@+id/scoreButton"
         android:layout_alignLeft="@+id/scoreButton"
         android:layout_alignStart="@+id/scoreButton"
-        android:onClick="play"
-        android:background="#00000000"
-        android:textColor="#FFFFFF"
-        android:layout_above="@+id/scoreButton"
-        android:layout_alignRight="@+id/scoreButton"
-        android:layout_alignEnd="@+id/scoreButton"
-        android:clickable="true"
-        />
+        android:layout_marginBottom="5dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Scores"
         android:id="@+id/scoreButton"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
         android:onClick="scores"
-        android:background="#00000000"
-        android:textColor="#FFFFFF"/>
+
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Options"
         android:id="@+id/optionButton"
+        android:onClick="options"
+        android:background="@drawable/button"
+        android:textColor="#FFFFFF"
         android:layout_below="@+id/scoreButton"
         android:layout_alignLeft="@+id/scoreButton"
         android:layout_alignStart="@+id/scoreButton"
-        android:layout_alignRight="@+id/scoreButton"
-        android:layout_alignEnd="@+id/scoreButton"
-        android:onClick="options"
-        android:background="#00000000"
-        android:textColor="#FFFFFF"/>
+        android:layout_marginTop="5dp" />
 
 </RelativeLayout>

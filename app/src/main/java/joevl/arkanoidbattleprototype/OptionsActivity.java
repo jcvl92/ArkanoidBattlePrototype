@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -48,6 +49,9 @@ public class OptionsActivity extends Activity {
         textView = (TextView) findViewById(R.id.SoundEffectBox);
         Typeface soundEffectFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
         textView.setTypeface(soundEffectFont);
+    }
+    public void finishActivity(View view){
+        finish();
     }
 
     @Override
