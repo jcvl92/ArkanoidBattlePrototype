@@ -1,6 +1,7 @@
 package joevl.arkanoidbattleprototype;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.media.AudioManager;
@@ -52,7 +53,18 @@ public class OptionsActivity extends Activity {
     }
 
     public void clearScores(View view) {
-        MainMenuActivity.deleteScores();
+        final ProgressDialog pd = ProgressDialog.show(this, "Please wait.", "Clearing score data.", true);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                MainMenuActivity.deleteScores();
+
+                //sleep for a bit so the user can actually see the dialog
+                try{Thread.sleep(1000);}catch(Exception e){}
+
+                pd.dismiss();
+            }
+        }).start();
     }
 
     public void finishActivity(View view) {
