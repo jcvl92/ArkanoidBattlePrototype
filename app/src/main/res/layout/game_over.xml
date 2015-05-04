@@ -27,4 +27,17 @@
         android:layout_marginTop="200dp"
         android:layout_centerHorizontal="true"
         android:id="@+id/gameOverStatus" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_centerHorizontal="true"
+        android:text="Home"
+        android:id="@+id/back"
+        android:background="@drawable/border"
+        android:textColor="#FFFFFF"
+        android:layout_alignParentBottom="true"
+        android:onClick="finishActivity" />
+
 </RelativeLayout>

@@ -35,6 +35,7 @@ public class GameActivity extends Activity {
     protected void onPause() {
         super.onPause();
         MainMenuActivity.mediaPlayer.pause();
+        finish();//rethink this for multiplayer
     }
 
     @Override

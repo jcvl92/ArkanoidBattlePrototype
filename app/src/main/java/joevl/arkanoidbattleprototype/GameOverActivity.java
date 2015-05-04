@@ -2,6 +2,7 @@ package joevl.arkanoidbattleprototype;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 public class GameOverActivity extends Activity {
@@ -29,5 +30,9 @@ public class GameOverActivity extends Activity {
     protected void onResume() {
         super.onResume();
         MainMenuActivity.mediaPlayer.start();
+    }
+
+    public void finishActivity(View view) {
+        finish();
     }
 }
