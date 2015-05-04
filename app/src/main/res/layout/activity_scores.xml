@@ -23,6 +23,8 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/textView"
         android:layout_marginTop="56dp"
+        android:layout_alignBottom="@+id/back"
+        android:layout_marginBottom="60dp"
         android:id="@+id/scoresListView" />
 
     <Button

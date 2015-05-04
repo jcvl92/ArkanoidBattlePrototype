@@ -78,6 +78,17 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/effectBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="Clear Scores"
+        android:background="@drawable/border"
+        android:textColor="#FFFFFF"
+        android:onClick="clearScores" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
         android:text="Back"

@@ -51,6 +51,10 @@ public class OptionsActivity extends Activity {
         textView.setTypeface(soundEffectFont);
     }
 
+    public void clearScores(View view) {
+        MainMenuActivity.deleteScores();
+    }
+
     public void finishActivity(View view) {
         finish();
     }

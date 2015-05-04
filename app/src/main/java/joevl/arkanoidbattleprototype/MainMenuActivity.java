@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class MainMenuActivity extends Activity {
     static ArrayList<String> scores;
     static final String scoresFileName = "ArkanoidScores.dat";
+    static private Context context;
     TextView textView;
     static MediaPlayer mediaPlayer;
 
@@ -24,6 +25,8 @@ public class MainMenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        context = getApplicationContext();
 
         scores = readScores();
 
@@ -87,8 +90,9 @@ public class MainMenuActivity extends Activity {
         }
     }
 
-    private void deleteScores() {
-        getApplicationContext().deleteFile(scoresFileName);
+    public static void deleteScores() {
+        context.deleteFile(scoresFileName);
+        scores = new ArrayList<String>();
     }
 
     private ArrayList<String> readScores() {
