@@ -16,8 +16,7 @@ public class BounceTester extends GameEngine {
     Ball ball;
     Brick brick;
 
-    public BounceTester(GameView gameView)
-    {
+    public BounceTester(GameView gameView) {
         super(gameView);
     }
 
@@ -37,13 +36,13 @@ public class BounceTester extends GameEngine {
 
     @Override
     protected void tick() {
-        int right = (int)gameView.bounds.right, bottom = (int)gameView.bounds.bottom;
+        int right = (int) gameView.bounds.right, bottom = (int) gameView.bounds.bottom;
 
         //bounce off of top and bottom
-        if(ball.getBounds().intersects(0, 0, right, 0))//top wall
-            ((Ball)ball).bounceOff(new RectF(0, 0, right, 0));
-        else if(ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
-            ((Ball)ball).bounceOff(new RectF(0, bottom, right, bottom));
+        if (ball.getBounds().intersects(0, 0, right, 0))//top wall
+            ((Ball) ball).bounceOff(new RectF(0, 0, right, 0));
+        else if (ball.getBounds().intersects(0, bottom, right, bottom))//bottom wall
+            ((Ball) ball).bounceOff(new RectF(0, bottom, right, bottom));
 
         super.tick();
     }

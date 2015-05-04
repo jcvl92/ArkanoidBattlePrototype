@@ -142,8 +142,8 @@ public abstract class GameEngine {
     protected abstract void init();
 
     protected void reset() {
-        synchronized(gameShapes) {
-            for(ArrayList<GameShape> gs : gameShapes.values()) {
+        synchronized (gameShapes) {
+            for (ArrayList<GameShape> gs : gameShapes.values()) {
                 gs.clear();
             }
             init();
@@ -154,8 +154,8 @@ public abstract class GameEngine {
     }
 
     private void resetTick() {
-        long difference = System.currentTimeMillis()-resetTime;
-        resetValue = (int) (3-(difference/1000));
+        long difference = System.currentTimeMillis() - resetTime;
+        resetValue = (int) (3 - (difference / 1000));
         resetting = difference < 3000;
     }
 
@@ -189,13 +189,12 @@ public abstract class GameEngine {
                 b.flipVertical();
                 //push it off of the wall
                 b.bounds.offsetTo(1, b.bounds.top);
-            }
-            else if (ball.getBounds().intersects(right, 0, right, bottom)) {//right wall
+            } else if (ball.getBounds().intersects(right, 0, right, bottom)) {//right wall
                 Ball b = (Ball) ball;
                 //redirect the ball
                 b.flipVertical();
                 //push it off of the wall
-                b.bounds.offsetTo(right-b.bounds.width(), b.bounds.top);
+                b.bounds.offsetTo(right - b.bounds.width(), b.bounds.top);
             }
 
             //if the ball went over an edge, push it back to the edge

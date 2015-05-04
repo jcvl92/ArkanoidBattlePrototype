@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
-import android.util.Log;
 
 import java.io.IOException;
 
@@ -152,21 +151,20 @@ public class Ball extends GameShape {
     }
 
     private void move(float x, float y) {
-        if(lastTick>0) {
-            long difference = System.currentTimeMillis()-lastTick;
+        if (lastTick > 0) {
+            long difference = System.currentTimeMillis() - lastTick;
             lastTick = System.currentTimeMillis();
             bounds.offset(
-                    (float) ((speed*difference)/1000f) * x,
-                    (float) ((speed*difference)/1000f) * y
+                    (float) ((speed * difference) / 1000f) * x,
+                    (float) ((speed * difference) / 1000f) * y
             );
 
             //TODO: re-implement this
             //cap the speed
-            double aDiff = (acceleration * difference)/1000f;
-            if (speed * aDiff < (bounds.width()*30)/1000f)
-                speed *= 1+aDiff;
-        }
-        else {
+            double aDiff = (acceleration * difference) / 1000f;
+            if (speed * aDiff < (bounds.width() * 30) / 1000f)
+                speed *= 1 + aDiff;
+        } else {
             lastTick = System.currentTimeMillis();
         }
     }

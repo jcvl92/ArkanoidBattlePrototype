@@ -2,19 +2,14 @@ package joevl.arkanoidbattleprototype;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import java.util.ArrayList;
-
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
-import joevl.arkanoidbattleprototype.game_engine.GameShape;
 
-public class GameView extends View
-{
+public class GameView extends View {
     GameEngine gameEngine;
     public RectF bounds = new RectF();
     Paint textPaint;
@@ -33,15 +28,14 @@ public class GameView extends View
     }
 
     @Override
-    public void onDraw(Canvas canvas)
-    {
+    public void onDraw(Canvas canvas) {
         /* TODO: this can be optimized http://developer.android.com/training/custom-views/optimizing-view.html
            to optimize, you can just take the union of the rectangles of previous locations of objects,
            and new locations of objects, all union-ed */
         super.onDraw(canvas);
 
-        if(gameEngine == null)
-            gameEngine = ((GameActivity)getContext()).gameEngine;
+        if (gameEngine == null)
+            gameEngine = ((GameActivity) getContext()).gameEngine;
 
         gameEngine.draw(canvas);
 
@@ -49,6 +43,6 @@ public class GameView extends View
     }
 
     public void onGameOver() {
-        ((GameActivity)getContext()).onGameOver(gameEngine.getDescription(), gameEngine.getStatus(), gameEngine.getScore());
+        ((GameActivity) getContext()).onGameOver(gameEngine.getDescription(), gameEngine.getStatus(), gameEngine.getScore());
     }
 }

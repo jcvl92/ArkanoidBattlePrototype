@@ -21,23 +21,22 @@ public class Paddle extends GameShape {
     public void advance(float min, float max) {
         float aSpeed = paddleController.getSpeed() < speed ? paddleController.getSpeed() : speed;
 
-        if(lastTick>0) {
-            long difference = System.currentTimeMillis()-lastTick;
+        if (lastTick > 0) {
+            long difference = System.currentTimeMillis() - lastTick;
             lastTick = System.currentTimeMillis();
 
             if (paddleController.getMovement() == PaddleController.Controls.LEFT)
-                bounds.offset((-aSpeed*difference)/1000f, 0);
+                bounds.offset((-aSpeed * difference) / 1000f, 0);
             else if (paddleController.getMovement() == PaddleController.Controls.RIGHT)
-                bounds.offset((aSpeed*difference)/1000f, 0);
-        }
-        else {
+                bounds.offset((aSpeed * difference) / 1000f, 0);
+        } else {
             lastTick = System.currentTimeMillis();
         }
 
         if (bounds.left < min)
             bounds.offsetTo(min, bounds.top);
         else if (bounds.right > max)
-            bounds.offsetTo(max-bounds.width(), bounds.top);
+            bounds.offsetTo(max - bounds.width(), bounds.top);
     }
 
     public void draw(Canvas canvas) {

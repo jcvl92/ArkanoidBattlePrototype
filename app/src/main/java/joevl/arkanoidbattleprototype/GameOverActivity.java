@@ -15,7 +15,7 @@ public class GameOverActivity extends Activity {
 
         //fill in text view
         String result = getIntent().getStringExtra("result");
-        TextView tv = (TextView)findViewById(R.id.gameOverStatus);
+        TextView tv = (TextView) findViewById(R.id.gameOverStatus);
         tv.setText(result);
     }
 

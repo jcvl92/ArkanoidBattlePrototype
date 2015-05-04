@@ -21,10 +21,10 @@ public class OptionsActivity extends Activity {
 
         setContentView(R.layout.activity_options);
 
-        audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
         int curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        SeekBar volControl = (SeekBar)findViewById(R.id.volbar);
+        SeekBar volControl = (SeekBar) findViewById(R.id.volbar);
         volControl.setMax(maxVolume);
         volControl.setProgress(curVolume);
         volControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -43,14 +43,15 @@ public class OptionsActivity extends Activity {
         });
 
         textView = (TextView) findViewById(R.id.MusicCheckBox);
-        Typeface musicFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
+        Typeface musicFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
         textView.setTypeface(musicFont);
 
         textView = (TextView) findViewById(R.id.SoundEffectBox);
-        Typeface soundEffectFont = Typeface.createFromAsset(getAssets(),"fonts/dfont.TTF");
+        Typeface soundEffectFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
         textView.setTypeface(soundEffectFont);
     }
-    public void finishActivity(View view){
+
+    public void finishActivity(View view) {
         finish();
     }
 

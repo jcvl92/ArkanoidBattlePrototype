@@ -12,8 +12,7 @@ import android.view.View;
 import joevl.arkanoidbattleprototype.game_engine.Ball;
 import joevl.arkanoidbattleprototype.game_engine.Brick;
 
-public class CollisionTester extends View
-{
+public class CollisionTester extends View {
     Brick brick;
     Ball ball;
     Paint greenPaint = new Paint(), redPaint = new Paint(), bluePaint = new Paint(), textPaint = new Paint();
@@ -33,29 +32,26 @@ public class CollisionTester extends View
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_MOVE ||event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_MOVE || event.getAction() == MotionEvent.ACTION_DOWN) {
                     RectF b = ball.getBounds();
                     b.offsetTo(event.getX() - ball.getBounds().width() / 2, event.getY() - ball.getBounds().width() / 2);
                     ball = new Ball(300, 300, b.left, b.top, bluePaint);
 
-                    if(ball.collides(brick)) {
+                    if (ball.collides(brick)) {
                         brick.paint = redPaint;
                         ball.bounceOff(brick);
-                    }
-                    else
+                    } else
                         brick.paint = greenPaint;
 
                     postInvalidate();
                     return true;
-                }
-                else return false;
+                } else return false;
             }
         });
     }
 
     @Override
-    public void onDraw(Canvas canvas)
-    {
+    public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         //draw a rectangle in the middle of the screen

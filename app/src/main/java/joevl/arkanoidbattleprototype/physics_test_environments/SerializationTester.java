@@ -7,26 +7,23 @@ public class SerializationTester extends VersusGame {
     byte[] state = null;
     int counter = 0;
 
-    public SerializationTester(GameView gameView)
-    {
+    public SerializationTester(GameView gameView) {
         super(gameView);
     }
 
     @Override
-    protected void reset()
-    {
+    protected void reset() {
         super.reset();
         state = null;
     }
 
     @Override
-    protected void tick()
-    {
+    protected void tick() {
         super.tick();
 
-        if(++counter == 100) {
+        if (++counter == 100) {
             counter = 0;
-            if(state != null) {
+            if (state != null) {
                 setSerializedState(state);
             }
             state = getSerializedState();

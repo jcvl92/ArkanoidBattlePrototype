@@ -6,8 +6,6 @@ import android.os.Bundle;
 
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 import joevl.arkanoidbattleprototype.game_modes.VersusGame;
-import joevl.arkanoidbattleprototype.physics_test_environments.BounceTester;
-import joevl.arkanoidbattleprototype.physics_test_environments.SerializationTester;
 
 public class GameActivity extends Activity {
     public GameEngine gameEngine;
@@ -21,7 +19,7 @@ public class GameActivity extends Activity {
 
         setContentView(R.layout.activity_game);
 
-        gameView = (GameView)findViewById(R.id.gameView);
+        gameView = (GameView) findViewById(R.id.gameView);
 
         //spawn the game engine
         gameEngine = new VersusGame(gameView);
@@ -43,7 +41,7 @@ public class GameActivity extends Activity {
     protected void onResume() {
         super.onResume();
         MainMenuActivity.mediaPlayer.start();
-    } 
+    }
 
     public void onGameOver(String mode, String status, String score) {
         Intent result = new Intent();

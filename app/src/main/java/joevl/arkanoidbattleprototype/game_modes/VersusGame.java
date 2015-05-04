@@ -33,7 +33,7 @@ public class VersusGame extends GameEngine {
     private Ball mainBall;
 
     protected void init() {
-        synchronized(gameShapes) {
+        synchronized (gameShapes) {
             int width = (int) (gameView.bounds.right - gameView.bounds.left),
                     height = (int) (gameView.bounds.bottom - gameView.bounds.top);
 
@@ -52,7 +52,7 @@ public class VersusGame extends GameEngine {
             //add a few bricks
             for (int i = 0; i < 5; i++)
                 for (int j = 0; j < 8; j++) {
-                    if(j == 3 || j == 4)
+                    if (j == 3 || j == 4)
                         continue;
                     Paint brickPaint = new SerialPaint();
                     Random rnd = new Random();
@@ -62,11 +62,11 @@ public class VersusGame extends GameEngine {
 
             //add the touch paddle listener
             //int touchAreaSize = 300;
-            if(tpc == null) {
+            if (tpc == null) {
                 tpc = new TouchPaddleController(
                         new RectF(gameView.bounds.left, gameView.bounds.top,
-                                gameView.bounds.right/2, gameView.bounds.bottom),//(0, height - touchAreaSize, touchAreaSize, height),
-                        new RectF(gameView.bounds.left+gameView.bounds.right/2, gameView.bounds.top,
+                                gameView.bounds.right / 2, gameView.bounds.bottom),//(0, height - touchAreaSize, touchAreaSize, height),
+                        new RectF(gameView.bounds.left + gameView.bounds.right / 2, gameView.bounds.top,
                                 gameView.bounds.right, gameView.bounds.bottom));//(width - touchAreaSize, height - touchAreaSize, width, height));
 
                 //add the touch paddle listener to our view
@@ -104,19 +104,18 @@ public class VersusGame extends GameEngine {
 
     @Override
     protected void tick() {
-        int right = (int)gameView.bounds.right,
-                bottom = (int)gameView.bounds.bottom;
+        int right = (int) gameView.bounds.right,
+                bottom = (int) gameView.bounds.bottom;
 
-        for(GameShape ball : gameShapes.get("balls")) {
+        for (GameShape ball : gameShapes.get("balls")) {
             if (ball.getBounds().centerY() < 0) {//top wall
-                if(++humanScore >= 3)
+                if (++humanScore >= 3)
                     close();
                 else
                     reset();
                 return;
-            }
-            else if (ball.getBounds().centerY() > bottom) {//bottom wall
-                if(++computerScore >= 3)
+            } else if (ball.getBounds().centerY() > bottom) {//bottom wall
+                if (++computerScore >= 3)
                     close();
                 else
                     reset();
@@ -131,7 +130,7 @@ public class VersusGame extends GameEngine {
     protected void ballHit(GameShape ball, GameShape object, Iterator iter) {
         super.ballHit(ball, object, iter);
 
-        if(object.getClass()==Brick.class)
+        if (object.getClass() == Brick.class)
             iter.remove();
 
         ((Ball) ball).bounceOff(object);
@@ -142,11 +141,11 @@ public class VersusGame extends GameEngine {
     }
 
     public String getStatus() {
-        return humanScore>computerScore ? "YOU WIN!" : "YOU LOSE!";
+        return humanScore > computerScore ? "YOU WIN!" : "YOU LOSE!";
     }
 
     public String getScore() {
-        return humanScore+"-"+computerScore;
+        return humanScore + "-" + computerScore;
     }
 
     @Override
