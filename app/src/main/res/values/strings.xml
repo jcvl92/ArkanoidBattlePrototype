@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Arkanoid Battle!</string>
+    <string name="signin_other_error">There was an issue with sign in.  Please try again later.</string>
+    <string name="title_activity_multiplayer_game">MultiplayerGameActivity</string>
+    <string name="app_id">576438125880</string>
 </resources>
