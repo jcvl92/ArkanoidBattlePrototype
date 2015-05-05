@@ -244,7 +244,7 @@ public abstract class GameEngine {
     }
 
     protected void ballHit(GameShape ball, GameShape object, Iterator iter) {
-        if(MainMenuActivity.vibrateOn)
+        if (MainMenuActivity.vibrateOn)
             vibrator.vibrate(50);
     }
 

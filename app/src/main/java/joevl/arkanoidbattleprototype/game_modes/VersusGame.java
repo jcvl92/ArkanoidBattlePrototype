@@ -77,7 +77,7 @@ public class VersusGame extends GameEngine {
             //opponent
             Paint opponentPaddlePaint = new SerialPaint();
             opponentPaddlePaint.setColor(Color.RED);
-            Paddle opponentPaddle = new Paddle(50, paddleLength, width / 4, 10, opponentPaddlePaint);
+            Paddle opponentPaddle = new Paddle(brickLength/2, paddleLength, width / 4, 10, opponentPaddlePaint);
             apc = new AIPaddleController(mainBall, opponentPaddle);
             opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
             gameShapes.get("paddles").add(opponentPaddle);
@@ -85,7 +85,7 @@ public class VersusGame extends GameEngine {
             //player
             Paint userPaddlePaint = new SerialPaint();
             userPaddlePaint.setColor(Color.BLUE);
-            Paddle playerPaddle = new Paddle(50, paddleLength, width / 4, height - 50, userPaddlePaint);
+            Paddle playerPaddle = new Paddle(brickLength/2, paddleLength, width / 4, height - 50, userPaddlePaint);
             playerPaddle.setPaddleController(tpc);
             gameShapes.get("paddles").add(playerPaddle);
         }

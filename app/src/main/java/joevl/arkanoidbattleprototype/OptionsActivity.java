@@ -26,7 +26,7 @@ public class OptionsActivity extends Activity {
 
         readOptions();
 
-        ((Button)findViewById(R.id.vibrateToggleButton)).setText("Vibration "+(MainMenuActivity.vibrateOn ? "On" : "Off"));
+        ((Button) findViewById(R.id.vibrateToggleButton)).setText("Vibration " + (MainMenuActivity.vibrateOn ? "On" : "Off"));
 
         final SeekBar musicVolume = (SeekBar) findViewById(R.id.MusicVolumeBar);
         musicVolume.setMax(10);
@@ -128,7 +128,7 @@ public class OptionsActivity extends Activity {
 
     public void toggleVibration(View view) {
         MainMenuActivity.vibrateOn = !MainMenuActivity.vibrateOn;
-        ((Button)findViewById(R.id.vibrateToggleButton)).setText("Vibration "+(MainMenuActivity.vibrateOn ? "On" : "Off"));
+        ((Button) findViewById(R.id.vibrateToggleButton)).setText("Vibration " + (MainMenuActivity.vibrateOn ? "On" : "Off"));
         writeOptions();
     }
 
