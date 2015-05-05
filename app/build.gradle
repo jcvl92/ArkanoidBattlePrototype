@@ -11,15 +11,35 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs {
+        release {
+            storeFile file('C:\\Users\\Joe\\Downloads\\android.jks')
+            storePassword "pantaloons"
+            keyAlias "AKBAndroidKey"
+            keyPassword "pantaloons"
+        }
+        debug {
+            keyAlias 'AKBAndroidKey'
+            keyPassword 'pantaloons'
+            storeFile file('C:\\Users\\Joe\\Downloads\\android.jks')
+            storePassword 'pantaloons'
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
+            signingConfig signingConfigs.debug
         }
     }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:support-v4:22.0.0'
     compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.google.android.gms:play-services-games:7.0.0'
 }

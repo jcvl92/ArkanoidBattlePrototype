@@ -152,6 +152,10 @@ public class MainMenuActivity extends Activity {
         startActivityForResult(new Intent(this, GameActivity.class), 0);
     }
 
+    public void playMultiplayer(View view) {
+        startActivityForResult(new Intent(this, MultiplayerGameActivity.class), 0);
+    }
+
     public void options(View view) {
         startActivity(new Intent(this, OptionsActivity.class));
     }

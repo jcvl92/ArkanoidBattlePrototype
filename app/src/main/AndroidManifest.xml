@@ -34,6 +34,10 @@
             android:label="OptionsActivity"
             android:name=".OptionsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:label="MultiplayerGameActivity"
+            android:name=".MultiplayerGameActivity"
+            android:screenOrientation="portrait" />
     </application>
 
     <uses-permission android:name="android.permission.VIBRATE" />

@@ -12,7 +12,6 @@ import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 public class GameView extends View {
     GameEngine gameEngine;
     public RectF bounds = new RectF();
-    Paint textPaint;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -27,17 +26,21 @@ public class GameView extends View {
         }
     }
 
+    public void setGameEngine(GameEngine gameEngine) {
+        this.gameEngine = gameEngine;
+    }
+
+    public void close() {
+        gameEngine.close();
+    }
+
     @Override
     public void onDraw(Canvas canvas) {
-        /* TODO: this can be optimized http://developer.android.com/training/custom-views/optimizing-view.html
-           to optimize, you can just take the union of the rectangles of previous locations of objects,
-           and new locations of objects, all union-ed */
         super.onDraw(canvas);
 
-        if (gameEngine == null)
-            gameEngine = ((GameActivity) getContext()).gameEngine;
-
-        gameEngine.draw(canvas);
+        try{
+            gameEngine.draw(canvas);
+        }catch(NullPointerException npe){}
 
         invalidate();
     }

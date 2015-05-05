@@ -10,53 +10,69 @@
         android:layout_height="fill_parent"
         android:id="@+id/spaceView" />
 
-    <Button
-        android:id="@+id/playGameButton"
-
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/scoreButton"
-        android:layout_alignLeft="@+id/scoreButton"
-        android:layout_alignStart="@+id/scoreButton"
-        android:layout_marginBottom="20dp"
-
-        android:text="Play Game"
-        android:textColor="#FFFFFF"
-
-        android:background="@drawable/border"
-
-        android:onClick="play" />
-
-    <Button
-        android:id="@+id/scoreButton"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true" >
 
-        android:text="Scores"
-        android:textColor="#FFFFFF"
+        <Button
+            android:id="@+id/playGameButton"
 
-        android:background="@drawable/border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        android:onClick="scores" />
+            android:text="Play Game"
+            android:textColor="#FFFFFF"
 
-    <Button
-        android:id="@+id/optionButton"
+            android:background="@drawable/border"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/scoreButton"
-        android:layout_alignLeft="@+id/scoreButton"
-        android:layout_alignStart="@+id/scoreButton"
-        android:layout_marginTop="20dp"
+            android:onClick="play" />
 
-        android:text="Options"
-        android:textColor="#FFFFFF"
+        <Button
+            android:id="@+id/multiplayerButton"
 
-        android:background="@drawable/border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/playGameButton"
+            android:layout_marginTop="20dp"
 
-        android:onClick="options" />
+            android:text="Multiplayer"
+            android:textColor="#FFFFFF"
+
+            android:background="@drawable/border"
+
+            android:onClick="playMultiplayer" />
+
+        <Button
+            android:id="@+id/scoreButton"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/multiplayerButton"
+            android:layout_marginTop="20dp"
+
+            android:text="Scores"
+            android:textColor="#FFFFFF"
+
+            android:background="@drawable/border"
+
+            android:onClick="scores" />
+
+        <Button
+            android:id="@+id/optionButton"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/scoreButton"
+            android:layout_marginTop="20dp"
+
+            android:text="Options"
+            android:textColor="#FFFFFF"
+
+            android:background="@drawable/border"
+
+            android:onClick="options" />
+    </RelativeLayout>
 
 </RelativeLayout>

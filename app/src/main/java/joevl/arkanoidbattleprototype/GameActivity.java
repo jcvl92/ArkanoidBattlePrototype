@@ -8,7 +8,6 @@ import joevl.arkanoidbattleprototype.game_engine.GameEngine;
 import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 
 public class GameActivity extends Activity {
-    public GameEngine gameEngine;
     GameView gameView;
 
     @Override
@@ -21,13 +20,13 @@ public class GameActivity extends Activity {
 
         gameView = (GameView) findViewById(R.id.gameView);
 
-        //spawn the game engine
-        gameEngine = new VersusGame(gameView);
+        //create the game engine
+        gameView.setGameEngine(createGameMode());
     }
 
     @Override
     public void onDestroy() {
-        gameEngine.close();
+        gameView.close();
         super.onDestroy();
     }
 
@@ -35,7 +34,7 @@ public class GameActivity extends Activity {
     protected void onPause() {
         super.onPause();
         MainMenuActivity.musicPlayer.pause();
-        finish();//rethink this for multiplayer
+        finish();
     }
 
     @Override
@@ -44,7 +43,11 @@ public class GameActivity extends Activity {
         MainMenuActivity.musicPlayer.start();
     }
 
-    public void onGameOver(String mode, String status, String score) {
+    protected GameEngine createGameMode() {
+        return new VersusGame(gameView);
+    }
+
+    final public void onGameOver(String mode, String status, String score) {
         Intent result = new Intent();
         result.putExtra("mode", mode);
         result.putExtra("status", status);
