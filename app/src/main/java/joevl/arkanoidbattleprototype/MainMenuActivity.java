@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class MainMenuActivity extends Activity {
@@ -30,6 +31,7 @@ public class MainMenuActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setFonts();
         setContentView(R.layout.activity_main_menu);
 
         scores = readScores();
@@ -48,18 +50,17 @@ public class MainMenuActivity extends Activity {
         BRICK_SFX_ID = SFXPlayer.load(this, R.raw.brick_hit, 1);
         PADDLE_SFX_ID = SFXPlayer.load(this, R.raw.paddle_hit, 1);
         SCORE_SFX_ID = SFXPlayer.load(this, R.raw.score_sound, 1);
+    }
 
-        textView = (TextView) findViewById(R.id.playGameButton);
-        Typeface playDigitFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
-        textView.setTypeface(playDigitFont);
+    private void setFonts() {
+        final Typeface font = Typeface.createFromAsset(getAssets(), "fonts/digital_font.ttf");
+        try {
+            final Field staticField = Typeface.class.getDeclaredField("DEFAULT");
+            staticField.setAccessible(true);
+            staticField.set(null, font);
+        } catch (Exception e) {
+        }
 
-        textView = (TextView) findViewById(R.id.scoreButton);
-        Typeface scoreDigitFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
-        textView.setTypeface(scoreDigitFont);
-
-        textView = (TextView) findViewById(R.id.optionButton);
-        Typeface optionDigitFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
-        textView.setTypeface(optionDigitFont);
     }
 
     public static void playSoundEffect(int soundID) {

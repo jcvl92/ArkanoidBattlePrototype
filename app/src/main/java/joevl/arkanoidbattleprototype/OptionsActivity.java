@@ -3,11 +3,9 @@ package joevl.arkanoidbattleprototype;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,7 +13,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class OptionsActivity extends Activity {
-    TextView textView;
     boolean vibrateOn;
     int mVolume, sVolume;
 
@@ -29,7 +26,7 @@ public class OptionsActivity extends Activity {
 
         readOptions();
 
-        final SeekBar musicVolume = (SeekBar) findViewById(R.id.musicVolumeBar);
+        final SeekBar musicVolume = (SeekBar) findViewById(R.id.MusicVolumeBar);
         musicVolume.setMax(10);
         musicVolume.setProgress(mVolume);
         musicVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -68,14 +65,6 @@ public class OptionsActivity extends Activity {
                 MainMenuActivity.SFXVolume = progress / 10f;
             }
         });
-
-        textView = (TextView) findViewById(R.id.MusicCheckBox);
-        Typeface musicFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
-        textView.setTypeface(musicFont);
-
-        textView = (TextView) findViewById(R.id.SoundEffectBox);
-        Typeface soundEffectFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
-        textView.setTypeface(soundEffectFont);
     }
 
     public void writeOptions() {
@@ -114,7 +103,10 @@ public class OptionsActivity extends Activity {
     }
 
     public void clearScores(View view) {
-        final ProgressDialog pd = ProgressDialog.show(this, "Please wait.", "Clearing score data.", true);
+        final ProgressDialog pd = new ProgressDialog(this, ProgressDialog.THEME_HOLO_DARK);
+        pd.setTitle("Please wait.");
+        pd.setMessage("Clearing score data.");
+        pd.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
