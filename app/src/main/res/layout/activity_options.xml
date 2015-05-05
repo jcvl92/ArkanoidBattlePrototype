@@ -17,89 +17,121 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp" />
 
-    <RelativeLayout
-        android:id="@+id/MusicWidget"
-
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="70dp" >
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:id="@+id/MusicWidget"
 
-        android:background="@drawable/border">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/MusicText"
+                android:background="@drawable/border">
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
+                <TextView
+                    android:id="@+id/MusicText"
 
-            android:text="Music Volume"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
 
-        <SeekBar
-            android:id="@+id/MusicVolumeBar"
+                    android:text="Music Volume"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp" />
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/MusicText"
-            android:layout_margin="15dp" />
-    </RelativeLayout>
+                <SeekBar
+                    android:id="@+id/MusicVolumeBar"
 
-    <RelativeLayout
-        android:id="@+id/SFXWidget"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/MusicText"
+                    android:layout_margin="15dp" />
+            </RelativeLayout>
 
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/MusicWidget"
-        android:layout_marginTop="40dp"
+            <RelativeLayout
+                android:id="@+id/SFXWidget"
 
-        android:background="@drawable/border">
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/MusicWidget"
+                android:layout_marginTop="25dp"
 
-        <TextView
-            android:id="@+id/SFXText"
+                android:background="@drawable/border">
 
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_centerHorizontal="true"
+                <TextView
+                    android:id="@+id/SFXText"
 
-            android:text="Sound Effects Volume"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
 
-        <SeekBar
-            android:id="@+id/SFXVolumeBar"
+                    android:text="Sound Effects Volume"
+                    android:textColor="#FFFFFF"
+                    android:textSize="30sp" />
 
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/SFXText"
-            android:layout_margin="15dp" />
-    </RelativeLayout>
+                <SeekBar
+                    android:id="@+id/SFXVolumeBar"
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/SFXWidget"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:text="Clear Scores"
-        android:background="@drawable/border"
-        android:textColor="#FFFFFF"
-        android:onClick="clearScores" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/SFXText"
+                    android:layout_margin="15dp" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/vibrateToggleButton"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/SFXWidget"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp"
+                android:padding="25dp"
+
+                android:text="Vibration On/Off"
+                android:textColor="#FFFFFF"
+
+                android:background="@drawable/border"
+
+                android:onClick="toggleVibration" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/vibrateToggleButton"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="25dp"
+                android:padding="25dp"
+
+                android:text="Clear Scores"
+                android:textColor="#FFFFFF"
+
+                android:background="@drawable/border"
+
+                android:onClick="clearScores" />
+        </RelativeLayout>
+    </ScrollView>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_centerHorizontal="true"
-        android:text="Back"
-        android:id="@+id/back"
-        android:background="@drawable/border"
-        android:textColor="#FFFFFF"
         android:layout_alignParentBottom="true"
+
+        android:text="Back"
+        android:textColor="#FFFFFF"
+
+        android:background="@drawable/border"
+
         android:onClick="finishActivity" />
 
 </RelativeLayout>

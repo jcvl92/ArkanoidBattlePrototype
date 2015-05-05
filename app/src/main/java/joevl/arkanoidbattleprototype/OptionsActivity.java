@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 
 import java.io.IOException;
@@ -13,7 +14,6 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class OptionsActivity extends Activity {
-    boolean vibrateOn;
     int mVolume, sVolume;
 
     @Override
@@ -25,6 +25,8 @@ public class OptionsActivity extends Activity {
         setContentView(R.layout.activity_options);
 
         readOptions();
+
+        ((Button)findViewById(R.id.vibrateToggleButton)).setText("Vibration "+(MainMenuActivity.vibrateOn ? "On" : "Off"));
 
         final SeekBar musicVolume = (SeekBar) findViewById(R.id.MusicVolumeBar);
         musicVolume.setMax(10);
@@ -74,7 +76,7 @@ public class OptionsActivity extends Activity {
                 out = new ObjectOutputStream(openFileOutput(MainMenuActivity.optionsFileName, Context.MODE_PRIVATE));
                 out.writeInt(mVolume);
                 out.writeInt(sVolume);
-                out.writeBoolean(vibrateOn);
+                out.writeBoolean(MainMenuActivity.vibrateOn);
             } finally {
                 if (out != null)
                     out.close();
@@ -90,7 +92,7 @@ public class OptionsActivity extends Activity {
                 in = new ObjectInputStream(openFileInput(MainMenuActivity.optionsFileName));
                 mVolume = in.readInt();
                 sVolume = in.readInt();
-                vibrateOn = in.readBoolean();
+                MainMenuActivity.vibrateOn = in.readBoolean();
             } finally {
                 if (in != null)
                     in.close();
@@ -98,7 +100,7 @@ public class OptionsActivity extends Activity {
         } catch (Exception e) {
             mVolume = 10;
             sVolume = 8;
-            vibrateOn = true;
+            MainMenuActivity.vibrateOn = true;
         }
     }
 
@@ -122,6 +124,12 @@ public class OptionsActivity extends Activity {
                 pd.dismiss();
             }
         }).start();
+    }
+
+    public void toggleVibration(View view) {
+        MainMenuActivity.vibrateOn = !MainMenuActivity.vibrateOn;
+        ((Button)findViewById(R.id.vibrateToggleButton)).setText("Vibration "+(MainMenuActivity.vibrateOn ? "On" : "Off"));
+        writeOptions();
     }
 
     public void finishActivity(View view) {

@@ -11,43 +11,52 @@
         android:id="@+id/spaceView" />
 
     <Button
+        android:id="@+id/playGameButton"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Play Game"
-        android:id="@+id/playGameButton"
-        android:onClick="play"
-
-        android:textColor="#FFFFFF"
-        android:clickable="true"
-        android:background="@drawable/border"
         android:layout_above="@+id/scoreButton"
         android:layout_alignLeft="@+id/scoreButton"
         android:layout_alignStart="@+id/scoreButton"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="20dp"
+
+        android:text="Play Game"
+        android:textColor="#FFFFFF"
+
+        android:background="@drawable/border"
+
+        android:onClick="play" />
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Scores"
         android:id="@+id/scoreButton"
-        android:onClick="scores"
 
-        android:textColor="#FFFFFF"
-        android:background="@drawable/border"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Options"
-        android:id="@+id/optionButton"
-        android:onClick="options"
-        android:background="@drawable/border"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+
+        android:text="Scores"
         android:textColor="#FFFFFF"
+
+        android:background="@drawable/border"
+
+        android:onClick="scores" />
+
+    <Button
+        android:id="@+id/optionButton"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/scoreButton"
         android:layout_alignLeft="@+id/scoreButton"
         android:layout_alignStart="@+id/scoreButton"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="20dp"
+
+        android:text="Options"
+        android:textColor="#FFFFFF"
+
+        android:background="@drawable/border"
+
+        android:onClick="options" />
 
 </RelativeLayout>

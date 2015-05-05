@@ -21,7 +21,6 @@ public class MainMenuActivity extends Activity {
     public static ArrayList<String> scores;
     public static final String scoresFileName = "ArkanoidScores.dat",
             optionsFileName = "ArkanoidOptions.dat";
-    TextView textView;
     static MediaPlayer musicPlayer;
     static SoundPool SFXPlayer;
     public static int PADDLE_SFX_ID, BRICK_SFX_ID, SCORE_SFX_ID, BEGIN_SFX_ID;

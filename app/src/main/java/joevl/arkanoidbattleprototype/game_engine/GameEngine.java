@@ -244,7 +244,8 @@ public abstract class GameEngine {
     }
 
     protected void ballHit(GameShape ball, GameShape object, Iterator iter) {
-        vibrator.vibrate(50);
+        if(MainMenuActivity.vibrateOn)
+            vibrator.vibrate(50);
     }
 
     public final HashMap<String, ArrayList<GameShape>> getGameShapes() {
