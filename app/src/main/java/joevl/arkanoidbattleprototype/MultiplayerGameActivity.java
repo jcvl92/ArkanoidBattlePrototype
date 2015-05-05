@@ -66,8 +66,6 @@ public class MultiplayerGameActivity extends GameActivity implements
 
     ArrayList<Participant> mParticipants = null;
 
-    private GameView gv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +79,6 @@ public class MultiplayerGameActivity extends GameActivity implements
 
         keepScreenOn();
         mGoogleApiClient.connect();
-
-        gv = (GameView) findViewById(R.id.gameView);
     }
 
     private void startMultiplayerGame() {
@@ -177,7 +173,7 @@ public class MultiplayerGameActivity extends GameActivity implements
                 return;
             }
         } else {
-            Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 3);
+            Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 1);
 //        switchToScreen(R.id.screen_wait);
             startActivityForResult(intent, RC_SELECT_PLAYERS);
         }
@@ -359,11 +355,11 @@ public class MultiplayerGameActivity extends GameActivity implements
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
         byte[] receivedState = realTimeMessage.getMessageData();
-        gv.gameEngine.setSerializedState(receivedState);
+        gameView.gameEngine.setSerializedState(receivedState);
     }
 
     void synchronizeState() {
-        byte[] state = gv.gameEngine.getSerializedState();
+        byte[] state = gameView.gameEngine.getSerializedState();
         for (Participant p : mParticipants) {
             if (p.getParticipantId().equals(mMyId)) {
                 continue;
@@ -381,7 +377,7 @@ public class MultiplayerGameActivity extends GameActivity implements
     }
 
     @Override
-    protected GameEngine createGameMode() {
+    protected GameEngine gameModeFactory() {
         return new VersusGame(gameView);
     }
 }

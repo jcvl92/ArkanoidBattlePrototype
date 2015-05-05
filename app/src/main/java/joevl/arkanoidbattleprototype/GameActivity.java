@@ -21,7 +21,7 @@ public class GameActivity extends Activity {
         gameView = (GameView) findViewById(R.id.gameView);
 
         //create the game engine
-        gameView.setGameEngine(createGameMode());
+        gameView.setGameEngine(gameModeFactory());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class GameActivity extends Activity {
         MainMenuActivity.musicPlayer.start();
     }
 
-    protected GameEngine createGameMode() {
+    protected GameEngine gameModeFactory() {
         return new VersusGame(gameView);
     }
 
