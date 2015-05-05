@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -129,6 +130,8 @@ public class OptionsActivity extends Activity {
     public void toggleVibration(View view) {
         MainMenuActivity.vibrateOn = !MainMenuActivity.vibrateOn;
         ((Button) findViewById(R.id.vibrateToggleButton)).setText("Vibration " + (MainMenuActivity.vibrateOn ? "On" : "Off"));
+        if(MainMenuActivity.vibrateOn)
+            ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(100);
         writeOptions();
     }
 
