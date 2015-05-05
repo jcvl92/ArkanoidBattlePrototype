@@ -2,7 +2,6 @@ package joevl.arkanoidbattleprototype;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -18,28 +17,35 @@ public class OptionsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
 
         setContentView(R.layout.activity_options);
 
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        int maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        int curVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-        SeekBar volControl = (SeekBar) findViewById(R.id.volbar);
-        volControl.setMax(maxVolume);
-        volControl.setProgress(curVolume);
-        volControl.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        final SeekBar musicVolume = (SeekBar) findViewById(R.id.musicVolumeBar);
+        musicVolume.setMax(10);
+        musicVolume.setProgress(10);//TODO: persist this
+        musicVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onStopTrackingTouch(SeekBar arg0) {
+            public void onStopTrackingTouch(SeekBar arg0) {}
+            @Override
+            public void onStartTrackingTouch(SeekBar arg0) {}
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                MainMenuActivity.musicPlayer.setVolume(progress / 10f, progress / 10f);
             }
+        });
 
+        final SeekBar SFXVolume = (SeekBar) findViewById(R.id.SFXVolumeBar);
+        SFXVolume.setMax(10);
+        SFXVolume.setProgress(10);//TODO: persist this
+        SFXVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onStartTrackingTouch(SeekBar arg0) {
-            }
-
+            public void onStopTrackingTouch(SeekBar arg0) {}
             @Override
-            public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, arg1, 0);
+            public void onStartTrackingTouch(SeekBar arg0) {}
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                MainMenuActivity.SFXVolume = progress/10f;
             }
         });
 
@@ -74,12 +80,12 @@ public class OptionsActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MainMenuActivity.mediaPlayer.pause();
+        MainMenuActivity.musicPlayer.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
     }
 }

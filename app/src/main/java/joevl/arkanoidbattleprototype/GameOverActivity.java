@@ -10,7 +10,7 @@ public class GameOverActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
 
         setContentView(R.layout.game_over);
 
@@ -23,13 +23,13 @@ public class GameOverActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MainMenuActivity.mediaPlayer.pause();
+        MainMenuActivity.musicPlayer.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
     }
 
     public void finishActivity(View view) {

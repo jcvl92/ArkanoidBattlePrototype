@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import joevl.arkanoidbattleprototype.GameView;
+import joevl.arkanoidbattleprototype.MainMenuActivity;
 import joevl.arkanoidbattleprototype.game_engine.AIPaddleController;
 import joevl.arkanoidbattleprototype.game_engine.Ball;
 import joevl.arkanoidbattleprototype.game_engine.Brick;
@@ -109,12 +110,14 @@ public class VersusGame extends GameEngine {
 
         for (GameShape ball : gameShapes.get("balls")) {
             if (ball.getBounds().centerY() < 0) {//top wall
+                MainMenuActivity.playSoundEffect(MainMenuActivity.SCORE_SFX_ID);
                 if (++humanScore >= 3)
                     close();
                 else
                     reset();
                 return;
             } else if (ball.getBounds().centerY() > bottom) {//bottom wall
+                MainMenuActivity.playSoundEffect(MainMenuActivity.SCORE_SFX_ID);
                 if (++computerScore >= 3)
                     close();
                 else
@@ -130,8 +133,12 @@ public class VersusGame extends GameEngine {
     protected void ballHit(GameShape ball, GameShape object, Iterator iter) {
         super.ballHit(ball, object, iter);
 
-        if (object.getClass() == Brick.class)
+        if (object.getClass() == Brick.class) {
             iter.remove();
+            MainMenuActivity.playSoundEffect(MainMenuActivity.BRICK_SFX_ID);
+        } else if(object.getClass() == Paddle.class) {
+            MainMenuActivity.playSoundEffect(MainMenuActivity.PADDLE_SFX_ID);
+        }
 
         ((Ball) ball).bounceOff(object);
     }

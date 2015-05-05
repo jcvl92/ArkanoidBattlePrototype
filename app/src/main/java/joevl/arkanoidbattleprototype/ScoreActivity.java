@@ -12,7 +12,7 @@ public class ScoreActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
 
         setContentView(R.layout.activity_scores);
 
@@ -29,12 +29,12 @@ public class ScoreActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MainMenuActivity.mediaPlayer.pause();
+        MainMenuActivity.musicPlayer.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
     }
 }

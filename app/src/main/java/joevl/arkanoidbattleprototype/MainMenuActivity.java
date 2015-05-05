@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
@@ -12,14 +14,19 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MainMenuActivity extends Activity {
     static ArrayList<String> scores;
     static final String scoresFileName = "ArkanoidScores.dat";
-    static private Context context;
+    private static Context context;
     TextView textView;
-    static MediaPlayer mediaPlayer;
+    static MediaPlayer musicPlayer;
+    static SoundPool SFXPlayer;
+    public static int PADDLE_SFX_ID, BRICK_SFX_ID, SCORE_SFX_ID, BEGIN_SFX_ID;
+    static float SFXVolume = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +37,17 @@ public class MainMenuActivity extends Activity {
 
         scores = readScores();
 
-        mediaPlayer = MediaPlayer.create(MainMenuActivity.this, R.raw.spacesound2);
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
+        //initialize and start the music player
+        musicPlayer = MediaPlayer.create(MainMenuActivity.this, R.raw.space_music);
+        musicPlayer.setLooping(true);
+        musicPlayer.start();
+
+        //initialize the sound effects sound pool and fill it with sounds
+        SFXPlayer = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        BEGIN_SFX_ID = SFXPlayer.load(this, R.raw.begin_sound, 1);
+        BRICK_SFX_ID = SFXPlayer.load(this, R.raw.brick_hit, 1);
+        PADDLE_SFX_ID = SFXPlayer.load(this, R.raw.paddle_hit, 1);
+        SCORE_SFX_ID = SFXPlayer.load(this, R.raw.score_sound, 1);
 
         textView = (TextView) findViewById(R.id.playGameButton);
         Typeface playDigitFont = Typeface.createFromAsset(getAssets(), "fonts/dfont.TTF");
@@ -47,22 +62,26 @@ public class MainMenuActivity extends Activity {
         textView.setTypeface(optionDigitFont);
     }
 
+    public static void playSoundEffect(int soundID) {
+        SFXPlayer.play(soundID, SFXVolume, SFXVolume, 1, 0, 1);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mediaPlayer.stop();
+        musicPlayer.stop();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mediaPlayer.pause();
+        musicPlayer.pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mediaPlayer.start();
+        musicPlayer.start();
     }
 
     @Override

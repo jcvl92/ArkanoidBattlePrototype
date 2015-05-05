@@ -15,7 +15,7 @@ public class GameActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
 
         setContentView(R.layout.activity_game);
 
@@ -34,14 +34,14 @@ public class GameActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MainMenuActivity.mediaPlayer.pause();
+        MainMenuActivity.musicPlayer.pause();
         finish();//rethink this for multiplayer
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        MainMenuActivity.mediaPlayer.start();
+        MainMenuActivity.musicPlayer.start();
     }
 
     public void onGameOver(String mode, String status, String score) {

@@ -19,13 +19,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import joevl.arkanoidbattleprototype.GameView;
+import joevl.arkanoidbattleprototype.MainMenuActivity;
 
 //TODO: implement closeable
 public abstract class GameEngine {
     protected GameView gameView;
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
-    private boolean closing = false, resetting;
+    private boolean closing = false, resetting, beginning;
     private Paint textPaint, resetTextPaint, overlayPaint;
     private Vibrator vibrator;
     private long resetTime;
@@ -150,6 +151,7 @@ public abstract class GameEngine {
         }
 
         resetting = true;
+        beginning = false;
         resetTime = System.currentTimeMillis();
     }
 
@@ -157,6 +159,10 @@ public abstract class GameEngine {
         long difference = System.currentTimeMillis() - resetTime;
         resetValue = (int) (3 - (difference / 1000));
         resetting = difference < 3000;
+        if(difference > 2200 && !beginning) {
+            beginning = true;
+            MainMenuActivity.playSoundEffect(MainMenuActivity.BEGIN_SFX_ID);
+        }
     }
 
     protected void tick() {
