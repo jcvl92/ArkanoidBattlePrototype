@@ -19,8 +19,6 @@ public class AIPaddleController implements PaddleController {
             return Controls.NONE;
     }
 
-    ;
-
     @Override
     public float getSpeed() {
         return Math.abs(paddle.getBounds().centerX() - ball.getBounds().centerX()) * 30;
