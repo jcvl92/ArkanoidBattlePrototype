@@ -43,7 +43,7 @@ public class MainMenuActivity extends Activity {
         musicPlayer.start();
 
         //initialize the sound effects sound pool and fill it with sounds
-        SFXPlayer = new SoundPool(10, AudioManager.STREAM_MUSIC, 0);
+        SFXPlayer = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
         BEGIN_SFX_ID = SFXPlayer.load(this, R.raw.begin_sound, 1);
         BRICK_SFX_ID = SFXPlayer.load(this, R.raw.brick_hit, 1);
         PADDLE_SFX_ID = SFXPlayer.load(this, R.raw.paddle_hit, 1);
