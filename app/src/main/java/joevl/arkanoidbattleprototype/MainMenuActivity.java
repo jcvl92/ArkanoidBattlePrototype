@@ -14,18 +14,17 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class MainMenuActivity extends Activity {
-    static ArrayList<String> scores;
-    static final String scoresFileName = "ArkanoidScores.dat";
-    private static Context context;
+    public static ArrayList<String> scores;
+    public static final String scoresFileName = "ArkanoidScores.dat",
+            optionsFileName = "ArkanoidOptions.dat";
     TextView textView;
     static MediaPlayer musicPlayer;
     static SoundPool SFXPlayer;
     public static int PADDLE_SFX_ID, BRICK_SFX_ID, SCORE_SFX_ID, BEGIN_SFX_ID;
+    public static boolean vibrateOn = true;
     static float SFXVolume = 1;
 
     @Override
@@ -33,13 +32,14 @@ public class MainMenuActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        context = getApplicationContext();
-
         scores = readScores();
 
         //initialize and start the music player
         musicPlayer = MediaPlayer.create(MainMenuActivity.this, R.raw.space_music);
         musicPlayer.setLooping(true);
+
+        getOptions();
+
         musicPlayer.start();
 
         //initialize the sound effects sound pool and fill it with sounds
@@ -109,11 +109,6 @@ public class MainMenuActivity extends Activity {
         }
     }
 
-    public static void deleteScores() {
-        context.deleteFile(scoresFileName);
-        scores = new ArrayList<String>();
-    }
-
     private ArrayList<String> readScores() {
         ArrayList<String> obj;
 
@@ -131,6 +126,23 @@ public class MainMenuActivity extends Activity {
         }
 
         return obj;
+    }
+
+    public void getOptions() {
+        try {
+            ObjectInputStream in = null;
+            try {
+                in = new ObjectInputStream(openFileInput(optionsFileName));
+                int musicVolume = in.readInt();
+                MainMenuActivity.musicPlayer.setVolume(musicVolume / 10f, musicVolume / 10f);
+                SFXVolume = in.readInt() / 10f;
+                vibrateOn = in.readBoolean();
+            } finally {
+                if (in != null)
+                    in.close();
+            }
+        } catch (Exception e) {
+        }
     }
 
     public void scores(View view) {

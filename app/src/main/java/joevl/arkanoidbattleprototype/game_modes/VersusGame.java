@@ -136,7 +136,7 @@ public class VersusGame extends GameEngine {
         if (object.getClass() == Brick.class) {
             iter.remove();
             MainMenuActivity.playSoundEffect(MainMenuActivity.BRICK_SFX_ID);
-        } else if(object.getClass() == Paddle.class) {
+        } else if (object.getClass() == Paddle.class) {
             MainMenuActivity.playSoundEffect(MainMenuActivity.PADDLE_SFX_ID);
         }
 
