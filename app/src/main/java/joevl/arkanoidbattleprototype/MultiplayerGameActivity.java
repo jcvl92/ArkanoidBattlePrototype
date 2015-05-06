@@ -69,7 +69,7 @@ public class MultiplayerGameActivity extends GameActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
+        this.gameView.gameEngine.paused = true;
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -324,6 +324,7 @@ public class MultiplayerGameActivity extends GameActivity implements
     }
 
     void startGame() {
+        this.gameView.gameEngine.paused = false;
         final Handler handler = new Handler();
         Timer timer = new Timer();
         TimerTask doAsynchronousTask = new TimerTask() {
@@ -376,7 +377,7 @@ public class MultiplayerGameActivity extends GameActivity implements
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    @Override
+    //@Override
     protected GameEngine gameModeFactory() {
         return new VersusGame(gameView);
     }

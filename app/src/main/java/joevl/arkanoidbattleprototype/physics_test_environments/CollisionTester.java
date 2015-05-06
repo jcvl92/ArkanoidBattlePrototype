@@ -57,7 +57,7 @@ public class CollisionTester extends View {
         //draw a rectangle in the middle of the screen
         //it will be green unless it overlaps the circle,
         //in which case it will turn red until the overlap stops
-        brick.draw(canvas);
-        ball.draw(canvas);
+        //brick.draw(canvas);
+        //ball.draw(canvas);
     }
 }

@@ -34,13 +34,14 @@ public class GameActivity extends Activity {
     protected void onPause() {
         super.onPause();
         MainMenuActivity.musicPlayer.pause();
-        finish();
+        gameView.gameEngine.paused = true;
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         MainMenuActivity.musicPlayer.start();
+        gameView.gameEngine.paused = false;
     }
 
     protected GameEngine gameModeFactory() {

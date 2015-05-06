@@ -27,6 +27,7 @@ public abstract class GameEngine {
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
     private boolean closing = false, resetting, beginning;
+    public boolean paused = false;
     private Paint textPaint, resetTextPaint, overlayPaint;
     private Vibrator vibrator;
     private long resetTime;
@@ -72,10 +73,12 @@ public abstract class GameEngine {
                     reset();
                 }
                 while (!closing) {
-                    if (!resetting)
-                        tick();
-                    else
-                        resetTick();
+                    if(!paused) {
+                        if (!resetting)
+                            tick();
+                        else
+                            resetTick();
+                    }
                 }
             }
         });
@@ -166,8 +169,7 @@ public abstract class GameEngine {
     }
 
     protected void tick() {
-        int right = (int) gameView.bounds.right,
-                bottom = (int) gameView.bounds.bottom;
+        int right = 1080, bottom = 1845;
 
         //progress the paddles
         for (GameShape paddle : gameShapes.get("paddles"))
@@ -218,13 +220,13 @@ public abstract class GameEngine {
 
     public void draw(Canvas canvas) {
         //draw the score
-        canvas.drawText(getScore(), 0, 150, textPaint);
+        canvas.drawText(getScore(), 0, 150*getYRatio(), textPaint);
 
         //draw the objects on the screen
         synchronized (gameShapes) {
             for (ArrayList<GameShape> gameShapeList : gameShapes.values())
                 for (GameShape gameShape : gameShapeList)
-                    gameShape.draw(canvas);
+                    gameShape.draw(canvas, getXRatio(), getYRatio());
         }
 
         //draw the reset overlay
@@ -241,6 +243,14 @@ public abstract class GameEngine {
                     gameView.bounds.centerY() + bounds.height() / 2,
                     resetTextPaint);
         }
+    }
+
+    protected float getXRatio() {
+        return (gameView.bounds.right - gameView.bounds.left)/1080;
+    }
+
+    protected float getYRatio() {
+        return (gameView.bounds.bottom - gameView.bounds.top)/1845;
     }
 
     protected void ballHit(GameShape ball, GameShape object, Iterator iter) {

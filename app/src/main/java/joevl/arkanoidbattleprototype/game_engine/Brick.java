@@ -10,7 +10,12 @@ public class Brick extends GameShape {
         bounds = new RectF(x, y, x + width, y + height);
     }
 
-    public void draw(Canvas canvas) {
-        canvas.drawRect(bounds, paint);
+    public void draw(Canvas canvas, float xRatio, float yRatio) {
+        RectF drawingBounds = new RectF(bounds);
+        drawingBounds.left *= xRatio;
+        drawingBounds.top *= yRatio;
+        drawingBounds.right *= xRatio;
+        drawingBounds.bottom *= yRatio;
+        canvas.drawRect(drawingBounds, paint);
     }
 }

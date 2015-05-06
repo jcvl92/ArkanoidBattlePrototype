@@ -35,19 +35,16 @@ public class VersusGame extends GameEngine {
 
     protected void init() {
         synchronized (gameShapes) {
-            int width = (int) (gameView.bounds.right - gameView.bounds.left),
-                    height = (int) (gameView.bounds.bottom - gameView.bounds.top);
-
             //define the dimension
             ballDiameter = 100;
             brickLength = 100;
-            paddleLength = width / 4;
+            paddleLength = 270;
 
             //TODO: the engine should handle the adding of objects(balls, bricks, and paddles)
 
             //add one ball
             Paint ballPaint = new SerialPaint();
-            mainBall = new Ball(ballDiameter, ballDiameter, 500, height - 200, ballPaint);
+            mainBall = new Ball(ballDiameter, ballDiameter, 500, 1645, ballPaint);
             gameShapes.get("balls").add(mainBall);
 
             //add a few bricks
@@ -58,7 +55,7 @@ public class VersusGame extends GameEngine {
                     Paint brickPaint = new SerialPaint();
                     Random rnd = new Random();
                     brickPaint.setARGB(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-                    gameShapes.get("bricks").add(new Brick(brickLength / 2, brickLength, 40 + (j * 130), (height / 3) + (i * 100), brickPaint));
+                    gameShapes.get("bricks").add(new Brick(brickLength / 2, brickLength, 40 + (j * 130), 615 + (i * 100), brickPaint));
                 }
 
             //add the touch paddle listener
@@ -77,7 +74,7 @@ public class VersusGame extends GameEngine {
             //opponent
             Paint opponentPaddlePaint = new SerialPaint();
             opponentPaddlePaint.setColor(Color.RED);
-            Paddle opponentPaddle = new Paddle(brickLength/2, paddleLength, width / 4, 10, opponentPaddlePaint);
+            Paddle opponentPaddle = new Paddle(brickLength/2, paddleLength, 270, 10, opponentPaddlePaint);
             apc = new AIPaddleController(mainBall, opponentPaddle);
             opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
             gameShapes.get("paddles").add(opponentPaddle);
@@ -85,7 +82,7 @@ public class VersusGame extends GameEngine {
             //player
             Paint userPaddlePaint = new SerialPaint();
             userPaddlePaint.setColor(Color.BLUE);
-            Paddle playerPaddle = new Paddle(brickLength/2, paddleLength, width / 4, height - 50, userPaddlePaint);
+            Paddle playerPaddle = new Paddle(brickLength/2, paddleLength, 270, 1795, userPaddlePaint);
             playerPaddle.setPaddleController(tpc);
             gameShapes.get("paddles").add(playerPaddle);
         }
@@ -105,8 +102,7 @@ public class VersusGame extends GameEngine {
 
     @Override
     protected void tick() {
-        int right = (int) gameView.bounds.right,
-                bottom = (int) gameView.bounds.bottom;
+        int bottom = 1845;
 
         for (GameShape ball : gameShapes.get("balls")) {
             if (ball.getBounds().centerY() < 0) {//top wall

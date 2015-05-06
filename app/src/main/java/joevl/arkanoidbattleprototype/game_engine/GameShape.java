@@ -33,7 +33,7 @@ public abstract class GameShape implements Serializable {
         this.paint = paint;
     }
 
-    public abstract void draw(Canvas canvas);
+    public abstract void draw(Canvas canvas, float xRatio, float yRatio);
 
     public RectF getBounds() {
         return new RectF(bounds);

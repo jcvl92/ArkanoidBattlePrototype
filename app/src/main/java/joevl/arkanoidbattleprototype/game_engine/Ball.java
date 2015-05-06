@@ -145,9 +145,6 @@ public class Ball extends GameShape {
         float x = -(float) (Math.sin(Math.toRadians(angle))),
                 y = (float) (Math.cos(Math.toRadians(angle)));
         move(x, y);
-
-        paint.setShader(new RadialGradient(bounds.centerX(), bounds.centerY(),
-                bounds.height() / 2, Color.RED, Color.GREEN, Shader.TileMode.CLAMP));
     }
 
     private void move(float x, float y) {
@@ -169,7 +166,14 @@ public class Ball extends GameShape {
         }
     }
 
-    public void draw(Canvas canvas) {
-        canvas.drawOval(bounds, paint);
+    public void draw(Canvas canvas, float xRatio, float yRatio) {
+        paint.setShader(new RadialGradient(bounds.centerX()*xRatio, bounds.centerY()*yRatio,
+                bounds.height()*yRatio / 2, Color.RED, Color.GREEN, Shader.TileMode.CLAMP));
+        RectF drawingBounds = new RectF(bounds);
+        drawingBounds.left *= xRatio;
+        drawingBounds.top *= yRatio;
+        drawingBounds.right *= xRatio;
+        drawingBounds.bottom *= yRatio;
+        canvas.drawOval(drawingBounds, paint);
     }
 }
