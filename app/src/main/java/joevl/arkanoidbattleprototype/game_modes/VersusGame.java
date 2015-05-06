@@ -22,7 +22,7 @@ import joevl.arkanoidbattleprototype.game_engine.TouchPaddleController;
 
 public class VersusGame extends GameEngine {
     GameView gameView;
-    int computerScore = 0, humanScore = 0;
+    int player2Score = 0, player1Score = 0;
     PaddleController tpc = null, apc = null;
 
     public VersusGame(GameView gameView) {
@@ -30,21 +30,18 @@ public class VersusGame extends GameEngine {
         this.gameView = gameView;
     }
 
-    private int ballDiameter, brickLength, paddleLength;
-    private Ball mainBall;
-
     protected void init() {
         synchronized (gameShapes) {
             //define the dimension
-            ballDiameter = 100;
-            brickLength = 100;
-            paddleLength = 270;
+            int ballDiameter = 100;
+            int brickLength = 100;
+            int paddleLength = 270;
 
             //TODO: the engine should handle the adding of objects(balls, bricks, and paddles)
 
             //add one ball
             Paint ballPaint = new SerialPaint();
-            mainBall = new Ball(ballDiameter, ballDiameter, 500, 1645, ballPaint);
+            Ball mainBall = new Ball(ballDiameter, ballDiameter, 500, 1645, ballPaint);
             gameShapes.get("balls").add(mainBall);
 
             //add a few bricks
@@ -89,32 +86,20 @@ public class VersusGame extends GameEngine {
     }
 
     @Override
-    public void setSerializedState(byte[] bytes) {
-        super.setSerializedState(bytes);
-
-        ArrayList<GameShape> paddles = gameShapes.get("paddles");
-        Paddle opponentPaddle = (Paddle) paddles.get(0);
-        Ball mainBall = (Ball) gameShapes.get("balls").get(0);
-        opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
-
-        ((Paddle) paddles.get(1)).setPaddleController(tpc);
-    }
-
-    @Override
     protected void tick() {
         int bottom = 1845;
 
         for (GameShape ball : gameShapes.get("balls")) {
             if (ball.getBounds().centerY() < 0) {//top wall
                 MainMenuActivity.playSoundEffect(MainMenuActivity.SCORE_SFX_ID);
-                if (++humanScore >= 3)
+                if (++player1Score >= 3)
                     close();
                 else
                     reset();
                 return;
             } else if (ball.getBounds().centerY() > bottom) {//bottom wall
                 MainMenuActivity.playSoundEffect(MainMenuActivity.SCORE_SFX_ID);
-                if (++computerScore >= 3)
+                if (++player2Score >= 3)
                     close();
                 else
                     reset();
@@ -140,15 +125,15 @@ public class VersusGame extends GameEngine {
     }
 
     public String getDescription() {
-        return "User vs. Computer";
+        return "Singleplayer";
     }
 
     public String getStatus() {
-        return humanScore > computerScore ? "YOU WIN!" : "YOU LOSE!";
+        return player1Score > player2Score ? "YOU WIN!" : "YOU LOSE!";
     }
 
     public String getScore() {
-        return humanScore + "-" + computerScore;
+        return player1Score + "-" + player2Score;
     }
 
     @Override

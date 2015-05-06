@@ -36,6 +36,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import joevl.arkanoidbattleprototype.game_engine.GameEngine;
+import joevl.arkanoidbattleprototype.game_modes.MultiplayerVersusGame;
 import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 
 
@@ -169,12 +170,14 @@ public class MultiplayerGameActivity extends GameActivity implements
 
             if (inv != null && inv.getInvitationId() != null) {
                 Log.d(TAG, "onConnected: connection hint has a room invite!");
+                //THIS IS WHERE A CLIENT STARTS
                 acceptInviteToRoom(inv.getInvitationId());
                 return;
             }
         } else {
             Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 1);
 //        switchToScreen(R.id.screen_wait);
+            //THIS IS WHERE A SERVER STARTS
             startActivityForResult(intent, RC_SELECT_PLAYERS);
         }
     }
@@ -356,7 +359,8 @@ public class MultiplayerGameActivity extends GameActivity implements
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
         byte[] receivedState = realTimeMessage.getMessageData();
-        gameView.gameEngine.setSerializedState(receivedState);
+        if(isClient)
+            gameView.gameEngine.setSerializedState(receivedState);
     }
 
     void synchronizeState() {
@@ -379,7 +383,7 @@ public class MultiplayerGameActivity extends GameActivity implements
 
     //@Override
     protected GameEngine gameModeFactory() {
-        return new VersusGame(gameView);
+        return new MultiplayerVersusGame(gameView, (isClient ? 1 : 2));
     }
 }
 
