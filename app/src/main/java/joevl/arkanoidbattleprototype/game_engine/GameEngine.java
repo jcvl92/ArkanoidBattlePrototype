@@ -169,6 +169,7 @@ public abstract class GameEngine {
 
     public void draw(Canvas canvas) {
         //draw the score
+        textPaint.setTextSize(200*getYRatio());
         canvas.drawText(getScore(), 0, 150*getYRatio(), textPaint);
 
         //draw the objects on the screen
@@ -186,6 +187,7 @@ public abstract class GameEngine {
             //draw text
             String val = String.valueOf(resetValue);
             Rect bounds = new Rect();
+            resetTextPaint.setTextSize(500*getYRatio());
             resetTextPaint.getTextBounds(val, 0, val.length(), bounds);
             canvas.drawText(val,
                     gameView.bounds.centerX() - bounds.width() / 2,
