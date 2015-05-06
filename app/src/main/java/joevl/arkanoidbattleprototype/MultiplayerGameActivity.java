@@ -64,9 +64,9 @@ public class MultiplayerGameActivity extends GameActivity implements
     private boolean mResolvingConnectionFailure = false;
     private static boolean isClient = true;
 
-    String mRoomId = null;
+    private Timer timer;
 
-    String mMyId = null;
+    String mRoomId = null;
 
     ArrayList<Participant> mParticipants = null;
 
@@ -186,7 +186,6 @@ public class MultiplayerGameActivity extends GameActivity implements
     @Override
     public void onConnectionSuspended(int i) {
         Log.d(TAG, "Connection suspended: " + i);
-
     }
 
     void updateRoom(Room room) {
@@ -260,6 +259,7 @@ public class MultiplayerGameActivity extends GameActivity implements
 
     @Override
     public void onConnectedToRoom(Room room) {
+        mRoomId = room.getRoomId();
         updateRoom(room);
     }
 
@@ -329,7 +329,7 @@ public class MultiplayerGameActivity extends GameActivity implements
 
     void startGame() {
         final Handler handler = new Handler();
-        Timer timer = new Timer();
+        timer = new Timer();
         gameView.gameEngine.paused = false;
         TimerTask doAsynchronousTask = new TimerTask() {
             @Override
@@ -387,6 +387,7 @@ public class MultiplayerGameActivity extends GameActivity implements
     @Override
     public void onGameOver(String mode, String status, String score) {
         if(!destroyed) {
+            timer.cancel();
             Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
             super.onGameOver(mode, status, score);
         }
