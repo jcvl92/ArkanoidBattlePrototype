@@ -33,19 +33,25 @@ public class GameActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        MainMenuActivity.musicPlayer.pause();
-        gameView.gameEngine.paused = true;
+        pause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         MainMenuActivity.musicPlayer.start();
-        gameView.gameEngine.paused = false;
+    }
+
+    protected void pause() {
+        MainMenuActivity.musicPlayer.pause();
+        gameView.gameEngine.paused = true;
+        onGameOver(gameView.gameEngine.getDescription(), "YOU LEFT!", gameView.gameEngine.getScore());
     }
 
     protected GameEngine gameModeFactory() {
-        return new VersusGame(gameView);
+        GameEngine ge = new VersusGame(gameView);
+        ge.paused = false;
+        return ge;
     }
 
     final public void onGameOver(String mode, String status, String score) {

@@ -59,7 +59,7 @@ public class MultiplayerGameActivity extends GameActivity implements
 
     private GoogleApiClient mGoogleApiClient;
 
-    private boolean mResolvingConnectionFailure = false;
+    private boolean mResolvingConnectionFailure = false, isClient = true;
 
     String mRoomId = null;
 
@@ -70,7 +70,6 @@ public class MultiplayerGameActivity extends GameActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.gameView.gameEngine.paused = true;
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -170,14 +169,14 @@ public class MultiplayerGameActivity extends GameActivity implements
 
             if (inv != null && inv.getInvitationId() != null) {
                 Log.d(TAG, "onConnected: connection hint has a room invite!");
-                //THIS IS WHERE A CLIENT STARTS
                 acceptInviteToRoom(inv.getInvitationId());
                 return;
             }
         } else {
             Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 1);
 //        switchToScreen(R.id.screen_wait);
-            //THIS IS WHERE A SERVER STARTS
+            //definitely a server if we are here
+            isClient = false;
             startActivityForResult(intent, RC_SELECT_PLAYERS);
         }
     }
@@ -327,9 +326,9 @@ public class MultiplayerGameActivity extends GameActivity implements
     }
 
     void startGame() {
-        this.gameView.gameEngine.paused = false;
         final Handler handler = new Handler();
         Timer timer = new Timer();
+        gameView.gameEngine.paused = false;
         TimerTask doAsynchronousTask = new TimerTask() {
             @Override
             public void run() {
@@ -361,9 +360,12 @@ public class MultiplayerGameActivity extends GameActivity implements
         byte[] receivedState = realTimeMessage.getMessageData();
         if(isClient)
             gameView.gameEngine.setSerializedState(receivedState);
+        else
+            ;//TODO: set the paddle position
     }
 
     void synchronizeState() {
+        //TODO: if client do something different
         byte[] state = gameView.gameEngine.getSerializedState();
         for (Participant p : mParticipants) {
             if (p.getParticipantId().equals(mMyId)) {
@@ -381,9 +383,12 @@ public class MultiplayerGameActivity extends GameActivity implements
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    //@Override
+    @Override
     protected GameEngine gameModeFactory() {
         return new MultiplayerVersusGame(gameView, (isClient ? 1 : 2));
     }
+
+    @Override
+    protected void pause() {}
 }
 

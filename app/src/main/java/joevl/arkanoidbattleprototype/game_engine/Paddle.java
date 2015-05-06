@@ -19,6 +19,9 @@ public class Paddle extends GameShape {
     }
 
     public void advance(float min, float max) {
+        if(paddleController == null)
+            return;
+        
         float aSpeed = paddleController.getSpeed() < speed ? paddleController.getSpeed() : speed;
 
         if (lastTick > 0) {

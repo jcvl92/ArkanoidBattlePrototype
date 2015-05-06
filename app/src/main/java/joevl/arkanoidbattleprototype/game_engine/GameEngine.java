@@ -27,7 +27,7 @@ public abstract class GameEngine {
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
     private boolean closing = false, resetting, beginning;
-    public boolean paused = false;
+    public boolean paused = true;
     private Paint textPaint, resetTextPaint, overlayPaint;
     private Vibrator vibrator;
     private long resetTime;
@@ -73,7 +73,7 @@ public abstract class GameEngine {
                     reset();
                 }
                 while (!closing) {
-                    if(!paused) {
+                    if (!paused) {
                         if (!resetting)
                             tick();
                         else
@@ -90,14 +90,6 @@ public abstract class GameEngine {
         /*try {
             ticker.join();
         } catch(InterruptedException ie) {}*/
-    }
-
-    public void pause() {
-        ticker.suspend();
-    }
-
-    public void resume() {
-        ticker.resume();
     }
 
     public byte[] getSerializedState() {
