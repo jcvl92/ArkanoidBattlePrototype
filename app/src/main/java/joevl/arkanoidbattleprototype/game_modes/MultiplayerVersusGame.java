@@ -31,6 +31,7 @@ public class MultiplayerVersusGame extends VersusGame {
         int player2Score = 0, player1Score = 0;
         PaddleController tpc = null, apc = null;*/
         private final int playerNum;
+        private boolean isreset = false;
 
         public MultiplayerVersusGame(GameView gameView, int playerNum) {
             super(gameView);
@@ -149,8 +150,12 @@ public class MultiplayerVersusGame extends VersusGame {
                             } catch(EOFException eofe) {
                                 gameShapes.put("bricks", bricks);
                             }
-                            if(resetting) {
+                            if(resetting && !isreset) {
                                 reset();
+                                isreset = true;
+                            }
+                            if(!resetting) {
+                                isreset = false;
                             }
                         } else {
                             ((Paddle)gameShapes.get("paddles").get(0)).readObject(in);
