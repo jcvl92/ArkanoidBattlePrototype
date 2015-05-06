@@ -10,8 +10,8 @@ import android.graphics.Shader;
 import java.io.IOException;
 
 public class Ball extends GameShape {
-    private double speed = 900, angle = 135, acceleration = 0.03;
-    private long lastTick = -1;
+    private transient double speed = 900, angle = 135, acceleration = 0.03;
+    private transient long lastTick = -1;
 
     public Ball(float height, float width, float x, float y, Paint paint) {
         super(paint);
@@ -20,23 +20,23 @@ public class Ball extends GameShape {
                 bounds.height() / 2, Color.RED, Color.GREEN, Shader.TileMode.CLAMP));
     }
 
-    private void writeObject(java.io.ObjectOutputStream out) throws IOException {
-        out.writeFloat(bounds.left);
-        out.writeFloat(bounds.top);
-        out.writeFloat(bounds.right);
-        out.writeFloat(bounds.bottom);
+    public void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.writeShort((short)bounds.left);
+        out.writeShort((short)bounds.top);
+        out.writeShort((short)bounds.right);
+        out.writeShort((short)bounds.bottom);
         out.writeObject(paint);
 
         out.writeDouble(speed);
         out.writeDouble(angle);
     }
 
-    private void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+    public void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
         bounds = new RectF(
-                in.readFloat(),
-                in.readFloat(),
-                in.readFloat(),
-                in.readFloat()
+                in.readShort(),
+                in.readShort(),
+                in.readShort(),
+                in.readShort()
         );
         paint = (Paint) in.readObject();
 

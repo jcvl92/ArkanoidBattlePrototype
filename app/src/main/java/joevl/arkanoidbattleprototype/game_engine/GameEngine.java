@@ -26,11 +26,11 @@ public abstract class GameEngine {
     protected GameView gameView;
     protected HashMap<String, ArrayList<GameShape>> gameShapes;
     private Thread ticker;
-    private boolean closing = false, resetting, beginning;
+    protected boolean closing = false, resetting, beginning;
     public boolean paused = true;
     private Paint textPaint, resetTextPaint, overlayPaint;
     private Vibrator vibrator;
-    private long resetTime;
+    protected long resetTime;
     private int resetValue;
 
     protected GameEngine(final GameView gameView) {
@@ -90,49 +90,6 @@ public abstract class GameEngine {
         /*try {
             ticker.join();
         } catch(InterruptedException ie) {}*/
-    }
-
-    public byte[] getSerializedState() {
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(bos);
-            /*for (Map.Entry<String, ArrayList<GameShape>> e : gameShapes.entrySet()) {
-                if (!e.getKey().equals("paddles")) {
-                    out.writeObject(e.getKey());
-                    out.writeObject(e.getValue());
-                }
-            }*/
-            out.writeObject(gameShapes);
-            byte[] bytes = bos.toByteArray();
-            out.close();
-            bos.close();
-            return bytes;
-        } catch (IOException ioe) {
-            Log.println(Log.ASSERT, "error", Log.getStackTraceString(ioe));
-            return null;
-        }
-    }
-
-    public void setSerializedState(byte[] bytes) {
-        synchronized (gameShapes) {
-            try {
-                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                ObjectInputStream in = new ObjectInputStream(bis);
-                try {
-                    /*while (true) {
-                        Object str = in.readObject();
-                        Object lst = in.readObject();
-                        gameShapes.put((String) str, (ArrayList<GameShape>) lst);
-                    }*/
-                    gameShapes = (HashMap<String, ArrayList<GameShape>>) in.readObject();
-                } catch (EOFException eofe) {
-                    in.close();
-                    bis.close();
-                }
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     protected abstract void init();

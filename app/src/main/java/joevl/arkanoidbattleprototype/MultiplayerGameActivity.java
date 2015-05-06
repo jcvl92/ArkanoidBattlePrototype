@@ -354,21 +354,18 @@ public class MultiplayerGameActivity extends GameActivity implements
                 });
             }
         };
-        timer.schedule(doAsynchronousTask, 0, 100); //execute in every 50000 ms
+        timer.schedule(doAsynchronousTask, 0, 20); //execute in every 50000 ms
     }
 
     @Override
     public void onRealTimeMessageReceived(RealTimeMessage realTimeMessage) {
         byte[] receivedState = realTimeMessage.getMessageData();
-        if(isClient)
-            gameView.gameEngine.setSerializedState(receivedState);
-        else
-            ;//TODO: set the paddle position
+        ((MultiplayerVersusGame)gameView.gameEngine).setSerializedState(receivedState);
     }
 
     void synchronizeState() {
         //TODO: if client do something different
-        byte[] state = gameView.gameEngine.getSerializedState();
+        byte[] state = ((MultiplayerVersusGame)gameView.gameEngine).getSerializedState();
         if(state.length > 1168)
             throw new RuntimeException("state too big!");
         Games.RealTimeMultiplayer.sendUnreliableMessageToOthers(mGoogleApiClient, state, mRoomId);

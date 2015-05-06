@@ -3,8 +3,17 @@ package joevl.arkanoidbattleprototype.game_modes;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
 import joevl.arkanoidbattleprototype.GameView;
@@ -86,16 +95,70 @@ public class MultiplayerVersusGame extends VersusGame {
             }
         }
 
-        @Override
+        public byte[] getSerializedState() {
+            try {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutputStream out = new ObjectOutputStream(bos);
+
+                if(playerNum == 1) {
+                    out.writeBoolean(closing);
+                    out.writeBoolean(resetting);
+                    out.writeLong(resetTime);
+                    ((Ball)gameShapes.get("balls").get(0)).writeObject(out);
+                    ((Paddle)gameShapes.get("paddles").get(1)).writeObject(out);
+                    for(GameShape gs : gameShapes.get("bricks")) {
+                        Brick brick = (Brick) gs;
+                        brick.writeObject(out);
+                    }
+                } else {
+                    ((Paddle)gameShapes.get("paddles").get(0)).writeObject(out);
+                }
+
+                byte[] bytes = bos.toByteArray();
+                out.close();
+                bos.close();
+                return bytes;
+            } catch (IOException ioe) {
+                Log.println(Log.ASSERT, "error", Log.getStackTraceString(ioe));
+                return null;
+            }
+        }
+
         public void setSerializedState(byte[] bytes) {
-            super.setSerializedState(bytes);
+            synchronized (gameShapes) {
+                try {
+                    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                    ObjectInputStream in = new ObjectInputStream(bis);
+                    try {
 
-            ArrayList<GameShape> paddles = gameShapes.get("paddles");
-            Paddle opponentPaddle = (Paddle) paddles.get(0);
-            Ball mainBall = (Ball) gameShapes.get("balls").get(0);
-            opponentPaddle.setPaddleController(new AIPaddleController(mainBall, opponentPaddle));
+                        if(playerNum != 1) {
+                            closing = in.readBoolean();
+                            resetting = in.readBoolean();
+                            resetTime = in.readLong();
+                            ((Ball)gameShapes.get("balls").get(0)).readObject(in);
+                            ((Paddle)gameShapes.get("paddles").get(1)).readObject(in);
+                            ArrayList<GameShape> bricks = new ArrayList<GameShape>();
+                            try {
+                                while (true) {
+                                    Brick brick = new Brick(0, 0, 0, 0, null);
+                                    brick.readObject(in);
+                                    bricks.add(brick);
+                                }
+                            } catch(EOFException eofe) {
+                                gameShapes.put("bricks", bricks);
+                            }
+                        } else {
+                            ((Paddle)gameShapes.get("paddles").get(0)).readObject(in);
+                        }
 
-            ((Paddle) paddles.get(1)).setPaddleController(tpc);
+                    } catch (EOFException eofe) {
+                        in.close();
+                        bis.close();
+                    }
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         public String getDescription() {

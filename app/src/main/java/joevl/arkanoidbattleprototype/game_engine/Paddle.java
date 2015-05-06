@@ -4,10 +4,12 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
+import java.io.IOException;
+
 public class Paddle extends GameShape {
     private transient PaddleController paddleController;
-    public static final int speed = 900;
-    private long lastTick = -1;
+    public transient static final int speed = 900;
+    private transient long lastTick = -1;
 
     public Paddle(float height, float width, float x, float y, Paint paint) {
         super(paint);
@@ -16,6 +18,24 @@ public class Paddle extends GameShape {
 
     public void setPaddleController(PaddleController paddleController) {
         this.paddleController = paddleController;
+    }
+
+    public void writeObject(java.io.ObjectOutputStream out) throws IOException {
+        out.writeFloat(bounds.left);
+        out.writeFloat(bounds.top);
+        out.writeFloat(bounds.right);
+        out.writeFloat(bounds.bottom);
+        out.writeObject(paint);
+    }
+
+    public void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
+        bounds = new RectF(
+                in.readFloat(),
+                in.readFloat(),
+                in.readFloat(),
+                in.readFloat()
+        );
+        paint = (Paint) in.readObject();
     }
 
     public void advance(float min, float max) {
