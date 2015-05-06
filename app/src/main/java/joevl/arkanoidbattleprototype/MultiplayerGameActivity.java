@@ -19,12 +19,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.games.GamesActivityResultCodes;
 import com.google.android.gms.games.GamesStatusCodes;
+import com.google.android.gms.games.internal.api.RealTimeMultiplayerImpl;
 import com.google.android.gms.games.multiplayer.Invitation;
 import com.google.android.gms.games.multiplayer.Multiplayer;
 import com.google.android.gms.games.multiplayer.OnInvitationReceivedListener;
 import com.google.android.gms.games.multiplayer.Participant;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessage;
 import com.google.android.gms.games.multiplayer.realtime.RealTimeMessageReceivedListener;
+import com.google.android.gms.games.multiplayer.realtime.RealTimeMultiplayer;
 import com.google.android.gms.games.multiplayer.realtime.Room;
 import com.google.android.gms.games.multiplayer.realtime.RoomConfig;
 import com.google.android.gms.games.multiplayer.realtime.RoomStatusUpdateListener;
@@ -59,7 +61,8 @@ public class MultiplayerGameActivity extends GameActivity implements
 
     private GoogleApiClient mGoogleApiClient;
 
-    private boolean mResolvingConnectionFailure = false, isClient = true;
+    private boolean mResolvingConnectionFailure = false;
+    private static boolean isClient = true;
 
     String mRoomId = null;
 
@@ -175,7 +178,6 @@ public class MultiplayerGameActivity extends GameActivity implements
         } else {
             Intent intent = Games.RealTimeMultiplayer.getSelectOpponentsIntent(mGoogleApiClient, 1, 1);
 //        switchToScreen(R.id.screen_wait);
-            //definitely a server if we are here
             isClient = false;
             startActivityForResult(intent, RC_SELECT_PLAYERS);
         }
@@ -335,15 +337,15 @@ public class MultiplayerGameActivity extends GameActivity implements
                 handler.post(new Runnable() {
                     public void run() {
                         try {
-                            AsyncTask syncLoop = new AsyncTask() {
+                            /*AsyncTask syncLoop = new AsyncTask() {
                                 @Override
-                                protected Object doInBackground(Object[] params) {
+                                protected Object doInBackground(Object[] params) {*/
                                     synchronizeState();
-                                    return null;
+                                    /*return null;
                                 }
-                            };
+                            };*/
 
-                            syncLoop.execute();
+                            //syncLoop.execute();
 
                         } catch (Exception e) {
                             // TODO Auto-generated catch block
@@ -390,5 +392,13 @@ public class MultiplayerGameActivity extends GameActivity implements
 
     @Override
     protected void pause() {}
+
+    @Override
+    public void onGameOver(String mode, String status, String score) {
+        if(!destroyed) {
+            Games.RealTimeMultiplayer.leave(mGoogleApiClient, this, mRoomId);
+            super.onGameOver(mode, status, score);
+        }
+    }
 }
 

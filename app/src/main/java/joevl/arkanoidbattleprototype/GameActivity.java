@@ -9,6 +9,7 @@ import joevl.arkanoidbattleprototype.game_modes.VersusGame;
 
 public class GameActivity extends Activity {
     GameView gameView;
+    protected boolean destroyed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +27,7 @@ public class GameActivity extends Activity {
 
     @Override
     public void onDestroy() {
+        destroyed = true;
         gameView.close();
         super.onDestroy();
     }
@@ -44,7 +46,7 @@ public class GameActivity extends Activity {
 
     protected void pause() {
         MainMenuActivity.musicPlayer.pause();
-        gameView.gameEngine.paused = true;
+        gameView.close();
         onGameOver(gameView.gameEngine.getDescription(), "YOU LEFT!", gameView.gameEngine.getScore());
     }
 
@@ -54,12 +56,14 @@ public class GameActivity extends Activity {
         return ge;
     }
 
-    final public void onGameOver(String mode, String status, String score) {
-        Intent result = new Intent();
-        result.putExtra("mode", mode);
-        result.putExtra("status", status);
-        result.putExtra("score", score);
-        setResult(RESULT_OK, result);
-        finish();
+    public void onGameOver(String mode, String status, String score) {
+        if(!destroyed) {
+            Intent result = new Intent();
+            result.putExtra("mode", mode);
+            result.putExtra("status", status);
+            result.putExtra("score", score);
+            setResult(RESULT_OK, result);
+            finish();
+        }
     }
 }
