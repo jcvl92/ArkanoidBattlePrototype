@@ -369,6 +369,8 @@ public class MultiplayerGameActivity extends GameActivity implements
     void synchronizeState() {
         //TODO: if client do something different
         byte[] state = gameView.gameEngine.getSerializedState();
+        if(state.length > 1168)
+            throw new RuntimeException("state too big!");
         Games.RealTimeMultiplayer.sendUnreliableMessageToOthers(mGoogleApiClient, state, mRoomId);
     }
 
