@@ -369,16 +369,7 @@ public class MultiplayerGameActivity extends GameActivity implements
     void synchronizeState() {
         //TODO: if client do something different
         byte[] state = gameView.gameEngine.getSerializedState();
-        for (Participant p : mParticipants) {
-            if (p.getParticipantId().equals(mMyId)) {
-                continue;
-            }
-            if (p.getStatus() != Participant.STATUS_JOINED) {
-                continue;
-            }
-            Games.RealTimeMultiplayer.sendUnreliableMessage(mGoogleApiClient, state, mRoomId,
-                    p.getParticipantId());
-        }
+        Games.RealTimeMultiplayer.sendUnreliableMessageToOthers(mGoogleApiClient, state, mRoomId);
     }
 
     void keepScreenOn() {
