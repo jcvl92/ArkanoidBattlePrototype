@@ -103,7 +103,6 @@ public class MultiplayerVersusGame extends VersusGame {
                 if(playerNum == 1) {
                     out.writeBoolean(closing);
                     out.writeBoolean(resetting);
-                    out.writeLong(resetTime);
                     out.writeInt(player2Score);
                     out.writeInt(player1Score);
                     ((Ball)gameShapes.get("balls").get(0)).writeObject(out);
@@ -136,7 +135,6 @@ public class MultiplayerVersusGame extends VersusGame {
                         if(playerNum != 1) {
                             closing = in.readBoolean();
                             resetting = in.readBoolean();
-                            resetTime = in.readLong();
                             player2Score = in.readInt();
                             player1Score = in.readInt();
                             ((Ball)gameShapes.get("balls").get(0)).readObject(in);
@@ -150,6 +148,9 @@ public class MultiplayerVersusGame extends VersusGame {
                                 }
                             } catch(EOFException eofe) {
                                 gameShapes.put("bricks", bricks);
+                            }
+                            if(resetting) {
+                                reset();
                             }
                         } else {
                             ((Paddle)gameShapes.get("paddles").get(0)).readObject(in);

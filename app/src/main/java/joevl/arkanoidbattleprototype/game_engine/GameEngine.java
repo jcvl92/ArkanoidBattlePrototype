@@ -30,7 +30,7 @@ public abstract class GameEngine {
     public boolean paused = true;
     private Paint textPaint, resetTextPaint, overlayPaint;
     private Vibrator vibrator;
-    protected long resetTime;
+    private long resetTime;
     private int resetValue;
 
     protected GameEngine(final GameView gameView) {
