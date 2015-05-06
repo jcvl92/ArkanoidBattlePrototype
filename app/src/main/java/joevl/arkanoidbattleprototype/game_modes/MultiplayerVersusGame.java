@@ -104,6 +104,8 @@ public class MultiplayerVersusGame extends VersusGame {
                     out.writeBoolean(closing);
                     out.writeBoolean(resetting);
                     out.writeLong(resetTime);
+                    out.writeInt(player2Score);
+                    out.writeInt(player1Score);
                     ((Ball)gameShapes.get("balls").get(0)).writeObject(out);
                     ((Paddle)gameShapes.get("paddles").get(1)).writeObject(out);
                     for(GameShape gs : gameShapes.get("bricks")) {
@@ -135,6 +137,8 @@ public class MultiplayerVersusGame extends VersusGame {
                             closing = in.readBoolean();
                             resetting = in.readBoolean();
                             resetTime = in.readLong();
+                            player2Score = in.readInt();
+                            player1Score = in.readInt();
                             ((Ball)gameShapes.get("balls").get(0)).readObject(in);
                             ((Paddle)gameShapes.get("paddles").get(1)).readObject(in);
                             ArrayList<GameShape> bricks = new ArrayList<GameShape>();
